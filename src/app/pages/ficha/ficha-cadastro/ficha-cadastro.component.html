@@ -1,0 +1,455 @@
+<ng2-toasty></ng2-toasty>
+
+<div class="row">
+  <div class="col-sm-12 filter-bar">
+    <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+      {{ 'Ficha cadastral do apartamento ' + apartamento.numero }}
+      <div class="nav-item nav-grid">
+        <span class="m-r-15">Ações: </span>
+
+        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+          title="Visualizar Ficha" (click)="getFicha()">
+          <i class="icofont icofont-printer icofont-2x"></i>
+        </button>
+        <button type="button" class="btn btn-sm-light m-r-10" data-toggle="tooltip" data-placement="top"
+          title="Documentos" (click)="getDocumentosPorApartamento(); modalDocumentos.show()">
+          <i class="icofont icofont-attachment icofont-2x"></i>
+        </button>
+        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+          title="Lista de Apartamentos" [routerLink]="['/apartamento/lista']">
+          <i class="icofont icofont-listing-box icofont-2x"></i>
+        </button>
+        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
+          (click)="salvar()">
+          <i class="icofont icofont-save icofont-2x icofont-2x"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <app-card>
+      <app-loader [observable]="observable"></app-loader>
+      <form autocomplete="off" [formGroup]="formulario">
+        <app-card [title]="'Dados do Imóvel'" [cardOptionBlock]="true">
+          <div class="form-group row">
+            <div class="col-sm-4">
+              <label class="col-form-label">Condomínio</label>
+              <input type="text" class="form-control form-control-round" #condominio
+                [value]="apartamento.bloco.condominio.nome" disabled>
+            </div>
+            <div class="col-sm-3">
+              <label class="col-form-label">Bloco</label>
+              <input type="text" class="form-control form-control-round" #bloco [value]="apartamento.bloco.nome"
+                disabled>
+            </div>
+            <!-- <div class="col-sm-3">
+              <label class="col-form-label">Apartamento</label>
+              <ng-select [ngClass]="'ng-select'" [options]="listaApartamentos" [(ngModel)]="apartamentoId"
+                [ngModelOptions]="{standalone: true}" disabled>
+              </ng-select>
+              <input type="text" class="form-control form-control-round" #apartamento [value]="apartamento.numero"
+                disabled>
+            </div> -->
+            <div class="col-sm-2">
+              <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numeroQuartos')}">Nº
+                Quartos</label>
+              <input type="number" class="form-control form-control-round" #numeroQuartos
+                [(ngModel)]="apartamento.numeroQuartos" formControlName="numeroQuartos">
+            </div>
+          </div>
+        </app-card>
+
+        <app-card [title]="'Dados do Responsável do Imóvel'" [cardOptionBlock]="true">
+          <div class="form-group row">
+            <div class="col-sm-2">
+              <div class="card user-card">
+                <div class="img-hover">
+                  <img class="img-fluid"
+                    [src]="'https://s3-sa-east-1.amazonaws.com/butler-fotos/' + responsavel.id + '.jpg'"
+                    alt="Foto não encontrada" *ngIf="!responsavel.foto64">
+                  <img class="img-fluid" [src]="responsavel.foto64" *ngIf="responsavel.foto64">
+                  <div class="img-overlay">
+                    <span>
+                      <a href="javascript:" class="btn btn-sm btn-primary" data-popup="lightbox"
+                        (click)="modalCamera.show(); moradorFotoTemp = responsavel">
+                        <i class="icofont icofont-camera"></i></a>
+                      <a href="javascript:" class="btn btn-sm btn-primary" (click)="responsavel.foto64 = undefined">
+                        <i class="icofont icofont-trash"></i></a>
+                      <a href="javascript:" class="btn btn-sm btn-primary"
+                        (click)="modalImportaFoto.show(); moradorFotoTemp = responsavel">
+                        <i class="icofont icofont-upload"></i></a>
+                      <a href="javascript:" class="btn btn-sm btn-primary"
+                        (click)="modalExibeFoto.show(); moradorFotoTemp = responsavel">
+                        <i class="icofont icofont-ui-zoom-in"></i></a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-10">
+              <div class="form-group row">
+                <div class="col-sm-2">
+                  <label class="col-form-label">Código</label>
+                  <input type="text" class="form-control form-control-round" #responsavelCodigo
+                    [(ngModel)]="responsavel.id" [ngModelOptions]="{standalone: true}" disabled>
+                </div>
+                <div class="col-sm-3">
+                  <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('tipoMorador')}">Tipo
+                    Morador</label>
+                  <ng-select [ngClass]="'ng-select'" [options]="listaTipoMoradores"
+                    [(ngModel)]="responsavel.tipoMorador" formControlName="tipoMorador">
+                  </ng-select>
+                </div>
+                <div class="col-sm-7">
+                  <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nome')}">Nome</label>
+                  <input type="text" class="form-control form-control-round" #responsavelNome
+                    [(ngModel)]="responsavel.nome" formControlName="nome">
+                </div>
+                <div class="col-sm-3">
+                  <label class="col-form-label"
+                    [ngClass]="{'form-control-danger' : !isValid('telefone')}">Telefone</label>
+                  <input type="text" class="form-control form-control-round" #responsavelTelefone
+                    [(ngModel)]="responsavel.telefone" formControlName="telefone" [textMask]="{mask: telefoneMask}">
+                </div>
+                <div class="col-sm-3">
+                  <label class="col-form-label"
+                    [ngClass]="{'form-control-danger' : !isValid('celular')}">Celular</label>
+                  <input type="text" class="form-control form-control-round" #responsavelCelular
+                    [(ngModel)]="responsavel.celular" formControlName="celular" [textMask]="{mask: celularMask}">
+                </div>
+                <div class="col-sm-3">
+                  <label class="col-form-label">Tipo Documento</label>
+                  <ng-select [ngClass]="'ng-select'" [options]="listaTipoDocumentos"
+                    [(ngModel)]="responsavel.tipoDocumento" [ngModelOptions]="{standalone: true}">
+                  </ng-select>
+                </div>
+                <div class="col-sm-3">
+                  <label class="col-form-label">Documento</label>
+                  <input type="text" class="form-control form-control-round" #responsavelDocumento
+                    [(ngModel)]="responsavel.documento" [ngModelOptions]="{standalone: true}">
+                </div>
+                <div class="col-sm-6">
+                  <label class="col-form-label">E-mail</label>
+                  <input type="email" class="form-control form-control-round" #responsavelEmail
+                    [(ngModel)]="responsavel.email" [ngModelOptions]="{standalone: true}">
+                </div>
+                <div class="col-sm-4">
+                  <label class="col-form-label">Placa Carro</label>
+                  <input type="text" class="form-control form-control-round" #responsavelPlacaCarro
+                    [(ngModel)]="responsavel.placaCarro" [ngModelOptions]="{standalone: true}">
+                </div>
+                <div class="col-sm-2">
+                  <label class="col-form-label"
+                    [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
+                  <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
+                    size="small" [(ngModel)]="responsavel.ativo" formControlName="ativo"></ui-switch>
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-card>
+
+        <app-card [title]="'Dados dos Residentes'" [cardOptionBlock]="true">
+          <form autocomplete="off" [formGroup]="formularioResidentes">
+            <div class="form-group row">
+              <div class="col-sm-2">
+                <div class="card user-card">
+                  <div class="img-hover">
+                    <img class="img-fluid"
+                      [src]="'https://s3-sa-east-1.amazonaws.com/butler-fotos/' + residente.id + '.jpg'"
+                      alt="Foto não encontrada" *ngIf="!residente.foto64">
+                    <img class="img-fluid" [src]="residente.foto64" *ngIf="residente.foto64">
+                    <div class="img-overlay">
+                      <span>
+                        <a href="javascript:" class="btn btn-sm btn-primary" data-popup="lightbox"
+                          (click)="modalCamera.show(); moradorFotoTemp = residente">
+                          <i class="icofont icofont-camera"></i></a>
+                        <a href="javascript:" class="btn btn-sm btn-primary" (click)="residente.foto64 = undefined">
+                          <i class="icofont icofont-trash"></i></a>
+                        <a href="javascript:" class="btn btn-sm btn-primary"
+                          (click)="modalImportaFoto.show(); moradorFotoTemp = residente">
+                          <i class="icofont icofont-upload"></i></a>
+                        <a href="javascript:" class="btn btn-sm btn-primary"
+                          (click)="modalExibeFoto.show(); moradorFotoTemp = residente">
+                          <i class="icofont icofont-ui-zoom-in"></i></a>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-10">
+                <div class="form-group row">
+                  <div class="col-sm-9">
+                    <label class="col-form-label"
+                      [ngClass]="{'form-control-danger' : !isResidentValid('nome')}">Nome</label>
+                    <input type="text" class="form-control form-control-round" #residenteNome
+                      [(ngModel)]="residente.nome" formControlName="nome">
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="col-form-label"
+                      [ngClass]="{'form-control-danger' : !isResidentValid('parentesco')}">Parentesco</label>
+                    <input type="text" class="form-control form-control-round" #residenteParentesco
+                      [(ngModel)]="residente.parentesco" formControlName="parentesco">
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="col-form-label"
+                      [ngClass]="{'form-control-danger' : !isResidentValid('celular')}">Celular</label>
+                    <input type="text" class="form-control form-control-round" #residenteCelular
+                      [(ngModel)]="residente.celular" formControlName="celular" [textMask]="{mask: celularMask}">
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="col-form-label">Tipo Documento</label>
+                    <ng-select [ngClass]="'ng-select'" [options]="listaTipoDocumentos"
+                      [(ngModel)]="residente.tipoDocumentoResidente" [ngModelOptions]="{standalone: true}">
+                    </ng-select>
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="col-form-label">Documento</label>
+                    <input type="text" class="form-control form-control-round" #residenteDocumento
+                      [(ngModel)]="residente.documento" [ngModelOptions]="{standalone: true}">
+                  </div>
+                  <div class="col-sm-7">
+                    <label class="col-form-label">E-mail</label>
+                    <input type="email" class="form-control form-control-round" #residenteEmail
+                      [(ngModel)]="residente.email" [ngModelOptions]="{standalone: true}">
+                  </div>
+                  <div class="col-sm-1">
+                    <label class="col-form-label"
+                      [ngClass]="{'form-control-danger' : !isResidentValid('ativo')}">Ativo</label><br>
+                    <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isResidentValid('ativo')}"
+                      color="#3498DB" size="small" [(ngModel)]="residente.ativo" formControlName="ativo"></ui-switch>
+                  </div>
+                  <div class="col-sm-4">
+                    <button class="btn btn-primary btn-round btn-sm m-t-35 m-r-10"
+                      [disabled]="formularioResidentes.invalid" (click)="incluiResidente()">
+                      Adicionar
+                    </button>
+                    <button class="btn btn-warning btn-round btn-sm m-t-35" (click)="cancelaEdicao()">
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <app-card [title]="'Lista dos Residentes'" [cardOptionBlock]="true">
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Código</th>
+                          <th>Nome</th>
+                          <th>Parentesco</th>
+                          <th>Documento</th>
+                          <th>Opções</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let mora of listaResidentes">
+                          <th scope="row">{{mora.id == undefined ? '' : mora.id}}</th>
+                          <td>{{mora.nome}}</td>
+                          <td>{{mora.parentesco}}</td>
+                          <td>{{mora.documento}}</td>
+                          <td>
+                            <span class="badge badge-warning" *ngIf="isEdit(mora)">Em edição</span>
+                            <span class="badge badge-secondary pointer"
+                              (click)="modalExibeFoto.show(); moradorFotoTemp = mora" *ngIf="!isEdit(mora)">Foto</span>
+                            <span class="badge badge-warning pointer" (click)="carregaEditarResidente(mora)"
+                              *ngIf="!isEdit(mora)">Editar</span>
+                            <span class="badge badge-danger pointer" (click)="removerResidente(mora)"
+                              *ngIf="!isEdit(mora)">Deletar</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </app-card>
+          </form>
+        </app-card>
+      </form>
+    </app-card>
+  </div>
+</div>
+
+<app-modal-basic #modalCamera>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Capturar foto</h4>
+    <button type="button" class="close basic-close"
+      (click)="modalCamera.hide(); image64Temp = undefined; moradorFotoTemp = undefined">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <app-loader [observable]="observable"></app-loader>
+    <ack-webcam #webcam [options]="options" [mime]="image/jpeg" (success)="onCamSuccess($event)"
+      (catch)="onCamError($event)" [hidden]="image64Temp"></ack-webcam>
+    <image-cropper [imageBase64]="image64Temp" [aspectRatio]="3 / 4" format="jpeg" (imageCropped)="imageCropped($event)"
+      resizeToWidth="160" imageQuality="100" onlyScaleDown="true" *ngIf="image64Temp"></image-cropper>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="generateBase64(webcam)"
+      *ngIf="!image64Temp">Capturar</button>
+    <button type="button" class="btn btn-default waves-effect" (click)="image64Temp = undefined" *ngIf="image64Temp">
+      Nova Foto
+    </button>
+    <button type="button" class="btn btn-primary waves-effect waves-light"
+      (click)="modalCamera.hide(); confirmarModalFoto()" *ngIf="image64Temp">Confirmar</button>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic #modalImportaFoto>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Importar foto</h4>
+    <button type="button" class="close basic-close"
+      (click)="modalImportaFoto.hide(); limparModalUploadFoto(); moradorFotoTemp.foto64 = undefined">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <app-loader [observable]="observable"></app-loader>
+    <div class="form-group row">
+      <div class="col-sm-12">
+        <input type="file" class="form-control" (change)="fileChangeEvent($event)">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <image-cropper [imageChangedEvent]="imageChangedEvent" [aspectRatio]="3 / 4" format="jpeg"
+          (imageCropped)="imageCropped($event)" resizeToWidth="160" imageQuality="100" onlyScaleDown="true">
+        </image-cropper>
+      </div>
+      <!-- <div class="col-md-6">
+        <img [src]="croppedImage" *ngIf="croppedImage != undefined" />
+      </div> -->
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="confirmarModalFoto(); limparModalUploadFoto(); modalImportaFoto.hide();">Confirmar</button>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic #modalExibeFoto>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Exibir foto</h4>
+    <button type="button" class="close basic-close" (click)="modalExibeFoto.hide(); moradorFotoTemp = undefined">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <app-loader [observable]="observable"></app-loader>
+    <img class="img-fluid" [src]="'https://s3-sa-east-1.amazonaws.com/butler-fotos/' + moradorFotoTemp.id + '.jpg'"
+      alt="Foto não encontrada" *ngIf="moradorFotoTemp && !moradorFotoTemp.foto64">
+    <img class="img-fluid" [src]="moradorFotoTemp.foto64" *ngIf="moradorFotoTemp && moradorFotoTemp.foto64">
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="modalExibeFoto.hide(); moradorFotoTemp = undefined">Fechar</button>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic #modalDocumentos>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Documentos do apartamento {{ apartamento.numero }}</h4>
+    <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); this.uploader.clearQueue()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <app-loader [observable]="observable"></app-loader>
+    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+      [uploader]="uploader" class="well ngb-drop-zone text-center">
+      Arraste e solte arquivos aqui
+    </div>
+    <div *ngIf="uploader?.queue?.length !== 0">
+      <p>Quantidade de itens: {{ uploader?.queue?.length }}</p>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="30%">Nome</th>
+              <th>Progresso</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of uploader.queue">
+              <td><strong>{{ item?.file?.name }}</strong></td>
+              <td>
+                <div class="progress" style="margin-bottom: 0;">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                </div>
+              </td>
+              <td class="text-center">
+                <span *ngIf="item.isSuccess"><i class="fa fa-check"></i></span>
+                <span *ngIf="item.isCancel"><i class="fa fa-ban"></i></span>
+                <span *ngIf="item.isError"><i class="fa fa-times"></i></span>
+              </td>
+              <td nowrap>
+                <button type="button" class="btn btn-success btn-sm m-b-5" (click)="item.upload()"
+                  [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                  <span class="fa fa-upload"></span> Upload
+                </button>
+                <button type="button" class="btn btn-warning btn-sm m-b-5" (click)="item.cancel()"
+                  [disabled]="!item.isUploading">
+                  <span class="fa fa-ban"></span> Cancelar
+                </button>
+                <button type="button" class="btn btn-danger btn-sm m-b-5" (click)="item.remove()">
+                  <span class="fa fa-trash"></span> Remover
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <p>
+          <ngb-progressbar type="primary" [value]="uploader.progress"></ngb-progressbar>
+        </p>
+
+        <div class="sub-title">Ações</div>
+        <button type="button" class="btn btn-success btn-sm m-b-5" (click)="uploader.uploadAll()"
+          [disabled]="!uploader.getNotUploadedItems().length">
+          <span class="fa fa-upload"></span> Upload todos
+        </button>
+        <button type="button" class="btn btn-warning btn-sm m-b-5" (click)="uploader.cancelAll()"
+          [disabled]="!uploader.isUploading">
+          <span class="fa fa-ban"></span> Cancelar todos
+        </button>
+        <button type="button" class="btn btn-danger btn-sm m-b-5" (click)="uploader.clearQueue()"
+          [disabled]="!uploader.queue.length">
+          <span class="fa fa-trash"></span> Remover todos
+        </button>
+      </div>
+    </div>
+    <br>
+    <div class="table-responsive" *ngIf="documentos.length !== 0">
+      <table class="table table-inverse">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Excluir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of documentos">
+            <th scope="row"><a [href]="doc.path" target="_blank">{{ doc.nome }}</a></th>
+            <td><label class="label bg-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="modalDocumentos.hide(); this.uploader.clearQueue()">Fechar</button>
+  </div>
+</app-modal-basic>

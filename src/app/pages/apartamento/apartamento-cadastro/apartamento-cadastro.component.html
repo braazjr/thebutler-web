@@ -1,0 +1,48 @@
+<ng2-toasty></ng2-toasty>
+
+<div class="row">
+  <div class="col-sm-12 filter-bar">
+    <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+      {{ !apartamento.id ? 'Cadastro de Apartamento' : ('Cadastro da Apartamento ' + apartamento.id) }}
+      <div class="nav-item nav-grid">
+        <span class="m-r-15">Ações: </span>
+
+        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip"
+          data-placement="top" title="Lista de Apartamentos" [routerLink]="['/apartamento/lista']">
+          <i class="icofont icofont-listing-box icofont-2x"></i>
+        </button>
+        <button type="button" class="btn btn-sm" data-toggle="tooltip"
+          data-placement="top" title="Salvar" (click)="salvar()" [disabled]="formulario.invalid">
+          <i class="icofont icofont-save icofont-2x"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <app-card>
+      <app-loader [observable]="observable"></app-loader>
+      <form autocomplete="off" [formGroup]="formulario">
+        <div class="form-group row">
+          <div class="col-sm-4">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('bloco')}">Bloco</label>
+            <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" [(ngModel)]="blocoId" formControlName="bloco">
+            </ng-select>
+          </div>
+          <div class="col-sm-2">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
+            <input type="number" class="form-control form-control-round" #numero [(ngModel)]="apartamento.numero"
+              formControlName="numero">
+          </div>
+          <div class="col-sm-2">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
+            <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
+              size="small" [(ngModel)]="apartamento.ativo" formControlName="ativo"></ui-switch>
+          </div>
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>

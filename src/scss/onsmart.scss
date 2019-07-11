@@ -1,0 +1,16 @@
+.pointer {
+    cursor: pointer !important;
+}
+
+/////////////////////////////////////// CHANGE COMPONENTS
+
+ng-select {
+    div.below > div.single {
+        height: 35px;
+        border-radius: 50px;
+
+        div.value, div.toggle {
+            line-height: 20px;
+        }
+    }
+}

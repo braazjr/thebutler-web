@@ -1,0 +1,52 @@
+<div class="page-body">
+
+  <div class="row">
+    <div class="col-sm-12 filter-bar">
+      <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+        Lista de Rotas
+        <div class="nav-item nav-grid">
+          <span class="m-r-15">Ações: </span>
+
+          <button type="button" class="btn btn-sm" data-toggle="tooltip"
+            data-placement="top" title="Cadastrar nova rota" [routerLink]="['/rota/cadastro']">
+            <i class="icofont icofont-ui-add"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <app-card>
+        <app-loader [observable]="observable"></app-loader>
+        <div class="row">
+          <div class="col-sm-12">
+            <label class="dt-cust-search f-right">
+              <div class="form-group">
+                <label>Pesquisar: </label>
+                <input type='text' class="form-control input-sm m-l-10" (keyup)='updateFilter($event)' />
+              </div>
+            </label>
+          </div>
+        </div>
+        <ngx-datatable #table class='data-table' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+          [rowHeight]="50" [rows]="listaRotas" [limit]="10">
+          <ngx-datatable-column name="Nome"></ngx-datatable-column>
+          <ngx-datatable-column name="Ativo">
+            <ng-template let-ativo="value" ngx-datatable-cell-template>
+              <label class="label bg-success" *ngIf="ativo">Ativo</label>
+              <label class="label bg-danger" *ngIf="!ativo">Inativo</label>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="id" name="Opções">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="label bg-warning pointer" [routerLink]="['/rota/cadastro', row.id]">Ver/Editar</label>
+              <label class="label bg-danger pointer" (click)="excluir(row)">Excluir</label>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </app-card>
+    </div>
+  </div>
+</div>
