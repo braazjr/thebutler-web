@@ -1,6 +1,7 @@
-import {Component, Directive, ElementRef, HostListener, OnInit} from '@angular/core';
-import {animate, AUTO_STYLE, state, style, transition, trigger} from '@angular/animations';
-import {MenuItems} from '../../shared/menu-items/menu-items';
+import { Component, Directive, ElementRef, HostListener, OnInit } from '@angular/core';
+import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
+import { MenuItems } from '../../shared/menu-items/menu-items';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -54,12 +55,12 @@ import {MenuItems} from '../../shared/menu-items/menu-items';
     ]),
     trigger('fadeInOutTranslate', [
       transition(':enter', [
-        style({opacity: 0}),
-        animate('400ms ease-in-out', style({opacity: 1}))
+        style({ opacity: 0 }),
+        animate('400ms ease-in-out', style({ opacity: 1 }))
       ]),
       transition(':leave', [
-        style({transform: 'translate(0)'}),
-        animate('400ms ease-in-out', style({opacity: 0}))
+        style({ transform: 'translate(0)' }),
+        animate('400ms ease-in-out', style({ opacity: 0 }))
       ])
     ])
   ]
@@ -119,7 +120,10 @@ export class AdminComponent implements OnInit {
 
   public config: any;
 
-  constructor(public menuItems: MenuItems) {
+  constructor(
+    public menuItems: MenuItems,
+    private authService: AuthService
+  ) {
     this.navType = 'st1';
     this.themeLayout = 'horizontal'; // vertical
     this.verticalPlacement = 'left';
@@ -379,13 +383,17 @@ export class AdminComponent implements OnInit {
     this.headerFixedMargin = this.isHeaderChecked === true ? '56px' : '';
   }
 
+  logout() {
+    this.authService.logout();
+  }
+
 }
 
 @Directive({
   selector: '[appTrigger]'
 })
 export class LinkTriggerDirective {
-  constructor(private elements: ElementRef) {}
+  constructor(private elements: ElementRef) { }
 
   @HostListener('click', ['$event'])
   onToggle($event: any) {
