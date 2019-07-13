@@ -3,16 +3,16 @@
 <div class="row">
   <div class="col-sm-12 filter-bar">
     <nav class="navbar navbar-light bg-faded m-b-30 p-10">
-      {{ !usuario.id ? 'Cadastro de Usuário' : ('Cadastro da Usuário ' + usuario.id) }}
+      {{ !usuario.id ? 'Cadastro de Usuário' : ('Cadastro da Usuário: ' + usuario.primeiroNome + ' ' + usuario.ultimoNome) }}
       <div class="nav-item nav-grid">
         <span class="m-r-15">Ações: </span>
 
-        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip"
-          data-placement="top" title="Lista de Usuários" [routerLink]="['/usuario/lista']">
+        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+          title="Lista de Usuários" [routerLink]="['/usuario/lista']">
           <i class="icofont icofont-listing-box icofont-2x"></i>
         </button>
-        <button type="button" class="btn btn-sm" data-toggle="tooltip"
-          data-placement="top" title="Salvar" (click)="salvar()" [disabled]="formulario.invalid">
+        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
+          (click)="salvar()" [disabled]="formulario.invalid">
           <i class="icofont icofont-save icofont-2x"></i>
         </button>
       </div>
