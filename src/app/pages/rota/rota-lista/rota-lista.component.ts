@@ -14,9 +14,14 @@ export class RotaListaComponent implements OnInit {
   observable: any;
 
   listaRotas: Rota[] = [];
+  listaRotasTemp: Rota[] = [];
   rota: Rota;
 
-  constructor(private _defaultService: DefaultService) { }
+  offset = 0;
+
+  constructor(
+    private _defaultService: DefaultService
+  ) { }
 
   ngOnInit() {
     this.getRotas();
@@ -24,7 +29,7 @@ export class RotaListaComponent implements OnInit {
 
   getRotas() {
     this.observable = this._defaultService.get('rota').subscribe(data => {
-      this.listaRotas = data as Rota[];
+      this.listaRotasTemp = this.listaRotas = data as Rota[];
     }, error => {
       console.error(error)
     });
@@ -44,5 +49,14 @@ export class RotaListaComponent implements OnInit {
           this.getRotas();
         });
     })
+  }
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    const temp = this.listaRotas.filter((rot) => rot.nome.toLowerCase().indexOf(val) !== -1 || !val);
+
+    this.listaRotasTemp = temp;
+    this.offset = 0;
   }
 }

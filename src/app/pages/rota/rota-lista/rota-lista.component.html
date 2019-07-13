@@ -7,8 +7,8 @@
         <div class="nav-item nav-grid">
           <span class="m-r-15">Ações: </span>
 
-          <button type="button" class="btn btn-sm" data-toggle="tooltip"
-            data-placement="top" title="Cadastrar nova rota" [routerLink]="['/rota/cadastro']">
+          <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
+            title="Cadastrar nova rota" [routerLink]="['/rota/cadastro']">
             <i class="icofont icofont-ui-add"></i>
           </button>
         </div>
@@ -31,7 +31,7 @@
           </div>
         </div>
         <ngx-datatable #table class='data-table' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
-          [rowHeight]="50" [rows]="listaRotas" [limit]="10">
+          [rowHeight]="50" [rows]="listaRotasTemp" [limit]="10">
           <ngx-datatable-column name="Nome"></ngx-datatable-column>
           <ngx-datatable-column name="Ativo">
             <ng-template let-ativo="value" ngx-datatable-cell-template>
