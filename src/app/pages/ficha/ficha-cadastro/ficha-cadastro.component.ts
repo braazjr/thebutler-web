@@ -56,6 +56,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   imageChangedEvent: any;
   croppedImage: any;
   moradorFotoTemp: Morador;
+  options = {};
 
   uploader: FileUploader;
   hasBaseDropZoneOver = false;

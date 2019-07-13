@@ -7,8 +7,8 @@
         <div class="nav-item nav-grid">
           <span class="m-r-15">Ações: </span>
 
-          <button type="button" class="btn btn-sm" data-toggle="tooltip"
-            data-placement="top" title="Cadastrar nova usuario" [routerLink]="['/usuario/cadastro']">
+          <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
+            title="Cadastrar nova usuario" [routerLink]="['/usuario/cadastro']">
             <i class="icofont icofont-ui-add"></i>
           </button>
         </div>
@@ -20,16 +20,6 @@
     <div class="col-sm-12">
       <app-card>
         <app-loader [observable]="observable"></app-loader>
-        <div class="row">
-          <div class="col-sm-12">
-            <label class="dt-cust-search f-right">
-              <div class="form-group">
-                <label>Pesquisar: </label>
-                <input type='text' class="form-control input-sm m-l-10" (keyup)='updateFilter($event)' />
-              </div>
-            </label>
-          </div>
-        </div>
         <ngx-datatable #table class='data-table' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
           [rowHeight]="50" [rows]="listaUsuarios" [externalPaging]="true"
           [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
