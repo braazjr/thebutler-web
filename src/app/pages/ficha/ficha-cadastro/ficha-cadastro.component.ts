@@ -12,7 +12,7 @@ import { TipoMoradorService } from '../../../services/tipo-morador.service';
 import { WebCamComponent } from 'ack-angular-webcam';
 import { SharedService } from '../../../services/shared.service';
 import { ToastService } from '../../../services/toast.service';
-import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
+import { FileUploader } from 'ng2-file-upload';
 import { environment } from '../../../../environments/environment';
 import { ApartamentoService } from '../../../services/apartamento.service';
 import * as fileSaver from 'file-saver';
@@ -263,7 +263,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         morador.usuario = this.sharedService.getUsuarioLogged();
       });
 
-      this.observable = this.defaultService.atualizar('apartamento', apartamento).subscribe(response => {
+      this.observable = this.defaultService.atualizar('apartamento', apartamento).subscribe(() => {
         this.getById();
         this.toastService.addToast('success', `Atualização da ficha do apartamento ${this.apartamento.numero}`,
           `Ficha atualizada com sucesso!`);

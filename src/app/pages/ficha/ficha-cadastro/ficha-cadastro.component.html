@@ -203,7 +203,7 @@
                   <div class="col-sm-4">
                     <label class="col-form-label">Tipo Documento</label>
                     <ng-select [ngClass]="'ng-select'" [options]="listaTipoDocumentos"
-                      [(ngModel)]="residente.tipoDocumentoResidente" [ngModelOptions]="{standalone: true}">
+                      [(ngModel)]="residente.tipoDocumento" [ngModelOptions]="{standalone: true}">
                     </ng-select>
                   </div>
                   <div class="col-sm-4">
@@ -287,7 +287,7 @@
   </div>
   <div class="app-modal-body">
     <app-loader [observable]="observable"></app-loader>
-    <ack-webcam #webcam [options]="options" [mime]="image/jpeg" (success)="onCamSuccess($event)"
+    <ack-webcam #webcam [options]="options" [mime]="'image/jpeg'" (success)="onCamSuccess($event)"
       (catch)="onCamError($event)" [hidden]="image64Temp"></ack-webcam>
     <image-cropper [imageBase64]="image64Temp" [aspectRatio]="3 / 4" format="jpeg" (imageCropped)="imageCropped($event)"
       resizeToWidth="160" imageQuality="100" onlyScaleDown="true" *ngIf="image64Temp"></image-cropper>
