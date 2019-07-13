@@ -38,6 +38,7 @@
     "core-js": "^2.5.4",
     "css-animator": "^2.3.1",
     "date-fns": "^1.30.1",
+    "express": "^4.17.1",
     "famfamfam-flags": "^1.0.0",
     "file-saver": "^2.0.2",
     "font-awesome-scss": "^1.0.0",
