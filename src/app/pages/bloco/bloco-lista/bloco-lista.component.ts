@@ -14,9 +14,14 @@ export class BlocoListaComponent implements OnInit {
   observable: any;
 
   listaBlocos: Bloco[] = [];
+  listaBlocosTemp: Bloco[] = [];
   bloco: Bloco;
 
-  constructor(private _defaultService: DefaultService) { }
+  offset = 0;
+
+  constructor(
+    private _defaultService: DefaultService
+  ) { }
 
   ngOnInit() {
     this.getBlocos();
@@ -24,7 +29,7 @@ export class BlocoListaComponent implements OnInit {
 
   getBlocos() {
     this.observable = this._defaultService.get('bloco').subscribe(data => {
-      this.listaBlocos = data as Bloco[];
+      this.listaBlocosTemp = this.listaBlocos = data as Bloco[];
     }, error => {
       console.error(error)
     });
@@ -44,5 +49,20 @@ export class BlocoListaComponent implements OnInit {
           this.getBlocos();
         });
     })
+  }
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    const temp = this.listaBlocos.filter(function (blo) {
+      return (
+        blo.nome.toLowerCase().indexOf(val) !== -1
+        || blo.condominio.nome.toLowerCase().indexOf(val) !== -1
+        || blo.condominio.construtora.nomeFantasia.toLowerCase().indexOf(val) !== -1
+      ) || !val;
+    });
+
+    this.listaBlocosTemp = temp;
+    this.offset = 0;
   }
 }

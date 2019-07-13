@@ -15,4 +15,12 @@ export class BlocoService {
     return this.http.get(`${environment.urlSpring}/bloco/condominio/${idCondominio}`, { headers: hds, withCredentials: true });
   }
 
+  getBlocos(pageable) {
+    const hds = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+
+    return this.http.get(`${environment.urlSpring}/bloco`, { headers: hds, withCredentials: true, params: pageable });
+  }
+
 }

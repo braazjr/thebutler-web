@@ -11,6 +11,7 @@ import { SelectModule } from 'ng-select';
 import { UiSwitchModule } from 'ng2-ui-switch';
 import { ToastyModule } from 'ng2-toasty';
 import { ToastService } from '../../services/toast.service';
+import { BlocoService } from 'src/app/services/bloco.service';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { ToastService } from '../../services/toast.service';
   declarations: [BlocoListaComponent, BlocoCadastroComponent],
   providers: [
     DefaultService,
-    ToastService
+    ToastService,
+    BlocoService
   ]
 })
 export class BlocoModule { }

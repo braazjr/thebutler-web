@@ -14,9 +14,14 @@ export class EmpresaListaComponent implements OnInit {
   observable: any;
 
   listaEmpresas: Empresa[] = [];
+  listaEmpresasTemp: Empresa[] = [];
   empresa: Empresa;
 
-  constructor(private _defaultService: DefaultService) { }
+  offset = 0;
+
+  constructor(
+    private _defaultService: DefaultService
+  ) { }
 
   ngOnInit() {
     this.getEmpresas();
@@ -24,7 +29,7 @@ export class EmpresaListaComponent implements OnInit {
 
   getEmpresas() {
     this.observable = this._defaultService.get('empresa').subscribe(data => {
-      this.listaEmpresas = data as Empresa[];
+      this.listaEmpresasTemp = this.listaEmpresas = data as Empresa[];
     }, error => {
       console.error(error)
     });
@@ -44,5 +49,16 @@ export class EmpresaListaComponent implements OnInit {
           this.getEmpresas();
         });
     })
+  }
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    const temp = this.listaEmpresas.filter(function (d) {
+      return (d.nomeSocial.toLowerCase().indexOf(val) !== -1 || d.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
+    });
+
+    this.listaEmpresasTemp = temp;
+    this.offset = 0;
   }
 }

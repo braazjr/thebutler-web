@@ -14,9 +14,14 @@ export class CondominioListaComponent implements OnInit {
   observable: any;
 
   listaCondominios: Condominio[] = [];
+  listaCondominiosTemp: Condominio[] = [];
   condominio: Condominio;
 
-  constructor(private _defaultService: DefaultService) { }
+  offset = 0;
+
+  constructor(
+    private _defaultService: DefaultService
+  ) { }
 
   ngOnInit() {
     this.getCondominios();
@@ -24,7 +29,7 @@ export class CondominioListaComponent implements OnInit {
 
   getCondominios() {
     this.observable = this._defaultService.get('condominio').subscribe(data => {
-      this.listaCondominios = data as Condominio[];
+      this.listaCondominiosTemp = this.listaCondominios = data as Condominio[];
     }, error => {
       console.error(error)
     });
@@ -44,5 +49,16 @@ export class CondominioListaComponent implements OnInit {
           this.getCondominios();
         });
     })
+  }
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    const temp = this.listaCondominios.filter(function (cond) {
+      return (cond.nome.toLowerCase().indexOf(val) !== -1 || cond.construtora.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
+    });
+
+    this.listaCondominiosTemp = temp;
+    this.offset = 0;
   }
 }

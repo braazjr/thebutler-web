@@ -14,9 +14,14 @@ export class ConstrutoraListaComponent implements OnInit {
   observable: any;
 
   listaConstrutoras: Construtora[] = [];
+  listaConstrutorasTemp: Construtora[] = [];
   construtora: Construtora;
 
-  constructor(private _defaultService: DefaultService) { }
+  offset = 0;
+
+  constructor(
+    private _defaultService: DefaultService
+  ) { }
 
   ngOnInit() {
     this.getConstrutoras();
@@ -24,7 +29,7 @@ export class ConstrutoraListaComponent implements OnInit {
 
   getConstrutoras() {
     this.observable = this._defaultService.get('construtora').subscribe(data => {
-      this.listaConstrutoras = data as Construtora[];
+      this.listaConstrutorasTemp = this.listaConstrutoras = data as Construtora[];
     }, error => {
       console.error(error)
     });
@@ -44,5 +49,16 @@ export class ConstrutoraListaComponent implements OnInit {
           this.getConstrutoras();
         });
     })
+  }
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    const temp = this.listaConstrutoras.filter(function (constr) {
+      return (constr.nomeSocial.toLowerCase().indexOf(val) !== -1 || constr.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
+    });
+
+    this.listaConstrutorasTemp = temp;
+    this.offset = 0;
   }
 }
