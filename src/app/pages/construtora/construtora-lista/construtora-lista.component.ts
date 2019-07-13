@@ -38,7 +38,7 @@ export class ConstrutoraListaComponent implements OnInit {
   excluir(construtora) {
     swal({
       title: 'Exclusão de construtora',
-      text: `Deseja excluir a construtora: ${construtora.nomeSocial}?`,
+      text: `Deseja excluir a construtora: ${construtora.razaoSocial}?`,
       type: 'warning',
       showCancelButton: true,
       cancelButtonText: 'Não',
@@ -55,7 +55,7 @@ export class ConstrutoraListaComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.listaConstrutoras.filter(function (constr) {
-      return (constr.nomeSocial.toLowerCase().indexOf(val) !== -1 || constr.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
+      return (constr.razaoSocial.toLowerCase().indexOf(val) !== -1 || constr.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
     });
 
     this.listaConstrutorasTemp = temp;

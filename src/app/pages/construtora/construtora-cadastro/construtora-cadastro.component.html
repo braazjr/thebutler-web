@@ -49,10 +49,11 @@
               size="small" [(ngModel)]="construtora.ativo" formControlName="ativo"></ui-switch>
           </div>
           <div class="col-sm-12">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nomeSocial')}">Nome
-              Social</label>
-            <input type="text" class="form-control form-control-round" #nomeSocial [(ngModel)]="construtora.nomeSocial"
-              formControlName="nomeSocial">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('razaoSocial')}">
+              Razão Social
+            </label>
+            <input type="text" class="form-control form-control-round" #razaoSocial
+              [(ngModel)]="construtora.razaoSocial" formControlName="razaoSocial">
           </div>
           <div class="col-sm-2">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('cep')}">CEP</label>

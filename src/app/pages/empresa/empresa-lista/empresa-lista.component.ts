@@ -38,7 +38,7 @@ export class EmpresaListaComponent implements OnInit {
   excluir(empresa) {
     swal({
       title: 'Exclusão de empresa',
-      text: `Deseja excluir a empresa: ${empresa.nomeSocial}?`,
+      text: `Deseja excluir a empresa: ${empresa.razaoSocial}?`,
       type: 'warning',
       showCancelButton: true,
       cancelButtonText: 'Não',
@@ -55,7 +55,7 @@ export class EmpresaListaComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.listaEmpresas.filter(function (d) {
-      return (d.nomeSocial.toLowerCase().indexOf(val) !== -1 || d.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
+      return (d.razaoSocial.toLowerCase().indexOf(val) !== -1 || d.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
     });
 
     this.listaEmpresasTemp = temp;

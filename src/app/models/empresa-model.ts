@@ -4,6 +4,6 @@ export class Empresa extends DadosGenericoEndereco {
 
     cnpj: string;
     nomeFantasia: string;
-    nomeSocial: string;
+    razaoSocial: string;
     complemento: string;
 }
