@@ -47,7 +47,7 @@ export class ConstrutoraCadastroComponent implements OnInit {
       cnpj: ['', [Validators.required, Validators.minLength(18), Validators.maxLength(18), Validators.pattern(this.cnpjRegex)]],
       nomeFantasia: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       ativo: ['', [Validators.required]],
-      razaoSocial: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      razaoSocial: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       bairro: [{ value: '', disabled: true }, [Validators.required]],
       cidade: [{ value: '', disabled: true }, [Validators.required]],
       estado: [{ value: '', disabled: true }, [Validators.required]],
