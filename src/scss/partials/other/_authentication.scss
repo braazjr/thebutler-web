@@ -5,7 +5,7 @@
 .common-img-bg {
     background-size: cover;
     // background: url(../assets/images/bg.jpg) no-repeat center center fixed;
-    background: linear-gradient(45deg, $color-blue, lighten($color-blue,10%));
+    // background: linear-gradient(45deg, $color-blue, lighten($color-blue,10%));
     height: 100%;
 }
 .signin-card .auth-box button i,.signup-card .auth-box button i,.login-card .auth-box button i{
@@ -74,7 +74,7 @@
         background: #fff;
     }
     h1 {
-        color: #1b8bf9;
+        color: white;
     }
     .forget {
         border-bottom: 1px solid #fff;
@@ -82,10 +82,14 @@
         line-height: 0.6;
     }
     h3 {
-        color: #666666;
+        color: white;
         font-size: 24px;
         font-weight: 600;
         margin-top: 20px;
+    }
+
+    a {
+        color: white !important;
     }
 }
 
@@ -151,7 +155,7 @@
 .error-403,
 .login {
     align-items: center;
-    background-color: #2196F3;
+    // background-color: #2196F3;
     display: flex;
     height: 100%;
     position: fixed;
@@ -161,7 +165,7 @@
 }
 
 .auth-box {
-    background-color: #fff;
+    background: $color-blue;
     border-radius: 8px;
     margin: 20px 0 0 0;
     padding: 20px;

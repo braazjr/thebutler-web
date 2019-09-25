@@ -165,8 +165,8 @@ export class AdminComponent implements OnInit {
     this.isVerticalLayoutChecked = false;
     this.isSidebarChecked = true;
     this.isHeaderChecked = true;
-    this.headerFixedMargin = '56px';
-    this.sidebarFixedHeight = 'calc(100vh - 56px)';
+    this.headerFixedMargin = '75px';
+    this.sidebarFixedHeight = 'calc(100vh - 75px)';
     this.itemBorderStyle = 'none';
     this.subItemBorder = true;
     this.itemBorder = true;

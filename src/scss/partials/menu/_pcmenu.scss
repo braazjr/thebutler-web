@@ -1,20 +1,20 @@
 $menu-title: #000,#624e89,#3c4fb1,#919aa3,#999,#fff;
 
-$header-theme:#3b4650,#473B7B,#000000,#ff5858,#4099ff,#2d0102;
+$header-theme:#3b4650,#473B7B,#000000,#ff5858,#08A5D0,#2d0102;
 $header-right-theme:#647688,#30D2BE,#0fb3c2,#f09819,#6E7FF3,#091991;
 
 //#038f9e, #4DD0E1
 
-$header-theme-light:#11c788,#FF5252,#ff784f,#38a9f9,#4099ff,#39ADB5;
+$header-theme-light:#11c788,#FF5252,#ff784f,#38a9f9,#08A5D0,#39ADB5;
 $header-right-theme-light:#54e2b7,#f48fb1,#ff5370,#43e9b3,#73b4ff,#7C4DFF;
 
-$box-bg-color: #3b4650,#f78ea4,#6E7FF3,#39ADB5,#4099ff,#f09819;
+$box-bg-color: #3b4650,#f78ea4,#6E7FF3,#39ADB5,#08A5D0,#f09819;
 
 $left-navbar-theme: #3b4650;
 $left-navbar-light-theme: #fff;
 
-$active-item:#3b4650,#473B7B,#000000,#ff5858,#4099ff,#2d0102,#11c788,#FF5252,#ff784f,#38a9f9,#038f9e,#39ADB5;
-$icon-color: #4099ff,#f78ea4,#2ed8b6,#f1c40f,#ab7967,#39ADB5,#7C4DFF,#FF5370;
+$active-item:#3b4650,#473B7B,#000000,#ff5858,#08A5D0,#2d0102,#11c788,#FF5252,#ff784f,#38a9f9,#038f9e,#39ADB5;
+$icon-color: #08A5D0,#f78ea4,#2ed8b6,#f1c40f,#ab7967,#39ADB5,#7C4DFF,#FF5370;
 .pcoded {
     &[nav-type="st1"] {
         .pcoded-item.pcoded-left-item {
@@ -161,7 +161,7 @@ $icon-color: #4099ff,#f78ea4,#2ed8b6,#f1c40f,#ab7967,#39ADB5,#7C4DFF,#FF5370;
       Main-header css start
 ==========================  **/
 .header-navbar {
-    min-height: 56px;
+    min-height: 75px;
     padding: 0;
 
     .navbar-wrapper {
@@ -170,7 +170,7 @@ $icon-color: #4099ff,#f78ea4,#2ed8b6,#f1c40f,#ab7967,#39ADB5,#7C4DFF,#FF5370;
             align-items: center;
             display: flex;
             float: left;
-            height: 56px;
+            height: 75px;
             text-align: center;
             text-transform: uppercase;
             width: 235px;
@@ -266,6 +266,10 @@ $icon-color: #4099ff,#f78ea4,#2ed8b6,#f1c40f,#ab7967,#39ADB5,#7C4DFF,#FF5370;
                             background-color: #fff;
                         }
                     }
+                }
+
+                li {
+                    line-height: 4.5 !important;
                 }
             }
 
@@ -3825,35 +3829,35 @@ body {
             }
         }
 
-        &[sidebar-img-type="img1"] {
-            .pcoded-navbar {
-                background-image: url('../assets/images/navbar-img-1.jpg');
-            }
-        }
+        // &[sidebar-img-type="img1"] {
+        //     .pcoded-navbar {
+        //         background-image: url('../assets/images/navbar-img-1.jpg');
+        //     }
+        // }
 
-        &[sidebar-img-type="img2"] {
-            .pcoded-navbar {
-                background-image: url('../assets/images/navbar-img-2.jpg');
-            }
-        }
+        // &[sidebar-img-type="img2"] {
+        //     .pcoded-navbar {
+        //         background-image: url('../assets/images/navbar-img-2.jpg');
+        //     }
+        // }
 
-        &[sidebar-img-type="img3"] {
-            .pcoded-navbar {
-                background-image: url('../assets/images/navbar-img-3.jpg');
-            }
-        }
+        // &[sidebar-img-type="img3"] {
+        //     .pcoded-navbar {
+        //         background-image: url('../assets/images/navbar-img-3.jpg');
+        //     }
+        // }
 
-        &[sidebar-img-type="img4"] {
-            .pcoded-navbar {
-                background-image: url('../assets/images/navbar-img-4.jpg');
-            }
-        }
+        // &[sidebar-img-type="img4"] {
+        //     .pcoded-navbar {
+        //         background-image: url('../assets/images/navbar-img-4.jpg');
+        //     }
+        // }
 
-        &[sidebar-img-type="img5"] {
-            .pcoded-navbar {
-                background-image: url('../assets/images/navbar-img-5.jpg');
-            }
-        }
+        // &[sidebar-img-type="img5"] {
+        //     .pcoded-navbar {
+        //         background-image: url('../assets/images/navbar-img-5.jpg');
+        //     }
+        // }
     }
 
     &[theme-layout="vertical"] {
@@ -4276,10 +4280,10 @@ body {
             height: 20px;
         }
 
-        &[layout-type="img"] {
-            background-size: cover;
-            background-image: url('../assets/images/navbar-img-2.jpg');
-        }
+        // &[layout-type="img"] {
+        //     background-size: cover;
+        //     background-image: url('../assets/images/navbar-img-2.jpg');
+        // }
 
         &.image {
             width: 45px;
@@ -4293,25 +4297,25 @@ body {
                 }
             }
 
-            &[navbg-pattern="img1"] {
-                background-image: url('../assets/images/navbar-img-1.jpg');
-            }
+            // &[navbg-pattern="img1"] {
+            //     background-image: url('../assets/images/navbar-img-1.jpg');
+            // }
 
-            &[navbg-pattern="img2"] {
-                background-image: url('../assets/images/navbar-img-2.jpg');
-            }
+            // &[navbg-pattern="img2"] {
+            //     background-image: url('../assets/images/navbar-img-2.jpg');
+            // }
 
-            &[navbg-pattern="img3"] {
-                background-image: url('../assets/images/navbar-img-3.jpg');
-            }
+            // &[navbg-pattern="img3"] {
+            //     background-image: url('../assets/images/navbar-img-3.jpg');
+            // }
 
-            &[navbg-pattern="img4"] {
-                background-image: url('../assets/images/navbar-img-4.jpg');
-            }
+            // &[navbg-pattern="img4"] {
+            //     background-image: url('../assets/images/navbar-img-4.jpg');
+            // }
 
-            &[navbg-pattern="img5"] {
-                background-image: url('../assets/images/navbar-img-5.jpg');
-            }
+            // &[navbg-pattern="img5"] {
+            //     background-image: url('../assets/images/navbar-img-5.jpg');
+            // }
         }
 
         .cont,
@@ -4609,6 +4613,7 @@ body {
                         .nav-right {
                             li {
                                 float: right !important;
+                                line-height: 4.5 !important;
                             }
                         }
 
