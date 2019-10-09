@@ -1,17 +1,16 @@
 <div class="page-body">
-
-  <div class="row">
-    <div class="col-sm-12 filter-bar">
-      <nav class="navbar navbar-light bg-faded m-b-30 p-10">
-        Lista de Moradores
-      </nav>
-    </div>
-  </div>
-
   <div class="row">
     <div class="col-sm-12">
       <app-card>
         <app-loader [observable]="observable"></app-loader>
+        <div class="row">
+          <div class="col-sm-12 filter-bar">
+            <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+              Lista de Moradores
+            </nav>
+          </div>
+        </div>
+      
         <!-- filtros -->
         <div class="row">
           <div class="col-sm-12">
