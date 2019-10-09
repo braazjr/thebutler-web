@@ -176,7 +176,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setBackgroundPattern('pattern1');
+    // this.setBackgroundPattern('pattern1');
     /*document.querySelector('body').classList.remove('dark');*/
   }
 

@@ -42,7 +42,7 @@
             </li> -->
           </ul>
           <ul [@mobileHeaderNavRight]="navRight" [ngClass]="navRight" class="nav-right">
-            <li (clickOutside)="notificationOutsideClick('live')" class="header-notification"
+            <!-- <li (clickOutside)="notificationOutsideClick('live')" class="header-notification"
               [ngClass]="liveNotificationClass" (click)="toggleLiveNotification()">
               <a href="javascript:">
                 <i class="ti-bell"></i>
@@ -93,11 +93,11 @@
                 <i class="ti-comments"></i>
                 <span class="badge bg-c-green"></span>
               </a>
-            </li>
+            </li> -->
             <li (clickOutside)="notificationOutsideClick('profile')" class="user-profile header-notification"
               [ngClass]="profileNotificationClass" (click)="toggleProfileNotification()">
               <a href="javascript:">
-                <img src="assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
+                <!-- <img src="assets/images/avatar-blank.jpg" class="img-radius" alt="User-Profile-Image"> -->
                 <span>John Doe</span>
                 <i class="ti-angle-down"></i>
               </a>

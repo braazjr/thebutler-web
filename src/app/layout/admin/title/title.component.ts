@@ -25,7 +25,7 @@ export class TitleComponent {
           });
         } while (currentRoute);
         if (title !== undefined ) {
-          this.titleService.setTitle(title + ' | Gradient Able Angular 7+');
+          this.titleService.setTitle(`Butler | ${title}`);
         }
       });
   }
