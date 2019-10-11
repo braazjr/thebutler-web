@@ -16,5 +16,23 @@ ng-select {
 }
 
 .filter-bar > .navbar {
-    background-color: #eceeef !important;
+    background-color: $primary-color !important;
+    color: $white-txt;
+
+    button {
+        color: $white-txt;
+    }
+}
+
+datatable-footer {
+    background-color: $primary-color !important;
+    color: $white-txt;
+
+    .datatable-pager a {
+        color: $white-txt !important;
+    }
+
+    .datatable-pager li.active {
+        font-weight: bold;
+    }
 }
