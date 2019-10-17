@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { IOption } from 'ng-select';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-apartamento-lista',
@@ -57,7 +58,8 @@ export class ApartamentoListaComponent implements OnInit {
     private defaultService: DefaultService,
     private apartamentoService: ApartamentoService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) {
     this.listaData = {
       size: 10,
