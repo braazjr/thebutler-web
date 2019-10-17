@@ -29,20 +29,25 @@
           <div class="col-sm-4">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('cnpj')}">Cnpj</label>
             <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('cnpj')}" #cnpj [(ngModel)]="empresa.cnpj"
-              formControlName="cnpj" [textMask]="{mask: cnpjMask}">
+              [ngClass]="{'form-control-danger' : !isValid('cnpj')}" #cnpj formControlName="cnpj"
+              [textMask]="{mask: cnpjMask}">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nomeFantasia')}">Nome
               Fantasia</label>
             <input type="text" class="form-control form-control-round"
               [ngClass]="{'form-control-danger' : !isValid('nomeFantasia')}" #nomeFantasia
-              [(ngModel)]="empresa.nomeFantasia" formControlName="nomeFantasia">
+              formControlName="nomeFantasia">
+          </div>
+          <div class="col-sm-2" formGroupName="empresaConfig">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('empresaConfig.qtyApartamentos')}">Número</label>
+            <input type="number" class="form-control form-control-round"
+              [ngClass]="{'form-control-danger' : !isValid('empresaConfig.qtyApartamentos')}" #numero formControlName="qtyApartamentos">
           </div>
           <div class="col-sm-2">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
             <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
-              size="small" [(ngModel)]="empresa.ativo" formControlName="ativo"></ui-switch>
+              size="small" formControlName="ativo"></ui-switch>
           </div>
         </div>
         <div class="form-group row">
@@ -51,60 +56,52 @@
               Razão Social
             </label>
             <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('razaoSocial')}" #razaoSocial
-              [(ngModel)]="empresa.razaoSocial" formControlName="razaoSocial">
+              [ngClass]="{'form-control-danger' : !isValid('razaoSocial')}" #razaoSocial formControlName="razaoSocial">
           </div>
           <div class="col-sm-2">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('cep')}">CEP</label>
             <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('cep')}" #cep [(ngModel)]="empresa.cep" formControlName="cep"
+              [ngClass]="{'form-control-danger' : !isValid('cep')}" #cep formControlName="cep"
               [textMask]="{mask: cepMask}" (keyup)="validaCep($event)">
           </div>
           <div class="col-sm-10">
             <label class="col-form-label">Rua</label>
-            <input type="text" class="form-control form-control-round" #rua [(ngModel)]="empresa.rua"
-              formControlName="rua">
+            <input type="text" class="form-control form-control-round" #rua formControlName="rua">
           </div>
 
           <div class="col-sm-2">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
             <input type="number" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('numero')}" #numero [(ngModel)]="empresa.numero"
-              formControlName="numero">
+              [ngClass]="{'form-control-danger' : !isValid('numero')}" #numero formControlName="numero">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label">Bairro</label>
-            <input type="text" class="form-control form-control-round" #bairro [(ngModel)]="empresa.bairro"
-              formControlName="bairro">
+            <input type="text" class="form-control form-control-round" #bairro formControlName="bairro">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label">Cidade</label>
-            <input type="text" class="form-control form-control-round" #cidade [(ngModel)]="empresa.cidade"
-              formControlName="cidade">
+            <input type="text" class="form-control form-control-round" #cidade formControlName="cidade">
           </div>
           <div class="col-sm-2">
             <label class="col-form-label">Estado</label>
-            <input type="text" class="form-control form-control-round" #estado [(ngModel)]="empresa.estado"
-              formControlName="estado">
+            <input type="text" class="form-control form-control-round" #estado formControlName="estado">
           </div>
           <div class="col-sm-12">
             <label class="col-form-label"
               [ngClass]="{'form-control-danger' : !isValid('complemento')}">Complemento</label>
             <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('complemento')}" #complemento
-              [(ngModel)]="empresa.complemento" formControlName="complemento">
+              [ngClass]="{'form-control-danger' : !isValid('complemento')}" #complemento formControlName="complemento">
           </div>
           <div class="col-sm-8">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('email')}">E-mail</label>
             <input type="email" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('email')}" #email [(ngModel)]="empresa.email"
-              formControlName="email">
+              [ngClass]="{'form-control-danger' : !isValid('email')}" #email formControlName="email">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('telefone')}">Telefone</label>
             <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('telefone')}" #telefone [(ngModel)]="empresa.telefone"
-              formControlName="telefone" [textMask]="{mask: telefoneMask}">
+              [ngClass]="{'form-control-danger' : !isValid('telefone')}" #telefone formControlName="telefone"
+              [textMask]="{mask: telefoneMask}">
           </div>
         </div>
       </form>
