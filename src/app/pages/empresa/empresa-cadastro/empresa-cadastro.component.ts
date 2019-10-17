@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Empresa } from '../../../models/empresa-model';
 import { DefaultService } from '../../../services/default.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import swal from 'sweetalert2';
 import { ToastService } from '../../../services/toast.service';
 import { SharedService } from '../../../services/shared.service';
+
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-empresa-cadastro',
@@ -28,18 +29,25 @@ export class EmpresaCadastroComponent implements OnInit {
   telefoneRegex = /^\(\d{2}\)\d{4}-\d{4}$/;
   formulario: FormGroup;
 
-  constructor(private route: ActivatedRoute, private defaultService: DefaultService, private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef, private toastService: ToastService, private sharedService: SharedService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private defaultService: DefaultService,
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private toastService: ToastService,
+    private sharedService: SharedService
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id'] !== undefined) {
         this.empresa.id = params['id'];
-        this.getById();
+        this.getById(params['id']);
       }
     });
 
     this.formulario = this.formBuilder.group({
+      id: ['', []],
       cnpj: ['', [Validators.required, Validators.minLength(18), Validators.maxLength(18), Validators.pattern(this.cnpjRegex)]],
       nomeFantasia: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       ativo: ['', [Validators.required]],
@@ -52,7 +60,10 @@ export class EmpresaCadastroComponent implements OnInit {
       telefone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13), Validators.pattern(this.telefoneRegex)]],
       complemento: ['', [Validators.maxLength(50)]],
       rua: [{ value: '', disabled: true }, [Validators.required]],
-      numero: ['', [Validators.min(1)]]
+      numero: ['', [Validators.min(1)]],
+      empresaConfig: this.formBuilder.group({
+        qtyApartamentos: ['', [Validators.required]]
+      })
     });
   }
 
@@ -60,9 +71,10 @@ export class EmpresaCadastroComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  getById() {
-    this.observable = this.defaultService.getById('empresa', this.empresa.id).subscribe(response => {
+  getById(id) {
+    this.observable = this.defaultService.getById('empresa', id).subscribe(response => {
       this.empresa = response as Empresa;
+      this.formulario.patchValue(response);
     })
   }
 
@@ -74,11 +86,11 @@ export class EmpresaCadastroComponent implements OnInit {
 
   buscaCep(cep) {
     this.observable = this.defaultService.getDadosCep(cep).subscribe(response => {
-      this.empresa.rua = response['logradouro'];
-      this.empresa.bairro = response['bairro'];
-      this.empresa.cidade = response['localidade'];
-      this.empresa.estado = response['uf'];
-      this.empresa.complemento = response['complemento'];
+      this.formulario.get('rua').setValue(response['logradouro']);
+      this.formulario.get('bairro').setValue(response['bairro']);
+      this.formulario.get('cidade').setValue(response['localidade']);
+      this.formulario.get('estado').setValue(response['uf']);
+      this.formulario.get('complemento').setValue(response['complemento']);
     })
   }
 
@@ -90,6 +102,7 @@ export class EmpresaCadastroComponent implements OnInit {
     if (this.formulario.invalid) {
       swal('Cadastro de empresa', 'Não é possível salvar a empresa!<br>Existem campos inválidos', 'error');
     } else {
+      this.empresa = this.formulario.getRawValue();
       this.empresa.usuario = this.sharedService.getUsuarioLogged();
 
       if (!this.empresa.id) {

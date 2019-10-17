@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../../services/auth.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Injectable()
 export class RouteGuard implements CanActivate {
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private sharedService: SharedService
+    ) { }
 
     canActivate(
         next: ActivatedRouteSnapshot,
@@ -25,6 +30,8 @@ export class RouteGuard implements CanActivate {
 
                 return true;
             });
+        } else if (state.url === '/empresa/lista' && !this.sharedService.isAdmin()) {
+            this.router.navigate(['/apartamento/lista']);
         }
         //  else if (next.data.roles && !this.authService.temQualquerPermissao(next.data.roles)) {
         //     this.router.navigate(['/nao-autorizado']);
