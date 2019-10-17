@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario-model';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+import * as lodash from 'lodash';
+
 @Injectable()
 export class SharedService {
 
@@ -36,10 +38,12 @@ export class SharedService {
     }
   }
 
-  checkRole(role) {
+  checkRole(roles) {
     if (localStorage.getItem('token') !== null) {
-      const permissoes: any[] = this.jwtHelper.decodeToken(localStorage.getItem('token')).permissoes;
-      return permissoes.includes(role);
+      const permissoes: any[] = this.jwtHelper.decodeToken(localStorage.getItem('token')).authorities;
+      return !roles || lodash.intersection(permissoes, roles).length > 0;
     }
+
+    return false;
   }
 }

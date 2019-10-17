@@ -357,8 +357,8 @@
                     </li>
 
                     <li [routerLinkActive]="['active']" class="pcoded-hasmenu" [attr.dropdown-icon]="dropDownIcon"
-                      [attr.subitem-icon]="subItemIcon" *ngIf="asideChildren.type === 'sub'" appAccordionLink
-                      group="sub-toggled">
+                      [attr.subitem-icon]="subItemIcon" *ngIf="asideChildren.type === 'sub' && sharedService.checkRole(asideChildren.profiles)"
+                      appAccordionLink group="sub-toggled">
                       <a href="javascript:;" appAccordionToggle>
                         <span class="pcoded-micon"><i class="ti-direction-alt"></i></span>
                         <span class="pcoded-mtext">{{ asideChildren.name }}</span>

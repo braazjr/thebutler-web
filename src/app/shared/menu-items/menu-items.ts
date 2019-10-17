@@ -59,6 +59,7 @@ const MENUITEMS = [
             name: 'Empresas',
             type: 'sub',
             icon: 'ti-layout-grid2-alt',
+            profiles: ['ADMIN'],
             children: [
               {
                 state: 'lista',
