@@ -14,6 +14,10 @@ export class SharedService {
   getUsuarioLogged() {
     if (localStorage.getItem('token') !== null) {
       const usuario: Usuario = this.jwtHelper.decodeToken(localStorage.getItem('token')).usuario;
+      if (usuario.empresa) {
+        usuario.empresa.dataHoraCadastro = undefined;
+        usuario.empresa.dataHoraModificacao = undefined;
+      }
       return usuario;
     }
   }

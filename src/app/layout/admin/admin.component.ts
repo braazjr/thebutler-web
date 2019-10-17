@@ -2,6 +2,7 @@ import { Component, Directive, ElementRef, HostListener, OnInit } from '@angular
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
 import { MenuItems } from '../../shared/menu-items/menu-items';
 import { AuthService } from 'src/app/services/auth.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-admin',
@@ -122,7 +123,8 @@ export class AdminComponent implements OnInit {
 
   constructor(
     public menuItems: MenuItems,
-    private authService: AuthService
+    private authService: AuthService,
+    public sharedService: SharedService
   ) {
     this.navType = 'st1';
     this.themeLayout = 'horizontal'; // vertical

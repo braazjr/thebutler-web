@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../../models/usuario-model';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-login',
@@ -15,13 +16,17 @@ export class LoginComponent implements OnInit {
   alerta: String = undefined;
   usuario: Usuario = new Usuario();
 
-  constructor(private _authService: AuthService, private _router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sharedService: SharedService
+  ) { }
 
   ngOnInit() {
   }
 
   logar() {
-    this.observable = this._authService.login(this.usuario.login, this.usuario.senha).subscribe(() => {
+    this.observable = this.authService.login(this.usuario.login, this.usuario.senha).subscribe(() => {
       console.info('Login efetuado com sucesso!');
     }, error => {
       if (error.status === 0) {
@@ -30,7 +35,11 @@ export class LoginComponent implements OnInit {
         console.error(this.alerta = error);
       }
     }, () => {
-      this._router.navigate(['/']);
+      if (!this.sharedService.isAdmin()) {
+        this.router.navigate(['/apartamento/lista']);
+      } else {
+        this.router.navigate(['/']);
+      }
     });
   }
 
