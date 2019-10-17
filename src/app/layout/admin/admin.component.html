@@ -98,7 +98,7 @@
               [ngClass]="profileNotificationClass" (click)="toggleProfileNotification()">
               <a href="javascript:">
                 <!-- <img src="assets/images/avatar-blank.jpg" class="img-radius" alt="User-Profile-Image"> -->
-                <span>{{ sharedService.getUsuarioLogged().primeiroNome + ' ' + sharedService.getUsuarioLogged().ultimoNome }}</span>
+                <span>{{ sharedService.getUsuarioLogged()?.primeiroNome + ' ' + sharedService.getUsuarioLogged()?.ultimoNome }}</span>
                 <i class="ti-angle-down"></i>
               </a>
               <ul [@notificationBottom]="profileNotification" class="show-notification profile-notification">
