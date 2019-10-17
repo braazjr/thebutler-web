@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Apartamento } from '../../../models/apartamento-model';
 import { DefaultService } from '../../../services/default.service';
-import swal from 'sweetalert2';
 import { ApartamentoService } from '../../../services/apartamento.service';
 import { ToastService } from '../../../services/toast.service';
 import { Router } from '@angular/router';
 import { IOption } from 'ng-select';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
-import { SharedService } from 'src/app/services/shared.service';
+import { SharedService } from '../../../services/shared.service';
+
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-apartamento-lista',
@@ -109,9 +110,9 @@ export class ApartamentoListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.observable = this.defaultService.excluir('apartamento', apartamento.id).subscribe(() => {
+        this.observable = this.defaultService.excluir('apartamentos', apartamento.id).subscribe(() => {
           this.toastService.addToast('success', 'Exclusão de Apartamento!', `Apartamento excluído com sucesso!`);
-          this.router.navigate(['/apartamento/lista']);
+          this.setPage({ offset: 0 });
         });
       }
     })
@@ -127,5 +128,10 @@ export class ApartamentoListaComponent implements OnInit {
     this.defaultService.get('bloco').subscribe(response => {
       this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
     }, error => console.error(error));
+  }
+
+  temPacoteParaCadastro() {
+    if (this.sharedService.getUsuarioLogged().empresa)
+      return this.sharedService.getUsuarioLogged().empresa.empresaConfig.qtyApartamentos > this.listaData.totalElements;
   }
 }

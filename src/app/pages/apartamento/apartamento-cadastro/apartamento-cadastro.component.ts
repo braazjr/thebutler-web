@@ -4,11 +4,11 @@ import { IOption } from 'ng-select';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
-import { Condominio } from '../../../models/condominio-model';
-import swal from 'sweetalert2';
 import { SharedService } from '../../../services/shared.service';
 import { ToastService } from '../../../services/toast.service';
 import { Bloco } from '../../../models/bloco-model';
+
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-apartamento-cadastro',
@@ -22,30 +22,28 @@ export class ApartamentoCadastroComponent implements OnInit {
 
   apartamento: Apartamento = new Apartamento();
   listaBlocos: Array<IOption> = [];
-  blocoId: string;
 
-  cnpjMask = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];
-  cepMask = [/\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
-  telefoneMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  cnpjRegex = /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/;
-  cepRegex = /^\d{5}-\d{3}$/;
-  telefoneRegex = /^\(\d{2}\)\d{4}-\d{4}$/;
   formulario: FormGroup;
 
-  constructor(private route: ActivatedRoute, private defaultService: DefaultService, private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef, private sharedService: SharedService, private toastService: ToastService,
-    private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private defaultService: DefaultService,
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private sharedService: SharedService,
+    private toastService: ToastService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id'] !== undefined) {
-        this.apartamento.id = params['id'];
-        this.getById();
+        this.getById(params['id']);
       }
     });
 
     this.formulario = this.formBuilder.group({
-      bloco: ['', [Validators.required, Validators.min(1)]],
+      blocoId: ['', [Validators.required, Validators.min(1)]],
       ativo: ['', [Validators.required]],
       numero: ['', [Validators.required, Validators.min(1)]]
     });
@@ -57,10 +55,11 @@ export class ApartamentoCadastroComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  getById() {
-    this.defaultService.getById('apartamentos', this.apartamento.id).subscribe(response => {
+  getById(id) {
+    this.defaultService.getById('apartamentos', id).subscribe(response => {
       this.apartamento = response as Apartamento;
-      this.blocoId = this.apartamento.bloco.id.toString();
+      this.formulario.patchValue(response);
+      this.formulario.get('blocoId').setValue(this.apartamento.bloco.id.toString());
       this.carregarBlocos();
     })
   }
@@ -86,10 +85,12 @@ export class ApartamentoCadastroComponent implements OnInit {
       swal('Cadastro de apartamento', 'Não é possível salvar o apartamento!<br>Existem campos inválidos', 'error');
     } else {
       this.apartamento.usuario = this.sharedService.getUsuarioLogged();
-      this.apartamento.bloco.id = Number(this.blocoId);
+      this.apartamento.bloco.id = this.formulario.get('blocoId').value;
+      this.apartamento.numero = this.formulario.get('numero').value;
+      this.apartamento.ativo = this.formulario.get('ativo').value;
 
       if (!this.apartamento.id) {
-        this.observable = this.defaultService.salvar('apartamento', this.apartamento).subscribe(response => {
+        this.observable = this.defaultService.salvar('apartamentos', this.apartamento).subscribe(response => {
           this.apartamento = response as Apartamento;
           this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
         }, error => {
@@ -99,7 +100,7 @@ export class ApartamentoCadastroComponent implements OnInit {
           });
         }, () => this.router.navigate([`/ficha/${this.apartamento.id}`]))
       } else {
-        this.observable = this.defaultService.atualizar('apartamento', this.apartamento).subscribe(response => {
+        this.observable = this.defaultService.atualizar('apartamentos', this.apartamento).subscribe(response => {
           this.apartamento = response as Apartamento;
           this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
         }, error => {

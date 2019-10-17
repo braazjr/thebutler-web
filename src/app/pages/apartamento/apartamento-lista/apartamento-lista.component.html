@@ -9,16 +9,17 @@
               Lista de Apartamentos
               <div class="nav-item nav-grid">
                 <span class="m-r-15">Ações: </span>
-      
-                <button type="button" class="btn btn-sm" data-toggle="tooltip"
-                  data-placement="top" title="Cadastrar nova apartamento" [routerLink]="['/apartamento/cadastro']">
+
+                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
+                  [title]="temPacoteParaCadastro() ? 'Cadastrar nova apartamento' : 'Limite de cadastro atingido'"
+                  [routerLink]="['/apartamento/cadastro']" [disabled]="!temPacoteParaCadastro()">
                   <i class="icofont icofont-ui-add"></i>
                 </button>
               </div>
             </nav>
           </div>
         </div>
-      
+
         <!-- filtros -->
         <div class="row">
           <div class="col-sm-12">
