@@ -27,19 +27,18 @@
       <form autocomplete="off" [formGroup]="formulario">
         <div class="form-group row">
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('bloco')}">Bloco</label>
-            <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" [(ngModel)]="blocoId" formControlName="bloco">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('blocoId')}">Bloco</label>
+            <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" formControlName="blocoId">
             </ng-select>
           </div>
           <div class="col-sm-2">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
-            <input type="number" class="form-control form-control-round" #numero [(ngModel)]="apartamento.numero"
-              formControlName="numero">
+            <input type="number" class="form-control form-control-round" #numero formControlName="numero">
           </div>
           <div class="col-sm-2">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
             <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
-              size="small" [(ngModel)]="apartamento.ativo" formControlName="ativo"></ui-switch>
+              size="small" formControlName="ativo"></ui-switch>
           </div>
         </div>
       </form>
