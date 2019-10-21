@@ -10,9 +10,10 @@ export class EmpresaRouteGuard implements CanActivate {
 
     canActivate(
         next: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        state: RouterStateSnapshot
+    ): Observable<boolean> | Promise<boolean> | boolean {
 
-        if (next.data.role && !this.sharedService.checkRole(next.data.role)) {
+        if (next.data.role && !this.sharedService.checkRole([next.data.role])) {
             this.router.navigate(['/nao-autorizado']);
             return false;
         }

@@ -131,7 +131,7 @@ export class ApartamentoListaComponent implements OnInit {
   }
 
   temPacoteParaCadastro() {
-    if (this.sharedService.getUsuarioLogged().empresa)
+    if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig)
       return this.sharedService.getUsuarioLogged().empresa.empresaConfig.qtyApartamentos > this.listaData.totalElements;
   }
 }
