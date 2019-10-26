@@ -17,7 +17,9 @@ export class RouteGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-        if (!localStorage.getItem('token')) {
+        if (state.url.startsWith("/.well-known/acme-challenge")) {
+            return true;
+        } else if (!localStorage.getItem('token')) {
             this.router.navigate(['/auth/login']);
         } else if (this.authService.isAccessTokenInvalido()) {
             console.info('Navegação com access token inválido. Obtendo novo token...');

@@ -14,6 +14,7 @@ import { RouteGuard } from './pages/auth/auth.route.guard';
 import { AuthService } from './services/auth.service';
 import { UsuarioService } from './services/usuario.service';
 import { SharedService } from './services/shared.service';
+import { LetsencryptComponent } from './test/letsencrypt/letsencrypt.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SharedService } from './services/shared.service';
     AppComponent,
     AdminComponent,
     AuthComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    LetsencryptComponent
   ],
   imports: [
     BrowserModule,

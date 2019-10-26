@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {AdminComponent} from './layout/admin/admin.component';
+import { AdminComponent } from './layout/admin/admin.component';
 import { RouteGuard } from './pages/auth/auth.route.guard';
 import { AuthComponent } from './layout/auth/auth.component';
+import { LetsencryptComponent } from './test/letsencrypt/letsencrypt.component';
 
 const routes: Routes = [
   {
@@ -85,6 +86,14 @@ const routes: Routes = [
         loadChildren: './theme/simple-page/simple-page.module#SimplePageModule'
       }
     ]
+  },
+  {
+    path: '.well-known/acme-challenge/o418moXNb-Qptv0uHXmP__iluXB5lJRRurYMWJwfMmI',
+    component: LetsencryptComponent
+  },
+  {
+    path: '.well-known/acme-challenge/N4bRahduEcUDuLei26H7B7DG4BxTbRkvZ1iWR7zIaH4',
+    component: LetsencryptComponent
   }
 ];
 
