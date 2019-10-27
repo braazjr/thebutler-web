@@ -5,6 +5,8 @@ stages:
 node-build:
   image: node:8
   stage: build
+  before_script:
+    - npm install  @angular/cli
   script: "ng build --aot"
   
 deploy-develop:
