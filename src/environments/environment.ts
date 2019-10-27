@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlSpring: 'https://api-butler.herokuapp.com'
+  urlSpring: 'https://butler-api.herokuapp.com'
 };
 
 /*
