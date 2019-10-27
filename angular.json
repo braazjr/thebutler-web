@@ -62,14 +62,6 @@
                   "maximumError": "5mb"
                 }
               ]
-            },
-            "stage": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.stage.ts"
-                }
-              ]
             }
           }
         },
@@ -81,9 +73,6 @@
           "configurations": {
             "production": {
               "browserTarget": "butler-v2.2.0:build:production"
-            },
-            "stage": {
-              "browserTarget": "butler-v2.2.0:build:stage"
             }
           }
         },
