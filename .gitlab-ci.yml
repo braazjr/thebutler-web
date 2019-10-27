@@ -7,6 +7,7 @@ node-build:
   stage: build
   before_script:
     - npm install -g @angular/cli@7
+    - npm install
   script: "ng build --aot"
   
 deploy-develop:
