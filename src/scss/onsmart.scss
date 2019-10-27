@@ -40,3 +40,16 @@ datatable-footer {
 .pcoded-header {
     background: $primary-color !important;
 }
+
+
+@media only screen and (max-width: 992px) {
+    .auth-body .text-center img {
+        display: initial;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .auth-box{
+        margin: 20px 0 0 0;
+    }
+}
