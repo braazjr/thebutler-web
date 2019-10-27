@@ -1,0 +1,40 @@
+stages:
+  - build
+  - deploy
+
+node-build:
+  image: node:8
+  stage: build
+  script: "ng build --aot"
+  
+deploy-develop:
+  stage: deploy
+  variables:
+    HEROKU_API_KEY: $HEROKU_PRODUCTION_API_KEY
+  before_script:
+    - echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
+    - wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
+    - apt-get update
+    - apt-get install -y heroku-toolbelt
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=butler-web-dev --api-key=$HEROKU_API_KEY
+    #- heroku run rake db:migrate --exit-code --app api-butler
+  only:
+    - develop
+
+deploy-production:
+  stage: deploy
+  variables:
+    HEROKU_API_KEY: $HEROKU_PRODUCTION_API_KEY
+  before_script:
+    - echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
+    - wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
+    - apt-get update
+    - apt-get install -y heroku-toolbelt
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=butler-web-prod --api-key=$HEROKU_API_KEY
+    #- heroku run rake db:migrate --exit-code --app api-butler
+  only:
+    - master
