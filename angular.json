@@ -63,7 +63,7 @@
                 }
               ]
             },
-            "stage": {
+            "dev": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -83,8 +83,8 @@
             "production": {
               "browserTarget": "butler-v2.2.0:build:production"
             },
-            "stage": {
-              "browserTarget": "butler-v2.2.0:build:stage"
+            "dev": {
+              "browserTarget": "butler-v2.2.0:build:dev"
             }
 
           }
