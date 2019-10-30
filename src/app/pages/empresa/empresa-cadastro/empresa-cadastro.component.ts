@@ -72,7 +72,7 @@ export class EmpresaCadastroComponent implements OnInit {
   }
 
   getById(id) {
-    this.observable = this.defaultService.getById('empresa', id).subscribe(response => {
+    this.observable = this.defaultService.getById('empresas', id).subscribe(response => {
       this.empresa = response as Empresa;
       this.formulario.patchValue(response);
     })
@@ -106,7 +106,7 @@ export class EmpresaCadastroComponent implements OnInit {
       this.empresa.usuario = this.sharedService.getUsuarioLogged();
 
       if (!this.empresa.id) {
-        this.observable = this.defaultService.salvar('empresa', this.empresa).subscribe(response => {
+        this.observable = this.defaultService.salvar('empresas', this.empresa).subscribe(response => {
           this.empresa = response as Empresa;
           this.toastService.addToast('success', 'Cadastro Empresa!', `Empresa ${this.empresa.nomeFantasia} salva com sucesso!`);
         }, error => {
@@ -116,7 +116,7 @@ export class EmpresaCadastroComponent implements OnInit {
           });
         })
       } else {
-        this.observable = this.defaultService.atualizar('empresa', this.empresa).subscribe(response => {
+        this.observable = this.defaultService.atualizar('empresas', this.empresa).subscribe(response => {
           this.empresa = response as Empresa;
           this.toastService.addToast('success', 'Atualização Empresa!', `Empresa ${this.empresa.nomeFantasia} atualizada com sucesso!`);
         }, error => {

@@ -57,7 +57,7 @@ export class BlocoCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.defaultService.getById('bloco', this.bloco.id).subscribe(response => {
+    this.defaultService.getById('blocos', this.bloco.id).subscribe(response => {
       this.bloco = response as Bloco;
       this.condominioId = this.bloco.condominio.id.toString();
       this.carregarCondominios();
@@ -65,7 +65,7 @@ export class BlocoCadastroComponent implements OnInit {
   }
 
   carregarCondominios() {
-    this.defaultService.get('condominio').subscribe(response => {
+    this.defaultService.get('condominios').subscribe(response => {
       this.listaCondominios = (response as Condominio[]).map(cond => {
         if (this.bloco.id && cond.id === this.bloco.condominio.id) {
           return ({ value: cond.id.toString(), label: cond.construtora.nomeFantasia + ' - ' + cond.nome, selected: true })
@@ -88,7 +88,7 @@ export class BlocoCadastroComponent implements OnInit {
       this.bloco.condominio.id = Number(this.condominioId);
 
       if (!this.bloco.id) {
-        this.observable = this.defaultService.salvar('bloco', this.bloco).subscribe(response => {
+        this.observable = this.defaultService.salvar('blocos', this.bloco).subscribe(response => {
           this.bloco = response as Bloco;
           this.toastService.addToast('success', 'Cadastro Bloco!', `Bloco ${this.bloco.nome} salvo com sucesso!`);
         }, error => {
@@ -98,7 +98,7 @@ export class BlocoCadastroComponent implements OnInit {
           });
         })
       } else {
-        this.observable = this.defaultService.atualizar('bloco', this.bloco).subscribe(response => {
+        this.observable = this.defaultService.atualizar('blocos', this.bloco).subscribe(response => {
           this.bloco = response as Bloco;
           this.toastService.addToast('success', 'Atualização Bloco!', `Bloco ${this.bloco.nome} atualizado com sucesso!`);
         }, error => {

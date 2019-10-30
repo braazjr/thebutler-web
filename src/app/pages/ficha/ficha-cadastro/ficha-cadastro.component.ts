@@ -264,7 +264,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         morador.usuario = this.sharedService.getUsuarioLogged();
       });
 
-      this.observable = this.defaultService.atualizar('apartamento', apartamento).subscribe(() => {
+      this.observable = this.defaultService.atualizar('apartamentos', apartamento).subscribe(() => {
         this.getById();
         this.toastService.addToast('success', `Atualização da ficha do apartamento ${this.apartamento.numero}`,
           `Ficha atualizada com sucesso!`);

@@ -12,7 +12,7 @@ export class TipoDocumentoService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this.http.get(`${environment.urlSpring}/tipoDocumento`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/tipo-documentos`, { headers: hds, withCredentials: true });
   }
 
 }

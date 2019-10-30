@@ -67,7 +67,7 @@ export class ConstrutoraCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.defaultService.getById('construtora', this.construtora.id).subscribe(response => {
+    this.defaultService.getById('construtoras', this.construtora.id).subscribe(response => {
       this.construtora = response as Construtora;
       this.empresaId = this.construtora.empresa.id.toString();
       this.carregarEmpresas();
@@ -91,7 +91,7 @@ export class ConstrutoraCadastroComponent implements OnInit {
   }
 
   carregarEmpresas() {
-    this.defaultService.get('empresa').subscribe(response => {
+    this.defaultService.get('empresas').subscribe(response => {
       let lista = [];
       this.listaEmpresas = (response as Empresa[]).map(emp => {
         if (this.construtora.id && emp.id === this.construtora.empresa.id) {
@@ -117,7 +117,7 @@ export class ConstrutoraCadastroComponent implements OnInit {
       this.construtora.empresa.id = Number(this.empresaId);
 
       if (!this.construtora.id) {
-        this.observable = this.defaultService.salvar('construtora', this.construtora).subscribe(response => {
+        this.observable = this.defaultService.salvar('construtoras', this.construtora).subscribe(response => {
           this.construtora = response as Construtora;
           this.toastService.addToast('success', 'Cadastro Construtora!', `Construtora ${this.construtora.nomeFantasia} salva com sucesso!`);
         }, error => {
@@ -127,7 +127,7 @@ export class ConstrutoraCadastroComponent implements OnInit {
           });
         })
       } else {
-        this.observable = this.defaultService.atualizar('construtora', this.construtora).subscribe(response => {
+        this.observable = this.defaultService.atualizar('construtoras', this.construtora).subscribe(response => {
           this.construtora = response as Construtora;
           this.toastService.addToast('success', 'Atualização Construtora!', `Construtora ${this.construtora.nomeFantasia} atualizada com sucesso!`);
         }, error => {

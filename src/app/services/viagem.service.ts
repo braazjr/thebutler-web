@@ -14,7 +14,7 @@ export class ViagemService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this.http.get(`${environment.urlSpring}/viagem`, { headers: hds, withCredentials: true, params: pageable });
+    return this.http.get(`${environment.urlSpring}/viagens`, { headers: hds, withCredentials: true, params: pageable });
   }
 
 }

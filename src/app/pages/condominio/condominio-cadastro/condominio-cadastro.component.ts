@@ -65,7 +65,7 @@ export class CondominioCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.defaultService.getById('condominio', this.condominio.id).subscribe(response => {
+    this.defaultService.getById('condominios', this.condominio.id).subscribe(response => {
       this.condominio = response as Condominio;
       this.construtoraId = this.condominio.construtora.id.toString();
       this.carregarConstrutoras();
@@ -89,7 +89,7 @@ export class CondominioCadastroComponent implements OnInit {
   }
 
   carregarConstrutoras() {
-    this.defaultService.get('construtora').subscribe(response => {
+    this.defaultService.get('construtoras').subscribe(response => {
       this.listaConstrutoras = (response as Construtora[]).map(constr => {
         if (this.condominio.id && constr.id === this.condominio.id) {
           return ({ value: constr.id.toString(), label: constr.nomeFantasia, selected: true })
@@ -112,7 +112,7 @@ export class CondominioCadastroComponent implements OnInit {
       this.condominio.construtora.id = Number(this.construtoraId);
 
       if (!this.condominio.id) {
-        this.observable = this.defaultService.salvar('condominio', this.condominio).subscribe(response => {
+        this.observable = this.defaultService.salvar('condominios', this.condominio).subscribe(response => {
           this.condominio = response as Condominio;
           this.toastService.addToast('success', 'Cadastro Condomínio!', `Condomínio ${this.condominio.nome} salvo com sucesso!`);
         }, error => {
@@ -122,7 +122,7 @@ export class CondominioCadastroComponent implements OnInit {
           });
         })
       } else {
-        this.observable = this.defaultService.atualizar('condominio', this.condominio).subscribe(response => {
+        this.observable = this.defaultService.atualizar('condominios', this.condominio).subscribe(response => {
           this.condominio = response as Condominio;
           this.toastService.addToast('success', 'Atualização Condomínio!', `Condomínio ${this.condominio.nome} atualizado com sucesso!`);
         }, error => {

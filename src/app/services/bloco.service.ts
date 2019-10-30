@@ -12,7 +12,7 @@ export class BlocoService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this.http.get(`${environment.urlSpring}/bloco/condominio/${idCondominio}`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/blocos/condominio/${idCondominio}`, { headers: hds, withCredentials: true });
   }
 
   getBlocos(pageable) {
@@ -20,7 +20,7 @@ export class BlocoService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this.http.get(`${environment.urlSpring}/bloco`, { headers: hds, withCredentials: true, params: pageable });
+    return this.http.get(`${environment.urlSpring}/blocos`, { headers: hds, withCredentials: true, params: pageable });
   }
 
 }

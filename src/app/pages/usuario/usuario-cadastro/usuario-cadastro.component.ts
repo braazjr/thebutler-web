@@ -65,7 +65,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
-    this.defaultService.getById('usuario', this.usuario.id).subscribe(response => {
+    this.defaultService.getById('usuarios', this.usuario.id).subscribe(response => {
       this.usuario = response as Usuario;
       if (this.usuario.empresa) {
         this.empresaId = this.usuario.empresa.id.toString();
@@ -77,7 +77,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   carregarPermissoes() {
-    this.defaultService.get('permissao').subscribe(response => {
+    this.defaultService.get('permissoes').subscribe(response => {
       this.permissoes = response as any[];
       this.listaPermissoes = (response as any[]).map(perm => {
         if (this.usuario.id && this.usuario.permissoes.map(permissao => permissao.codigo).includes(perm.codigo)) {
@@ -91,7 +91,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   carregarEmpresas() {
-    this.defaultService.get('empresa').subscribe(response => {
+    this.defaultService.get('empresas').subscribe(response => {
       this.listaEmpresas = (response as Empresa[]).map(emp => {
         if (this.usuario.id && this.usuario.empresa && emp.id === this.usuario.empresa.id) {
           return ({ value: emp.id.toString(), label: emp.nomeFantasia, disabled: false });
@@ -118,7 +118,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
       this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
 
       if (!this.usuario.id) {
-        this.observable = this.defaultService.salvar('usuario', this.usuario).subscribe(response => {
+        this.observable = this.defaultService.salvar('usuarios', this.usuario).subscribe(response => {
           this.usuario = response as Usuario;
           this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.primeiroNome} ${this.usuario.ultimoNome} salvo com sucesso!`);
 
@@ -133,7 +133,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
       } else {
         if (this.usuario.senhaNova)
           this.usuario.senha = this.usuario.senhaNova;
-        this.observable = this.defaultService.atualizar('usuario', this.usuario).subscribe(response => {
+        this.observable = this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
           this.usuario = response as Usuario;
           this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.primeiroNome} ${this.usuario.ultimoNome} atualizado com sucesso!`);
 

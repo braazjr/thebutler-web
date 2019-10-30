@@ -13,6 +13,6 @@ export class UsuarioService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this.http.get(`${environment.urlSpring}/usuario`, { headers: hds, withCredentials: true, params: pageable });
+    return this.http.get(`${environment.urlSpring}/usuarios`, { headers: hds, withCredentials: true, params: pageable });
   }
 }

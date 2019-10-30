@@ -44,7 +44,7 @@ export class RotaCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.defaultService.getById('rota', this.rota.id).subscribe(response => {
+    this.defaultService.getById('rotas', this.rota.id).subscribe(response => {
       this.rota = response as Rota;
     })
   }
@@ -60,7 +60,7 @@ export class RotaCadastroComponent implements OnInit {
       this.rota.usuario = this.sharedService.getUsuarioLogged();
 
       if (!this.rota.id) {
-        this.observable = this.defaultService.salvar('rota', this.rota).subscribe(response => {
+        this.observable = this.defaultService.salvar('rotas', this.rota).subscribe(response => {
           this.rota = response as Rota;
           this.toastService.addToast('success', 'Cadastro Rota!', `Rota ${this.rota.nome} salvo com sucesso!`);
         }, error => {
@@ -70,7 +70,7 @@ export class RotaCadastroComponent implements OnInit {
           });
         })
       } else {
-        this.observable = this.defaultService.atualizar('rota', this.rota).subscribe(response => {
+        this.observable = this.defaultService.atualizar('rotas', this.rota).subscribe(response => {
           this.rota = response as Rota;
           this.toastService.addToast('success', 'Atualização Rota!', `Rota ${this.rota.nome} atualizado com sucesso!`);
         }, error => {

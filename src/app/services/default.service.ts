@@ -56,7 +56,7 @@ export class DefaultService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this.http.get(`${environment.urlSpring}/dashboard/${dash}`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { headers: hds, withCredentials: true });
   }
 
   getUniqueInteger(dash) {
@@ -64,7 +64,7 @@ export class DefaultService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this.http.get(`${environment.urlSpring}/dashboard/${dash}`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { headers: hds, withCredentials: true });
   }
 
 }

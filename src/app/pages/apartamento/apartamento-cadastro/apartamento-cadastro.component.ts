@@ -65,7 +65,7 @@ export class ApartamentoCadastroComponent implements OnInit {
   }
 
   carregarBlocos() {
-    this.defaultService.get('bloco').subscribe(response => {
+    this.defaultService.get('blocos').subscribe(response => {
       this.listaBlocos = (response as Bloco[]).map(bloco => {
         if (this.apartamento.id && bloco.id === this.apartamento.bloco.id) {
           return ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome, selected: true })

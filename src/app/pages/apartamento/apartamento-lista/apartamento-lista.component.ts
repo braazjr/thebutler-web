@@ -119,13 +119,13 @@ export class ApartamentoListaComponent implements OnInit {
   }
 
   carregarCondominios() {
-    this.defaultService.get('condominio').subscribe(response => {
+    this.defaultService.get('condominios').subscribe(response => {
       this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.construtora.nomeFantasia + ' - ' + cond.nome }));
     }, error => console.error(error));
   }
 
   carregarBlocos() {
-    this.defaultService.get('bloco').subscribe(response => {
+    this.defaultService.get('blocos').subscribe(response => {
       this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
     }, error => console.error(error));
   }
