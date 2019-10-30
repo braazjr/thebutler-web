@@ -43,7 +43,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.dev.ts"
                 }
               ],
               "optimization": true,
@@ -62,7 +62,16 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "stage": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
             }
+
           }
         },
         "serve": {
@@ -73,7 +82,11 @@
           "configurations": {
             "production": {
               "browserTarget": "butler-v2.2.0:build:production"
+            },
+            "stage": {
+              "browserTarget": "butler-v2.2.0:build:stage"
             }
+
           }
         },
         "extract-i18n": {
