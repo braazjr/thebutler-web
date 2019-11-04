@@ -140,6 +140,9 @@
           "configurations": {
             "production": {
               "devServerTarget": "butler-v2.2.0:serve:production"
+            },
+            "dev": {
+              "devServerTarget": "butler-v2.2.0:serve:dev"
             }
           }
         },
