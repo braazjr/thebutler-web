@@ -34,6 +34,8 @@
           <ngx-datatable-column name="CNPJ" [flexGrow]="2"></ngx-datatable-column>
           <ngx-datatable-column name="Nome Fantasia" [flexGrow]="2"></ngx-datatable-column>
           <ngx-datatable-column name="Razão Social" [flexGrow]="3"></ngx-datatable-column>
+          <ngx-datatable-column name="Qtd cadastros" prop="empresaConfig.qtyApartamentos" [flexGrow]="3">
+          </ngx-datatable-column>
           <ngx-datatable-column name="Ativo" [flexGrow]="1">
             <ng-template let-ativo="value" ngx-datatable-cell-template>
               <label class="label bg-success" *ngIf="ativo">Ativo</label>

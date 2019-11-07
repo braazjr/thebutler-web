@@ -40,7 +40,7 @@
               formControlName="nomeFantasia">
           </div>
           <div class="col-sm-2" formGroupName="empresaConfig">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('empresaConfig.qtyApartamentos')}">Número</label>
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('empresaConfig.qtyApartamentos')}">Qtd. Cadastros</label>
             <input type="number" class="form-control form-control-round"
               [ngClass]="{'form-control-danger' : !isValid('empresaConfig.qtyApartamentos')}" #numero formControlName="qtyApartamentos">
           </div>

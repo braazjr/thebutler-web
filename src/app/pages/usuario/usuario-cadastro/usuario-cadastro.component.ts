@@ -116,6 +116,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     } else {
       // this.usuario.usuario = this.sharedService.getUsuarioLogged();
       this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
+      this.usuario.empresa.id = Number(this.empresaId);
 
       if (!this.usuario.id) {
         this.observable = this.defaultService.salvar('usuarios', this.usuario).subscribe(response => {
