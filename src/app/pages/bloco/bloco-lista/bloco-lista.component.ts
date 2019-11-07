@@ -28,7 +28,7 @@ export class BlocoListaComponent implements OnInit {
   }
 
   getBlocos() {
-    this.observable = this._defaultService.get('bloco').subscribe(data => {
+    this.observable = this._defaultService.get('blocos').subscribe(data => {
       this.listaBlocosTemp = this.listaBlocos = data as Bloco[];
     }, error => {
       console.error(error)
@@ -45,7 +45,7 @@ export class BlocoListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value)
-        this.observable = this._defaultService.excluir('bloco', bloco.id).subscribe(() => {
+        this.observable = this._defaultService.excluir('blocos', bloco.id).subscribe(() => {
           this.getBlocos();
         });
     })

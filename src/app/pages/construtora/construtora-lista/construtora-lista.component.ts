@@ -28,7 +28,7 @@ export class ConstrutoraListaComponent implements OnInit {
   }
 
   getConstrutoras() {
-    this.observable = this._defaultService.get('construtora').subscribe(data => {
+    this.observable = this._defaultService.get('construtoras').subscribe(data => {
       this.listaConstrutorasTemp = this.listaConstrutoras = data as Construtora[];
     }, error => {
       console.error(error)
@@ -45,7 +45,7 @@ export class ConstrutoraListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value)
-        this.observable = this._defaultService.excluir('construtora', construtora.id).subscribe(() => {
+        this.observable = this._defaultService.excluir('construtoras', construtora.id).subscribe(() => {
           this.getConstrutoras();
         });
     })

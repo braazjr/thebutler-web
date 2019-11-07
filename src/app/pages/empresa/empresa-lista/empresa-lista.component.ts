@@ -28,7 +28,7 @@ export class EmpresaListaComponent implements OnInit {
   }
 
   getEmpresas() {
-    this.observable = this._defaultService.get('empresa').subscribe(data => {
+    this.observable = this._defaultService.get('empresas').subscribe(data => {
       this.listaEmpresasTemp = this.listaEmpresas = data as Empresa[];
     }, error => {
       console.error(error)
@@ -45,7 +45,7 @@ export class EmpresaListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value)
-        this.observable = this._defaultService.excluir('empresa', empresa.id).subscribe(() => {
+        this.observable = this._defaultService.excluir('empresas', empresa.id).subscribe(() => {
           this.getEmpresas();
         });
     })

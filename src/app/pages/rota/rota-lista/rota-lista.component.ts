@@ -28,7 +28,7 @@ export class RotaListaComponent implements OnInit {
   }
 
   getRotas() {
-    this.observable = this._defaultService.get('rota').subscribe(data => {
+    this.observable = this._defaultService.get('rotas').subscribe(data => {
       this.listaRotasTemp = this.listaRotas = data as Rota[];
     }, error => {
       console.error(error)
@@ -45,7 +45,7 @@ export class RotaListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value)
-        this.observable = this._defaultService.excluir('rota', rota.id).subscribe(() => {
+        this.observable = this._defaultService.excluir('rotas', rota.id).subscribe(() => {
           this.getRotas();
         });
     })

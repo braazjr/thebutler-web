@@ -28,7 +28,7 @@ export class CondominioListaComponent implements OnInit {
   }
 
   getCondominios() {
-    this.observable = this._defaultService.get('condominio').subscribe(data => {
+    this.observable = this._defaultService.get('condominios').subscribe(data => {
       this.listaCondominiosTemp = this.listaCondominios = data as Condominio[];
     }, error => {
       console.error(error)
@@ -45,7 +45,7 @@ export class CondominioListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value)
-        this.observable = this._defaultService.excluir('condominio', condominio.id).subscribe(() => {
+        this.observable = this._defaultService.excluir('condominios', condominio.id).subscribe(() => {
           this.getCondominios();
         });
     })
