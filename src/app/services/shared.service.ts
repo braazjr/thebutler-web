@@ -26,14 +26,14 @@ export class SharedService {
 
   isAdmin() {
     if (localStorage.getItem('token') !== null) {
-      const permissoes: any[] = this.jwtHelper.decodeToken(localStorage.getItem('token')).permissoes;
+      const permissoes: any[] = this.jwtHelper.decodeToken(localStorage.getItem('token')).authorities;
       return permissoes.includes('ADMIN');
     }
   }
 
   isOperador() {
     if (localStorage.getItem('token') !== null) {
-      const permissoes: any[] = this.jwtHelper.decodeToken(localStorage.getItem('token')).permissoes;
+      const permissoes: any[] = this.jwtHelper.decodeToken(localStorage.getItem('token')).authorities;
       return permissoes.includes('OPERADOR');
     }
   }
