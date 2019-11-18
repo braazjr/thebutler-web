@@ -1,0 +1,56 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <app-card>
+        <div class="row">
+          <div class="col-sm-12 filter-bar">
+            <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+              Lista de Blocos
+              <div class="nav-item nav-grid">
+                <span class="m-r-15">Ações: </span>
+
+                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
+                  title="Cadastrar nova bloco" [routerLink]="['/bloco/cadastro']">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <label class="dt-cust-search f-right">
+              <div class="form-group">
+                <label>Pesquisar: </label>
+                <input type='text' class="form-control input-sm m-l-10" (keyup)='updateFilter($event)' />
+              </div>
+            </label>
+          </div>
+        </div>
+        <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
+          [rowHeight]="'auto'" [rows]="listaBlocosTemp" [limit]="10">
+          <ngx-datatable-column name="Nome" [flexGrow]="3"></ngx-datatable-column>
+          <ngx-datatable-column name="Numero" [flexGrow]="1"></ngx-datatable-column>
+          <ngx-datatable-column name="Condominio" [flexGrow]="2">
+            <ng-template let-condominio="value" ngx-datatable-cell-template>
+              {{ condominio.nome }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Construtora" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{row.condominio.construtora.nomeFantasia}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-warning pointer m-r-5"
+                [routerLink]="['/bloco/cadastro', row.id]">Ver/Editar</label>
+              <label class="badge badge-danger pointer" (click)="excluir(row)">Excluir</label>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </app-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-xl-4">
+        <app-card [hidHeader]="true" cardClass="prod-p-card bg-c-red">
+            <div class="row align-items-center m-b-0">
+                <div class="col">
+                    <h6 class="m-b-5 text-white">Viagens de hoje</h6>
+                    <h3 class="m-b-0 text-white">{{ viagensHoje }}</h3>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-bus text-white"></i>
+                </div>
+            </div>
+        </app-card>
+    </div>
+    <div class="col-xl-4">
+        <app-card [hidHeader]="true" cardClass="prod-p-card bg-c-red">
+            <div class="row align-items-center m-b-0">
+                <div class="col">
+                    <h6 class="m-b-5 text-white">Viagens última semana</h6>
+                    <h3 class="m-b-0 text-white">{{ viagensUltimaSemana }}</h3>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-bus text-white"></i>
+                </div>
+            </div>
+        </app-card>
+    </div>
+    <div class="col-xl-4">
+        <app-card [hidHeader]="true" cardClass="prod-p-card bg-c-red">
+            <div class="row align-items-center m-b-0">
+                <div class="col">
+                    <h6 class="m-b-5 text-white">Viagens desse mês</h6>
+                    <h3 class="m-b-0 text-white">{{ viagensMesAtual }}</h3>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-bus text-white"></i>
+                </div>
+            </div>
+        </app-card>
+    </div>
+</div>

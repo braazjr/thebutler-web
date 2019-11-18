@@ -1,0 +1,47 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <app-card>
+        <div class="row">
+          <div class="col-sm-12 filter-bar">
+            <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+              Lista de Usuários
+              <div class="nav-item nav-grid">
+                <span class="m-r-15">Ações: </span>
+
+                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
+                  title="Cadastrar nova usuario" [routerLink]="['/usuario/cadastro']">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        <ngx-datatable #table class='data-table' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+          [rowHeight]="50" [rows]="listaUsuarios" [externalPaging]="true"
+          [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
+          [limit]="listaData ? listaData.size : 10" (page)='setPage($event)'>
+          <ngx-datatable-column name="Primeiro Nome"></ngx-datatable-column>
+          <ngx-datatable-column name="Ultimo Nome"></ngx-datatable-column>
+          <ngx-datatable-column name="Login"></ngx-datatable-column>
+          <ngx-datatable-column name="Permissões">
+            <ng-template let-row="row" ngx-datatable-cell-template>{{ listarPermissoes(row.permissoes) }}</ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Ativo">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-success" *ngIf="row.ativo">Ativo</label>
+              <label class="badge badge-danger" *ngIf="!row.ativo">Inativo</label>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="id" name="Opções">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-warning pointer m-r-5" [routerLink]="['/usuario/cadastro', row.id]">Ver/Editar</label>
+              <label class="badge badge-danger pointer" (click)="excluir(row)">Excluir</label>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </app-card>
+    </div>
+  </div>
+</div>

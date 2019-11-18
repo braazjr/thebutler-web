@@ -1,0 +1,81 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <app-card>
+        <div class="row">
+          <div class="col-sm-12 filter-bar">
+            <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+              Lista de Apartamentos
+              <div class="nav-item nav-grid">
+                <span class="m-r-15">Ações: </span>
+
+                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
+                  [title]="temPacoteParaCadastro() ? 'Cadastrar nova apartamento' : 'Limite de cadastro atingido'"
+                  [routerLink]="['/apartamento/cadastro']" [disabled]="!temPacoteParaCadastro()">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        <!-- filtros -->
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <label class="col-form-label">Condominio</label>
+                <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="listaData.idCondominio">
+                </ng-select>
+              </div>
+              <div class="col-sm-3">
+                <label class="col-form-label">Bloco</label>
+                <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" [(ngModel)]="listaData.idBloco">
+                </ng-select>
+              </div>
+              <div class="col-sm-2">
+                <label class="col-form-label">Número</label>
+                <input type="number" class="form-control" [(ngModel)]="listaData .numero">
+              </div>
+              <div class="col-sm-2">
+                <label class="col-form-label">Com moradores</label>
+                <ng-select [ngClass]="'ng-select'" [options]="filtroComMoradores" [(ngModel)]="listaData.comMoradores">
+                </ng-select>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn btn-primary btn-round" style="margin-top: 30px" (click)="getApartamentos()">
+                  Pesquisar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
+          [rowHeight]="'auto'" [externalPaging]="true" [rows]="listaApartamentos"
+          [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
+          [limit]="listaData ? listaData.size : 10" (page)='setPage($event)' (sort)="onSort($event)">
+          <ngx-datatable-column prop="numero" name="Numero" [flexGrow]="1" [sortable]="true">
+            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.numero }}</ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="bloco.nome" name="Bloco" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.bloco.nome }}</ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="bloco.condominio.nome" name="Condomínio" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.bloco.condominio.nome }}</ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="2" [sortable]="false">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label [routerLink]="['/ficha',row.id]" class="badge badge-primary pointer m-r-5"
+                *ngIf="row.moradores.length != 0">Ficha</label>
+              <label class="badge badge-light m-r-5" *ngIf="row.moradores.length == 0">S/ moradores</label>
+              <label class="badge badge-warning pointer m-r-5"
+                [routerLink]="['/apartamento/cadastro', row.id]">Ver/Editar</label>
+              <label class="badge badge-danger pointer" (click)="excluir(row)">Excluir</label>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </app-card>
+    </div>
+  </div>
+</div>

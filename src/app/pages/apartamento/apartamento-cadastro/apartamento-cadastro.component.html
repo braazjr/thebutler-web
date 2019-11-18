@@ -1,0 +1,51 @@
+<ng2-toasty></ng2-toasty>
+
+<div class="row">
+  <div class="col-sm-12">
+    <app-card>
+      <div class="row">
+        <div class="col-sm-12 filter-bar">
+          <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+            {{ !apartamento.id ? 'Cadastro de Apartamento' : ('Cadastro da Apartamento: ' + apartamento.numero) }}
+            <div class="nav-item nav-grid">
+              <span class="m-r-15">Ações: </span>
+
+              <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+                title="Lista de Apartamentos" [routerLink]="['/apartamento/lista']">
+                <i class="fa fa-list"></i>
+              </button>
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
+                (click)="salvar()" [disabled]="formulario.invalid">
+                <i class="fa fa-save"></i>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <form autocomplete="off" [formGroup]="formulario">
+        <div class="form-group row">
+          <div class="col-sm-4">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('blocoId')}">Bloco</label>
+            <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" formControlName="blocoId"
+              [(ngModel)]="formulario.get('blocoId').value">
+            </ng-select>
+          </div>
+          <div class="col-sm-2">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
+            <input type="number" class="form-control" #numero formControlName="numero">
+          </div>
+          <div class="col-sm-2">
+            <br><br>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="ativo"
+                [ngClass]="{'form-control-danger' : !isValid('ativo')}" formControlName="ativo">
+              <label class="custom-control-label" for="ativo"
+                [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>
