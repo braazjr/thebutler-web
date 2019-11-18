@@ -62,7 +62,6 @@ export class AuthService {
 
   isAccessTokenInvalido() {
     const token = localStorage.getItem('token');
-
     const jwtHelper: JwtHelperService = new JwtHelperService();
 
     return !token || jwtHelper.isTokenExpired(token);

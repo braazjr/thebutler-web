@@ -27,7 +27,6 @@ export class ValidFormDirectiveDirective {
   }
 
   checkField() {
-    // console.log(this.el.nativeElement)
-    return !this.validForm.valid && (this.validForm.dirty || this.validForm.touched) ? true : false;
+    return !this.validForm.form.valid && this.validForm.form.enabled && (this.validForm.form.dirty || this.validForm.form.touched || this.validForm.isSubmit) ? true : false;
   }
 }

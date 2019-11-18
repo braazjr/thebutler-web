@@ -28,6 +28,7 @@ export class EmpresaCadastroComponent implements OnInit {
   cepRegex = /^\d{5}-\d{3}$/;
   telefoneRegex = /^\(\d{2}\)\d{4}-\d{4}$/;
   formulario: FormGroup;
+  isSubmit: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,18 +50,18 @@ export class EmpresaCadastroComponent implements OnInit {
 
     this.formulario = this.formBuilder.group({
       id: ['', []],
-      cnpj: ['', [Validators.required, Validators.minLength(18), Validators.maxLength(18), Validators.pattern(this.cnpjRegex)]],
+      cnpj: ['', [Validators.required, Validators.pattern(this.cnpjRegex)]],
       nomeFantasia: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       ativo: ['', [Validators.required]],
       razaoSocial: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      bairro: [{ value: '', disabled: true }, [Validators.required]],
-      cidade: [{ value: '', disabled: true }, [Validators.required]],
-      estado: [{ value: '', disabled: true }, [Validators.required]],
-      cep: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9), Validators.pattern(this.cepRegex)]],
+      bairro: [{ value: '', disabled: true }, []],
+      cidade: [{ value: '', disabled: true }, []],
+      estado: [{ value: '', disabled: true }, []],
+      cep: ['', [Validators.required, Validators.pattern(this.cepRegex)]],
       email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.email]],
-      telefone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13), Validators.pattern(this.telefoneRegex)]],
+      telefone: ['', [Validators.required, Validators.pattern(this.telefoneRegex)]],
       complemento: ['', [Validators.maxLength(50)]],
-      rua: [{ value: '', disabled: true }, [Validators.required]],
+      rua: [{ value: '', disabled: true }, []],
       numero: ['', [Validators.min(1)]],
       empresaConfig: this.formBuilder.group({
         qtyApartamentos: ['', [Validators.required]]
@@ -109,7 +110,8 @@ export class EmpresaCadastroComponent implements OnInit {
 
   salvar() {
     if (this.formulario.invalid) {
-      Swal.fire('Cadastro de empresa', 'Não é possível salvar a empresa!<br>Existem campos inválidos', 'error');
+      this.isSubmit = true;
+      return;
     } else {
       this.empresa = this.formulario.getRawValue();
       this.empresa.usuario = this.sharedService.getUsuarioLogged();
@@ -120,6 +122,7 @@ export class EmpresaCadastroComponent implements OnInit {
           this.empresa = response as Empresa;
           this.toastService.addToast('success', 'Cadastro Empresa!', `Empresa ${this.empresa.nomeFantasia} salva com sucesso!`);
         }, error => {
+          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Empresa!', element.mensagemUsuario);
@@ -131,7 +134,8 @@ export class EmpresaCadastroComponent implements OnInit {
           this.toastService.addToast('success', 'Atualização Empresa!', `Empresa ${this.empresa.nomeFantasia} atualizada com sucesso!`);
           this.spinner.hide();
         }, error => {
-          console.error(error)
+          this.spinner.hide();
+          console.error(error);
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Empresa!', element.mensagemUsuario);
           });
