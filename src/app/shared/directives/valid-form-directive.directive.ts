@@ -8,7 +8,10 @@ export class ValidFormDirectiveDirective {
   @Input('validForm')
   validForm: any;
 
-  constructor(private renderer: Renderer2, private el: ElementRef) { }
+  constructor(
+    private renderer: Renderer2,
+    private el: ElementRef
+  ) { }
 
   @HostBinding('class.is-invalid')
   public get isInvalid(): boolean {
@@ -27,6 +30,11 @@ export class ValidFormDirectiveDirective {
   }
 
   checkField() {
+    if (this.el.nativeElement.classList.contains('ng-select') && (this.validForm.form.value == '0' || this.validForm.form.value == 0)
+      && this.validForm.form.enabled && (this.validForm.form.dirty || this.validForm.form.touched || this.validForm.isSubmit)) {
+      return true;
+    }
+
     return !this.validForm.form.valid && this.validForm.form.enabled && (this.validForm.form.dirty || this.validForm.form.touched || this.validForm.isSubmit) ? true : false;
   }
 }

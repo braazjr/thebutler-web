@@ -23,6 +23,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   empresaId: string = '0';
 
   formularioSenha: FormGroup;
+  isSubmit: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -106,7 +107,12 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     return this.formularioSenha.get(field).status === 'VALID' ? true : false;
   }
 
-  salvar(modal?) {
+  salvar(form) {
+    if (form.invalid) {
+      this.isSubmit = true;
+      return;
+    }
+
     this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
     this.usuario.empresa.id = Number(this.empresaId);
 
@@ -114,10 +120,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     if (!this.usuario.id) {
       this.defaultService.salvar('usuarios', this.usuario).subscribe(response => {
         this.usuario = response as Usuario;
-        this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.primeiroNome} ${this.usuario.ultimoNome} salvo com sucesso!`);
-
-        if (modal)
-          modal.hide();
+        this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.nome} salvo com sucesso!`);
       }, error => {
         this.spinner.hide();
         console.error(error);
@@ -129,10 +132,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
       this.spinner.show();
       this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
         this.usuario = response as Usuario;
-        this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.primeiroNome} ${this.usuario.ultimoNome} atualizado com sucesso!`);
-
-        if (modal)
-          modal.hide();
+        this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.nome} atualizado com sucesso!`);
       }, error => {
         this.spinner.hide();
         console.error(error);
