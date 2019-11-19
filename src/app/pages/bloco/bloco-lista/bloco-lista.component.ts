@@ -61,7 +61,7 @@ export class BlocoListaComponent implements OnInit {
       return (
         blo.nome.toLowerCase().indexOf(val) !== -1
         || blo.condominio.nome.toLowerCase().indexOf(val) !== -1
-        || blo.condominio.construtora.nomeFantasia.toLowerCase().indexOf(val) !== -1
+        || blo.condominio.empresa.nomeFantasia.toLowerCase().indexOf(val) !== -1
       ) || !val;
     });
 

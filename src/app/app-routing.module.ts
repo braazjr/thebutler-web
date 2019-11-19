@@ -111,10 +111,6 @@ const routes: Routes = [
         loadChildren: () => import('./pages/empresa/empresa.module').then(module => module.EmpresaModule)
       },
       {
-        path: 'construtora',
-        loadChildren: () => import('./pages/construtora/construtora.module').then(module => module.ConstrutoraModule)
-      },
-      {
         path: 'condominio',
         loadChildren: () => import('./pages/condominio/condominio.module').then(module => module.CondominioModule)
       },

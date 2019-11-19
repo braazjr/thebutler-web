@@ -90,28 +90,6 @@ const NavigationItems = [
             ]
           },
           {
-            id: 'construtora',
-            title: 'Construtoras',
-            type: 'collapse',
-            breadcrumbs: false,
-            children: [
-              {
-                id: 'construtora-lista',
-                title: 'Lista',
-                type: 'item',
-                url: '/construtora/lista',
-                breadcrumbs: false
-              },
-              {
-                id: 'construtora-cadastro',
-                title: 'Cadastro',
-                type: 'item',
-                url: '/construtora/cadastro',
-                breadcrumbs: false
-              }
-            ]
-          },
-          {
             id: 'condominio',
             title: 'Condomínios',
             type: 'collapse',

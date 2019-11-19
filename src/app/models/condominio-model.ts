@@ -1,10 +1,10 @@
 import { DadosGenericoEndereco } from "./dados-generico-endereco-model";
-import { Construtora } from "./construtora-model";
+import { Empresa } from './empresa-model';
 
 export class Condominio extends DadosGenericoEndereco {
 
     nome: string;
-    construtora: Construtora = new Construtora();
+    empresa: Empresa = new Empresa();
     complemento: string;
     
 }
