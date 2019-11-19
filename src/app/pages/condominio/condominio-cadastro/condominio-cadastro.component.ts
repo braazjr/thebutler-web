@@ -1,15 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Condominio } from '../../../models/condominio-model';
 import { IOption } from 'ng-select';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
 import { ToastService } from '../../../services/toast.service';
-import { Construtora } from '../../../models/construtora-model';
 import { SharedService } from 'src/app/shared/shared.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-
-import Swal from 'sweetalert2';
+import { Empresa } from 'src/app/models/empresa-model';
 
 @Component({
   selector: 'app-condominio-cadastro',
@@ -19,21 +16,18 @@ import Swal from 'sweetalert2';
 export class CondominioCadastroComponent implements OnInit {
 
   condominio: Condominio = new Condominio();
-  listaConstrutoras: Array<IOption> = [];
-  construtoraId: string = '0';
+  listaEmpresas: Array<IOption> = [];
+  empresaId: string = '0';
 
   cnpjMask = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];
   cepMask = [/\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
   telefoneMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  cnpjRegex = /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/;
-  cepRegex = /^\d{5}-\d{3}$/;
-  telefoneRegex = /^\(\d{2}\)\d{4}-\d{4}$/;
-  formulario: FormGroup;
+
+  isSubmit: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private defaultService: DefaultService,
-    private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
@@ -48,22 +42,7 @@ export class CondominioCadastroComponent implements OnInit {
       }
     });
 
-    this.formulario = this.formBuilder.group({
-      construtora: ['', [Validators.required, Validators.min(1)]],
-      nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-      ativo: ['', [Validators.required]],
-      bairro: [{ value: '', disabled: true }, [Validators.required]],
-      cidade: [{ value: '', disabled: true }, [Validators.required]],
-      estado: [{ value: '', disabled: true }, [Validators.required]],
-      cep: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9), Validators.pattern(this.cepRegex)]],
-      email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50), Validators.email]],
-      telefone: ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13), Validators.pattern(this.telefoneRegex)]],
-      complemento: ['', [Validators.maxLength(50)]],
-      rua: [{ value: '', disabled: true }, [Validators.required]],
-      numero: ['', [Validators.min(1)]]
-    });
-
-    this.carregarConstrutoras();
+    this.carregarEmpresas();
   }
 
   ngAfterViewChecked() {
@@ -74,8 +53,8 @@ export class CondominioCadastroComponent implements OnInit {
     this.spinner.show();
     this.defaultService.getById('condominios', this.condominio.id).subscribe(response => {
       this.condominio = response as Condominio;
-      this.construtoraId = this.condominio.construtora.id.toString();
-      this.carregarConstrutoras();
+      this.empresaId = this.condominio.empresa.id.toString();
+      this.carregarEmpresas();
     })
   }
 
@@ -97,25 +76,22 @@ export class CondominioCadastroComponent implements OnInit {
     })
   }
 
-  carregarConstrutoras() {
+  carregarEmpresas() {
     this.spinner.show();
-    this.defaultService.get('construtoras').subscribe(response => {
-      this.listaConstrutoras = (response as Construtora[]).map(constr => ({ value: constr.id.toString(), label: constr.nomeFantasia }));
-      this.listaConstrutoras.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+    this.defaultService.get('empresas').subscribe(response => {
+      this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia }));
+      this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
     }, error => console.error(error)
       , () => this.spinner.hide());
   }
 
-  isValid(field) {
-    return this.formulario.get(field).status == 'VALID' ? true : false;
-  }
-
-  salvar() {
-    if (this.formulario.invalid) {
-      Swal.fire('Cadastro de condominio', 'Não é possível salvar o condominio!<br>Existem campos inválidos', 'error');
+  salvar(form) {
+    if (form.invalid) {
+      this.isSubmit = true;
+      return;
     } else {
       this.condominio.usuario = this.sharedService.getUsuarioLogged();
-      this.condominio.construtora.id = Number(this.construtoraId);
+      this.condominio.empresa.id = Number(this.empresaId);
 
       this.spinner.show();
       if (!this.condominio.id) {

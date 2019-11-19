@@ -60,7 +60,7 @@ export class CondominioListaComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.listaCondominios.filter(function (cond) {
-      return (cond.nome.toLowerCase().indexOf(val) !== -1 || cond.construtora.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
+      return (cond.nome.toLowerCase().indexOf(val) !== -1 || cond.empresa.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
     });
 
     this.listaCondominiosTemp = temp;
