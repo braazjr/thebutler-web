@@ -56,7 +56,7 @@
           <div class="col-sm-4">
             <label class="col-form-label">Permissões</label>
             <ng-select [ngClass]="'ng-select'" [options]="listaPermissoes" [multiple]="true" [(ngModel)]="permissaoIds"
-              name="permissao" required #permissoes="ngModel" [validForm]="{form: permissoes, isSubmit: isSubmit}">
+              name="permissao" #permissoes="ngModel" [validForm]="{form: permissoes, isSubmit: isSubmit}">
             </ng-select>
           </div>
         </div>
