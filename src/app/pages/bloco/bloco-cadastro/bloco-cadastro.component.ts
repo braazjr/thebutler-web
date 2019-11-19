@@ -9,8 +9,6 @@ import { ToastService } from '../../../services/toast.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
-import Swal from 'sweetalert2';
-
 @Component({
   selector: 'app-bloco-cadastro',
   templateUrl: './bloco-cadastro.component.html',
@@ -25,15 +23,12 @@ export class BlocoCadastroComponent implements OnInit {
   cnpjMask = [/\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/,];
   cepMask = [/\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/];
   telefoneMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  cnpjRegex = /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/;
-  cepRegex = /^\d{5}-\d{3}$/;
-  telefoneRegex = /^\(\d{2}\)\d{4}-\d{4}$/;
-  formulario: FormGroup;
+
+  isSubmit: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private defaultService: DefaultService,
-    private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
@@ -46,13 +41,6 @@ export class BlocoCadastroComponent implements OnInit {
         this.bloco.id = params['id'];
         this.getById();
       }
-    });
-
-    this.formulario = this.formBuilder.group({
-      condominio: ['', [Validators.required, Validators.min(1)]],
-      nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
-      ativo: ['', [Validators.required]],
-      numero: ['', [Validators.min(1)]]
     });
 
     this.carregarCondominios();
@@ -83,13 +71,10 @@ export class BlocoCadastroComponent implements OnInit {
       () => this.spinner.hide());
   }
 
-  isValid(field) {
-    return this.formulario.get(field).status == 'VALID' ? true : false;
-  }
-
-  salvar() {
-    if (this.formulario.invalid) {
-      Swal.fire('Cadastro de bloco', 'Não é possível salvar o bloco!<br>Existem campos inválidos', 'error');
+  salvar(form) {
+    if (form.invalid) {
+      this.isSubmit = true;
+      return;
     } else {
       this.bloco.usuario = this.sharedService.getUsuarioLogged();
       this.bloco.condominio.id = Number(this.condominioId);

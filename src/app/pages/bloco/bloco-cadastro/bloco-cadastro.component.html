@@ -15,7 +15,7 @@
                 <i class="fa fa-list"></i>
               </button>
               <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-                (click)="salvar()" [disabled]="formulario.invalid">
+                (click)="salvar(blocoForm)">
                 <i class="fa fa-save"></i>
               </button>
             </div>
@@ -23,31 +23,30 @@
         </div>
       </div>
 
-      <form autocomplete="off" [formGroup]="formulario">
+      <form autocomplete="off" (ngSubmit)="salvar(blocoForm)" #blocoForm="ngForm">
         <div class="form-group row">
           <div class="col-sm-4">
-            <label class="col-form-label"
-              [ngClass]="{'form-control-danger' : !isValid('condominio')}">Condomínio</label>
-            <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="condominioId"
-              formControlName="condominio">
+            <label class="col-form-label">Condomínio</label>
+            <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="condominioId" name="condominio"
+              #condominio="ngModel" required [validForm]="{form: condominio, isSubmit: isSubmit}">
             </ng-select>
           </div>
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nome')}">Nome</label>
-            <input type="text" class="form-control" #nome [(ngModel)]="bloco.nome" formControlName="nome">
+            <label class="col-form-label">Nome</label>
+            <input type="text" class="form-control" #nome="ngModel" [(ngModel)]="bloco.nome" name="nome" required
+              minlength="5" maxlength="25" [validForm]="{form: nome, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
-            <input type="number" class="form-control" #numero [(ngModel)]="bloco.numero" formControlName="numero">
+            <label class="col-form-label">Número</label>
+            <input type="number" class="form-control" #numero="ngModel" [(ngModel)]="bloco.numero" name="numero"
+              [validForm]="{form: numero, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-2">
             <br><br>
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="ativo"
-                [ngClass]="{'form-control-danger' : !isValid('ativo')}" [(ngModel)]="bloco.ativo"
-                formControlName="ativo">
-              <label class="custom-control-label" for="ativo"
-                [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label>
+              <input type="checkbox" class="custom-control-input" id="ativo" [(ngModel)]="bloco.ativo" name="ativo"
+                #ativo="ngModel" required [validForm]="{form: ativo, isSubmit: isSubmit}">
+              <label class="custom-control-label" for="ativo">Ativo</label>
             </div>
           </div>
         </div>
