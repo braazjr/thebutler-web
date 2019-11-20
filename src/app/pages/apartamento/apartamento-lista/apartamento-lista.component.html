@@ -42,9 +42,12 @@
                 <ng-select [ngClass]="'ng-select'" [options]="filtroComMoradores" [(ngModel)]="listaData.comMoradores">
                 </ng-select>
               </div>
-              <div class="col-sm-2">
-                <button class="btn btn-primary btn-round" style="margin-top: 30px" (click)="getApartamentos()">
+              <div class="col-sm-2 m-t-35">
+                <button class="btn btn-primary btn-round m-r-5" (click)="getApartamentos()">
                   Pesquisar
+                </button>
+                <button class="btn btn-primary btn-round" (click)="limparPesquisa()">
+                  Limpar
                 </button>
               </div>
             </div>
@@ -66,9 +69,8 @@
           </ngx-datatable-column>
           <ngx-datatable-column prop="id" name="Opções" [flexGrow]="2" [sortable]="false">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <label [routerLink]="['/ficha',row.id]" class="badge badge-primary pointer m-r-5"
-                *ngIf="row.moradores.length != 0">Ficha</label>
-              <label class="badge badge-light m-r-5" *ngIf="row.moradores.length == 0">S/ moradores</label>
+              <label [routerLink]="['/ficha',row.id]" class="badge badge-primary pointer m-r-5">Ficha</label>
+              <!-- <label class="badge badge-light m-r-5" *ngIf="row.moradores.length == 0">S/ moradores</label> -->
               <label class="badge badge-warning pointer m-r-5"
                 [routerLink]="['/apartamento/cadastro', row.id]">Ver/Editar</label>
               <label class="badge badge-danger pointer" (click)="excluir(row)">Excluir</label>
