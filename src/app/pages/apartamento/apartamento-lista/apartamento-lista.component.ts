@@ -137,7 +137,25 @@ export class ApartamentoListaComponent implements OnInit {
   }
 
   temPacoteParaCadastro() {
-    if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig)
+    if (this.sharedService.isAdmin()) {
+      return true;
+    } else if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig) {
       return this.sharedService.getUsuarioLogged().empresa.empresaConfig.qtyApartamentos > this.listaData.totalElements;
+    }
+  }
+
+  limparPesquisa() {
+    this.listaData = {
+      size: 10,
+      totalElements: 0,
+      totalPages: 0,
+      page: 0,
+      sort: 'numero,asc',
+      idCondominio: '0',
+      idBloco: '0',
+      comMoradores: '0'
+    };
+
+    this.setPage({ offset: 0 });
   }
 }
