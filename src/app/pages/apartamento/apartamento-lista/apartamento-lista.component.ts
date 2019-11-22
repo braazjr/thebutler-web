@@ -10,6 +10,7 @@ import { SharedService } from 'src/app/shared/shared.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 import Swal from 'sweetalert2';
+import * as lodash from 'lodash';
 
 @Component({
   selector: 'app-apartamento-lista',
@@ -89,8 +90,12 @@ export class ApartamentoListaComponent implements OnInit {
   }
 
   getApartamentos() {
+    const listaData = lodash.clone(this.listaData);
     this.spinner.show();
-    this.apartamentoService.getApartamentos(this.listaData).subscribe(data => {
+    if (listaData.comMoradores == '0')
+      delete listaData.comMoradores;
+
+    this.apartamentoService.getApartamentos(listaData).subscribe(data => {
       this.listaData.page = data['number'];
       this.listaData.size = data['size'];
       this.listaData.totalElements = data['totalElements'];
