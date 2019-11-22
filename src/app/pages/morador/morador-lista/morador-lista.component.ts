@@ -6,6 +6,8 @@ import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+import * as lodash from 'lodash';
+
 @Component({
   selector: 'app-morador-lista',
   templateUrl: './morador-lista.component.html',
@@ -81,11 +83,12 @@ export class MoradorListaComponent implements OnInit {
   }
 
   getMoradores() {
-    if (this.listaData.idBloco == '0') this.listaData.idBloco = null;
-    if (this.listaData.idCondominio ==='0') this.listaData.idCondominio = null;
+    const listaData = lodash.clone(this.listaData);
+    if (listaData.idBloco == '0') delete listaData.idBloco;
+    if (listaData.idCondominio ==='0') delete listaData.idCondominio;
 
     this.spinner.show();
-    this.moradorService.getViewApartamentoMorador(this.listaData).subscribe(data => {
+    this.moradorService.getViewApartamentoMorador(listaData).subscribe(data => {
       this.listaData.page = data['number'];
       this.listaData.size = data['size'];
       this.listaData.totalElements = data['totalElements'];
