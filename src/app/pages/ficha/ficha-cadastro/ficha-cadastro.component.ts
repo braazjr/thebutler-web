@@ -15,10 +15,11 @@ import { environment } from '../../../../environments/environment';
 import { ApartamentoService } from '../../../services/apartamento.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from 'src/app/shared/shared.service';
+import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
+import * as lodash from 'lodash';
 
 @Component({
   selector: 'app-ficha-cadastro',
@@ -30,13 +31,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   apartamento: Apartamento = new Apartamento();
   documentos: any[] = [];
 
-  // valores dos selects
-  tipoMorador: string;
-  tipoDocumento: string;
-  tipoDocumentoResidente: string;
-
-  responsavel: Morador = new Morador();
-  residente: Morador = new Morador();
   listaResidentes: Morador[] = [];
 
   // lista de selects
@@ -44,7 +38,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   listaTipoDocumentos: Array<IOption> = [];
 
   formulario: FormGroup;
-  formularioResidentes: FormGroup;
+  formularioResidente: FormGroup;
+  isSubmit: boolean = false;
+  isSubmitResidente: boolean = false;
 
   telefoneMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   celularMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -55,13 +51,13 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   image64Temp: any;
   imageChangedEvent: any;
   croppedImage: any;
-  moradorFotoTemp: Morador;
+  formFotoTemp: any;
   options = {};
 
   // uploader: FileUploader;
   hasBaseDropZoneOver = false;
   hasAnotherDropZoneOver = false;
-  
+
   public documentosForm = new FormGroup({
     files: new FormControl(null)
   });
@@ -100,20 +96,34 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     });
 
     this.formulario = this.formBuilder.group({
-      nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
-      ativo: ['', [Validators.required]],
-      celular: ['', [Validators.pattern(this.celularRegex)]],
-      telefone: ['', [Validators.pattern(this.telefoneRegex)]],
-      placaCarro: ['', []],
       numeroQuartos: ['', [Validators.required, Validators.minLength(2)]],
-      tipoMorador: ['', [Validators.required, Validators.min(1)]]
+      responsavel: this.formBuilder.group({
+        id: [{ value: '', disabled: true }],
+        nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+        ativo: ['', [Validators.required]],
+        celular: ['', [Validators.pattern(this.celularRegex)]],
+        telefone: ['', [Validators.pattern(this.telefoneRegex)]],
+        placaCarro: [''],
+        tipoMorador: ['0', [Validators.required, Validators.min(1)]],
+        tipoDocumento: ['0'],
+        documento: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        foto64: [],
+        fotoUrl: []
+      })
     });
 
-    this.formularioResidentes = this.formBuilder.group({
+    this.formularioResidente = this.formBuilder.group({
+      id: [{ value: '', disabled: true }],
       nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
       ativo: ['', [Validators.required]],
       celular: ['', [Validators.pattern(this.celularRegex)]],
-      parentesco: ['', [Validators.required]]
+      parentesco: ['', [Validators.required]],
+      tipoDocumento: ['0'],
+      documento: ['', [Validators.required]],
+      email: [''],
+      foto64: [],
+      fotoUrl: []
     });
 
     this.getTipoMorador();
@@ -128,6 +138,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     this.spinner.show();
     this.defaultService.getById('apartamentos', this.apartamento.id).subscribe(response => {
       this.apartamento = response as Apartamento;
+      this.formulario.patchValue(response);
       this.carregaFicha();
     }, (error) => {
       console.error(error);
@@ -136,87 +147,69 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   carregaFicha() {
-    const responsavel = this.apartamento.moradores.filter((morador) => morador.tipoMorador === 'PROPRIETARIO')[0];
+    const responsavel = this.apartamento.moradores.filter((morador) => morador.tipoMorador)[0];
     if (responsavel) {
-      this.responsavel = responsavel;
-      this.tipoMorador = this.responsavel.tipoMorador;
-      this.listaResidentes = this.apartamento.moradores.filter((morador) => !morador.tipoMorador || morador.tipoMorador === null);
+      this.formulario.get('responsavel').patchValue(responsavel);
+      this.listaResidentes = this.apartamento.moradores.filter((morador) => morador.id != responsavel.id);
     }
     this.spinner.hide();
   }
 
-  isValid(field) {
-    return this.formulario.get(field).status === 'VALID' ? true : false;
-  }
-
   isResidentValid(field) {
-    return this.formularioResidentes.get(field).status === 'VALID' ? true : false;
+    return this.formularioResidente.get(field).status === 'VALID' ? true : false;
   }
 
   getTipoMorador() {
     this.tipoMoradorService.getTiposMorador().subscribe(response => {
-      this.listaTipoMoradores = (response as any[]).map(tipo => {
-        if (this.apartamento.id && tipo === this.responsavel.tipoMorador) {
-          return ({ value: tipo.toString(), label: tipo.toString(), selected: true });
-        }
-
-        return ({ value: tipo.toString(), label: tipo.toString() });
-      });
+      this.listaTipoMoradores = (response as any[]).map(tipo => ({ value: tipo.toString(), label: tipo.toString() }));
+      this.listaTipoMoradores.unshift({ value: '0', label: 'Selecione uma opção' })
     }, (error) => console.error(error));
   }
 
   getTipoDocumento() {
     this.tipoDocumentoService.getTiposDocumento().subscribe(response => {
-      this.listaTipoDocumentos = (response as any[]).map(tipo => {
-        if (this.apartamento.id && tipo === this.responsavel.tipoMorador) {
-          return ({ value: tipo.toString(), label: tipo.toString(), selected: true });
-        }
-
-        return ({ value: tipo.toString(), label: tipo.toString() });
-      });
+      this.listaTipoDocumentos = (response as any[]).map(tipo => ({ value: tipo.toString(), label: tipo.toString() }));
+      this.listaTipoDocumentos.unshift({ value: '0', label: 'Selecione uma opção' })
     }, (error) => console.error(error));
   }
 
   carregaEditarResidente(residente) {
-    this.residente = residente;
+    this.formularioResidente.patchValue(residente);
   }
 
   removerResidente(residente: Morador) {
-    if (residente.id) {
-      Swal.fire({
-        title: 'Remoção de residente',
-        text: `Residente já está cadastrado, deseja remove-lo?`,
-        type: 'warning',
-        showCancelButton: true,
-        cancelButtonText: 'Não',
-        confirmButtonText: 'Sim'
-      }).then((result) => {
-        if (result.value) {
-          const residenteParaRemover = this.listaResidentes.findIndex(resid => resid.documento === residente.documento);
-          this.listaResidentes.splice(residenteParaRemover, 1);
-        }
-      });
-    } else {
-      const residenteParaRemover = this.listaResidentes.findIndex(resid => resid.documento === residente.documento);
-      this.listaResidentes.splice(residenteParaRemover, 1);
-    }
-  }
-
-  isEdit(residente) {
-    return this.residente === residente;
+    Swal.fire({
+      title: 'Remoção de residente',
+      text: `Residente já está cadastrado, deseja remove-lo?`,
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Não',
+      confirmButtonText: 'Sim'
+    }).then((result) => {
+      if (result.value) {
+        const residenteParaRemover = this.listaResidentes.findIndex(resid => resid.documento === residente.documento);
+        this.listaResidentes.splice(residenteParaRemover, 1);
+      }
+    });
   }
 
   incluiResidente() {
-    if (!this.residente.id) {
-      this.listaResidentes.push(this.residente);
-      this.residente = new Morador();
+    if (this.formularioResidente.invalid) {
+      this.isSubmitResidente = true;
+      return;
     } else {
-      const index = this.listaResidentes.indexOf(this.residente, 0);
-      if (index > -1) {
-        this.listaResidentes.splice(index, 1);
-        this.listaResidentes.push(this.residente);
-        this.residente = new Morador();
+      const residente = this.formularioResidente.getRawValue();
+      if (this.formularioResidente.get('tipoDocumento').value != '0')
+        residente.tipoDocumento = this.formularioResidente.get('tipoDocumento').value;
+
+      if (!this.formularioResidente.get('id').value) {
+        this.listaResidentes.push(residente);
+      } else {
+        this.listaResidentes = this.listaResidentes.filter(resid => resid.id != residente.id);
+        this.listaResidentes.push(residente);
       }
+
+      this.resetResidenteForm();
     }
   }
 
@@ -235,19 +228,24 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   onCamSuccess() { }
 
-  onCamError() { }
-
-  imageCropped(image: string) {
-    this.croppedImage = image;
+  onCamError(error) {
+    console.error(error);
+    this.toastService.addToast(
+      'error',
+      `Carregamento da webcam`,
+      'Ocorreu um erro ao carregar a webcam. Verifique a conexão!'
+    );
   }
 
-  confirmarModalFoto() {
-    this.moradorFotoTemp.foto64 = this.croppedImage.base64;
+  confirmarModalFoto(modalCamera) {
+    this.formFotoTemp.get('foto64').setValue(this.croppedImage.base64);
+    this.image64Temp = undefined;
+    modalCamera.hide();
   }
 
   limparModalFoto(morador) {
     morador.foto64 = undefined;
-    this.moradorFotoTemp = undefined;
+    this.formFotoTemp = undefined;
     this.image64Temp = undefined;
   }
 
@@ -262,14 +260,16 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   salvar() {
     if (this.formulario.invalid) {
-      Swal.fire(`Ficha do apartamento ${this.apartamento.numero}`, 'Não é possível salvar a ficha!<br>Existem campos inválidos', 'error');
+      this.isSubmit = true;
+      return;
     } else {
       let apartamento: Apartamento;
-      apartamento = this.apartamento;
+      apartamento = lodash.clone(this.apartamento);
+      apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value;
       apartamento.usuario = this.sharedService.getUsuarioLogged();
       apartamento.moradores = [];
       apartamento.moradores = this.listaResidentes;
-      apartamento.moradores.push(this.responsavel);
+      apartamento.moradores.push(this.formulario.getRawValue().responsavel);
       apartamento.moradores.forEach(morador => {
         morador.usuario = this.sharedService.getUsuarioLogged();
       });
@@ -277,21 +277,28 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.spinner.show();
       this.defaultService.atualizar('apartamentos', apartamento).subscribe(() => {
         this.getById();
-        this.toastService.addToast('success', `Atualização da ficha do apartamento ${this.apartamento.numero}`,
-          `Ficha atualizada com sucesso!`);
+        this.toastService.addToast(
+          'success',
+          `Atualização da ficha do apartamento ${this.apartamento.numero}`,
+          `Ficha atualizada com sucesso!`
+        );
       }, error => {
         this.spinner.hide();
         console.error(error);
         error.error.forEach(element => {
-          this.toastService.addToast('error', `Atualização da ficha do apartamento ${this.apartamento.numero}`,
-            element.mensagemUsuario);
+          this.toastService.addToast(
+            'error',
+            `Atualização da ficha do apartamento ${this.apartamento.numero}`,
+            element.mensagemUsuario
+          );
         });
       }, () => this.spinner.hide());
     }
   }
 
-  cancelaEdicao() {
-    this.residente = new Morador();
+  resetResidenteForm() {
+    this.formularioResidente.reset();
+    this.formularioResidente.get('tipoDocumento').setValue('0');
   }
 
   getDocumentosPorApartamento() {
@@ -302,8 +309,11 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.spinner.hide();
       console.error(error);
       error.error.forEach(element => {
-        this.toastService.addToast('error', `Captura dos documentos do apartamento ${this.apartamento.numero}`,
-          element.mensagemUsuario);
+        this.toastService.addToast(
+          'error',
+          `Captura dos documentos do apartamento ${this.apartamento.numero}`,
+          element.mensagemUsuario
+        );
       });
     }, () => this.spinner.hide());
   }
@@ -348,5 +358,26 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     const blob = new Blob([data], { type: 'application/pdf; charset=utf-8' });
     fileSaver.saveAs(blob, filename);
     this.spinner.hide();
+  }
+
+  getFieldResponsavelForm(field) {
+    return this.formulario.get('responsavel').get(field);
+  }
+
+  getValueResponsavelForm(field) {
+    return this.formulario.get('responsavel').get(field).value;
+  }
+
+  getFieldResidenteForm(field) {
+    return this.formularioResidente.get(field);
+  }
+
+  getValueResidenteForm(field) {
+    return this.formularioResidente.get(field).value;
+  }
+
+  removeFoto(form) {
+    form.get('foto64').setValue(undefined);
+    form.get('fotoUrl').setValue(undefined);
   }
 }

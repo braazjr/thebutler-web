@@ -10,6 +10,7 @@ import { SelectModule } from 'ng-select';
 import { ToastService } from '../services/toast.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ValidFormDirectiveDirective } from './directives/valid-form-directive.directive';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [ValidFormDirectiveDirective],
@@ -20,7 +21,8 @@ import { ValidFormDirectiveDirective } from './directives/valid-form-directive.d
     ReactiveFormsModule,
     ToastyModule.forRoot(),
     SelectModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgbCollapseModule
   ],
   providers: [
     DefaultService,
@@ -34,7 +36,8 @@ import { ValidFormDirectiveDirective } from './directives/valid-form-directive.d
     NgxDatatableModule,
     SelectModule,
     NgxSpinnerModule,
-    ValidFormDirectiveDirective
+    ValidFormDirectiveDirective,
+    NgbCollapseModule
   ]
 })
 export class SharedTheButlerModule { }
