@@ -5,7 +5,9 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class DocumentoService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   getDocumentosPorApartamento(id) {
     const hds = new HttpHeaders({
@@ -23,4 +25,14 @@ export class DocumentoService {
     return this.http.delete(`${environment.urlSpring}/public/documento/${id}`, { headers: hds, withCredentials: true });
   }
 
+  uploadDocumentos(idApartamento, files) {
+    const hds = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+
+    let formdata: FormData = new FormData();
+    formdata.append('file', files);
+
+    return this.http.post(`${environment.urlSpring}/public/documento/upload-documento/${idApartamento}`, files, { headers: hds, withCredentials: true, reportProgress: true });
+  }
 }

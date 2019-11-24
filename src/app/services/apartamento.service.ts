@@ -38,7 +38,7 @@ export class ApartamentoService {
   getFicha(idApartamento) {
     const hds = new HttpHeaders({
       'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      'responseType': 'blob'
+      // 'responseType': 'blob'
     });
 
     return this.http.get(`${environment.urlSpring}/apartamentos/${idApartamento}/ficha`, { headers: hds, withCredentials: true, observe: 'response', responseType: 'blob' });

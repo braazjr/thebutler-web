@@ -351,6 +351,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     this.spinner.show();
     this.apartamentoService.getFicha(this.apartamento.id).subscribe((response) => {
       this.saveFile(response['body'], `Ficha-Apartamento-${this.apartamento.numero}-${this.apartamento.bloco.nome}-${this.apartamento.bloco.condominio.nome}`);
+    }, error => {
+      this.spinner.hide();
+      console.error(error);
     })
   }
 
@@ -379,5 +382,16 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   removeFoto(form) {
     form.get('foto64').setValue(undefined);
     form.get('fotoUrl').setValue(undefined);
+  }
+
+  importarFotos() {
+    this.spinner.show();
+    this.documentoService.uploadDocumentos(this.apartamento.id, this.documentosForm.value.files[0])
+      .subscribe(() => {
+        this.spinner.hide();
+      }, error => {
+        this.spinner.hide();
+        console.error(error);
+      })
   }
 }

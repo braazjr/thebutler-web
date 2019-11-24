@@ -349,7 +349,7 @@
 <app-ui-modal #modalDocumentos>
   <div class="app-modal-header">
     <h4 class="modal-title">Documentos do apartamento {{ apartamento.numero }}</h4>
-    <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); this.uploader.clearQueue()">
+    <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); documentosForm.reset()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -444,7 +444,7 @@
         <tbody>
           <tr *ngFor="let doc of documentos">
             <th scope="row"><a [href]="doc.path" target="_blank">{{ doc.nome }}</a></th>
-            <td><label class="label bg-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
+            <td><label class="badge badge-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
           </tr>
         </tbody>
       </table>
@@ -452,6 +452,7 @@
   </div>
   <div class="app-modal-footer">
     <button type="button" class="btn btn-default waves-effect"
-      (click)="modalDocumentos.hide(); this.uploader.clearQueue()">Fechar</button>
+      (click)="modalDocumentos.hide(); documentosForm.reset()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect" (click)="importarFotos()">Importar fotos</button>
   </div>
 </app-ui-modal>
