@@ -25,13 +25,13 @@
 
       <form autocomplete="off" (ngSubmit)="salvar(blocoForm)" #blocoForm="ngForm">
         <div class="form-group row">
-          <div class="col-sm-4">
+          <div class="col-sm-6 col-md-4">
             <label class="col-form-label">Condomínio</label>
             <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="condominioId" name="condominio"
               #condominio="ngModel" required [validForm]="{form: condominio, isSubmit: isSubmit}">
             </ng-select>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-6 col-md-4">
             <label class="col-form-label">Nome</label>
             <input type="text" class="form-control" #nome="ngModel" [(ngModel)]="bloco.nome" name="nome" required
               minlength="5" maxlength="25" [validForm]="{form: nome, isSubmit: isSubmit}">

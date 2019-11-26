@@ -25,7 +25,7 @@
 
       <form autocomplete="off" (ngSubmit)="salvar(condominioForm)" #condominioForm="ngForm">
         <div class="form-group row">
-          <div class="col-sm-4">
+          <div class="col-sm-6 col-md-4">
             <label class="col-form-label">Empresa</label>
             <ng-select [ngClass]="'ng-select'" [options]="listaEmpresas" #empresa="ngModel" name="empresa"
               [(ngModel)]="empresaId" [validForm]="{form: empresa, isSubmit: isSubmit}" required>
@@ -36,7 +36,7 @@
             <input type="text" class="form-control" #nome="ngModel" name="nome" [(ngModel)]="condominio.nome"
               [validForm]="{form: nome, isSubmit: isSubmit}" required minlength="5" maxlength="30">
           </div>
-          <div class="col-sm-2">
+          <div class="col-sm-12 col-md-2">
             <br><br>
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="ativo" #ativo="ngModel" name="ativo"
@@ -44,13 +44,13 @@
               <label class="custom-control-label" for="ativo">Ativo</label>
             </div>
           </div>
-          <div class="col-sm-2">
+          <div class="col-sm-3 col-md-2">
             <label class="col-form-label">CEP</label>
             <input type="text" class="form-control" #cep="ngModel" name="cep" [(ngModel)]="condominio.cep"
               [textMask]="{mask: cepMask}" (keyup)="validaCep($event)" [validForm]="{form: cep, isSubmit: isSubmit}"
               required>
           </div>
-          <div class="col-sm-10">
+          <div class="col-sm-9 col-md-10">
             <label class="col-form-label">Rua</label>
             <input type="text" class="form-control" #rua="ngModel" [(ngModel)]="condominio.rua" name="rua"
               [validForm]="{form: rua, isSubmit: isSubmit}" disabled>

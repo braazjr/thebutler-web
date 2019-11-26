@@ -99,6 +99,7 @@ export class CondominioCadastroComponent implements OnInit {
           this.condominio = response as Condominio;
           this.toastService.addToast('success', 'Cadastro Condomínio!', `Condomínio ${this.condominio.nome} salvo com sucesso!`);
         }, error => {
+          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Condomínio!', element.mensagemUsuario);
@@ -109,6 +110,7 @@ export class CondominioCadastroComponent implements OnInit {
           this.condominio = response as Condominio;
           this.toastService.addToast('success', 'Atualização Condomínio!', `Condomínio ${this.condominio.nome} atualizado com sucesso!`);
         }, error => {
+          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Condomínio!', element.mensagemUsuario);

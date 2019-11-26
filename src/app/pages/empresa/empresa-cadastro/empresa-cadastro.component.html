@@ -35,12 +35,12 @@
             <input type="text" class="form-control" formControlName="nomeFantasia"
               [validForm]="{form: formulario.get('nomeFantasia'), isSubmit: isSubmit}">
           </div>
-          <div class="col-sm-2" formGroupName="empresaConfig">
+          <div class="col-sm-4 col-md-2" formGroupName="empresaConfig">
             <label class="col-form-label">Qtd. Cadastros</label>
             <input type="number" class="form-control" formControlName="qtyApartamentos"
               [validForm]="{form: formulario.get('empresaConfig.qtyApartamentos'), isSubmit: isSubmit}">
           </div>
-          <div class="col-sm-2">
+          <div class="col-sm-12 col-md-2">
             <br><br>
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="ativo" formControlName="ativo"
@@ -55,12 +55,12 @@
             <input type="text" class="form-control" formControlName="razaoSocial"
               [validForm]="{form: formulario.get('razaoSocial'), isSubmit: isSubmit}">
           </div>
-          <div class="col-sm-2">
+          <div class="col-sm-3 col-md-2">
             <label class="col-form-label">CEP</label>
             <input type="text" class="form-control" formControlName="cep" [textMask]="{mask: cepMask}"
               [validForm]="{form: formulario.get('cep'), isSubmit: isSubmit}" (keyup)="validaCep($event)">
           </div>
-          <div class="col-sm-10">
+          <div class="col-sm-9 col-md-10">
             <label class="col-form-label">Rua</label>
             <input type="text" class="form-control" formControlName="rua"
               [validForm]="{form: formulario.get('rua'), isSubmit: isSubmit}">

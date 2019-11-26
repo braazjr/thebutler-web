@@ -25,7 +25,7 @@
 
       <form autocomplete="off" [formGroup]="formulario">
         <div class="form-group row">
-          <div class="col-sm-4">
+          <div class="col-sm-6 col-md-4">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('blocoId')}">Bloco</label>
             <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" formControlName="blocoId">
             </ng-select>
