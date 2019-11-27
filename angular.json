@@ -60,6 +60,14 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "develop": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.develop.ts"
+                }
+              ]
             }
           }
         },
@@ -71,6 +79,9 @@
           "configurations": {
             "production": {
               "browserTarget": "gradient-able-v8.0.6:build:production"
+            },
+            "develop": {
+              "browserTarget": "gradient-able-v8.0.6:build:develop"
             }
           }
         },
@@ -119,6 +130,9 @@
           "configurations": {
             "production": {
               "devServerTarget": "gradient-able-v8.0.6:serve:production"
+            },
+            "develop": {
+              "devServerTarget": "gradient-able-v8.0.6:serve:develop"
             }
           }
         }
