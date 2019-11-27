@@ -13,7 +13,7 @@
         <!-- filtros -->
         <div class="row">
           <div class="col-sm-12">
-            <!-- <div class="form-group row">
+            <div class="form-group row">
               <div class="col-sm-3">
                 <label class="col-form-label">Condominio</label>
                 <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="listaData.idCondominio">
@@ -26,32 +26,32 @@
               </div>
               <div class="col-sm-6">
                 <label class="col-form-label">Nome</label>
-                <input type="text" class="form-control" [(ngModel)]="listaData.nome">
+                <input type="text" class="form-control" [(ngModel)]="listaData.nomeMorador">
               </div>
             </div>
             <div class="form-group row">
               <div class="col-sm-3">
                 <label class="col-form-label">Documento</label>
-                <input type="text" class="form-control" [(ngModel)]="listaData.documento">
+                <input type="text" class="form-control" [(ngModel)]="listaData.documentoMorador">
               </div>
-              <div class="col-sm-3">
+              <!-- <div class="col-sm-3">
                 <label class="col-form-label">Numero Apart.</label>
                 <input type="number" class="form-control" [(ngModel)]="listaData.numeroApartamento">
-              </div>
-              <div class="col-sm-3">
+              </div> -->
+              <!-- <div class="col-sm-3">
                 <label class="col-form-label">Ativo</label>
                 <ng-select [ngClass]="'ng-select'" [options]="ativoOpcoes" [(ngModel)]="listaData.ativo">
                 </ng-select>
-              </div>
-              <div class="col-sm-2">
-                <button class="btn btn-primary btn-round" style="margin-top: 30px" (click)="getMoradores()">
+              </div> -->
+              <div class="col-sm-9 col-md-3">
+                <button class="btn btn-primary btn-round btn-sm m-t-35 m-r-10" (click)="getViagens()">
                   Pesquisar
                 </button>
-                <button class="btn btn-warning btn-round" style="margin-top: 30px" (click)="limparPesquisa()">
+                <button class="btn btn-warning btn-round btn-sm m-t-35" (click)="limparPesquisa()">
                   Limpar
                 </button>
               </div>
-            </div> -->
+            </div>
           </div>
         </div>
         <br>
@@ -82,14 +82,6 @@
             </ng-template>
           </ngx-datatable-row-detail>
 
-          <ngx-datatable-column [flexGrow]="1" [sortable]="false">
-            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-              <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
-                [class.datatable-icon-down]="expanded" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
-              </a>
-            </ng-template>
-          </ngx-datatable-column>
-
           <ngx-datatable-column prop="id" name="ID" [flexGrow]="1">
             <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.id }}</strong></ng-template>
           </ngx-datatable-column>
@@ -105,6 +97,11 @@
           </ngx-datatable-column>
           <ngx-datatable-column prop="rota.nome" name="Rota" [flexGrow]="3">
             <ng-template let-row="row" ngx-datatable-cell-template>{{ row.rota.nome }}</ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column [flexGrow]="2" [sortable]="false">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+              <label class="badge badge-primary pointer" (click)="toggleExpandRow(row)">Ver moradores</label>
+            </ng-template>
           </ngx-datatable-column>
         </ngx-datatable>
       </app-card>

@@ -19,3 +19,15 @@ ng-select.is-invalid, ng-select.ng-invalid {
         border: none;
     }
 }
+
+.ngx-datatable {
+    .datatable-header {
+        background-color: $header-dark-background !important;
+        color: $header-dark-text-color;
+    }
+
+    .datatable-footer {
+        background-color: $secondary-color !important;
+        color: $header-dark-text-color;
+    }
+}
