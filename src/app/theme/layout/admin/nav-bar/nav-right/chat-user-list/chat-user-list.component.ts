@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FriendsList} from '../../../../../../fack-db/friends-list';
+// import {FriendsList} from '../../../../../../fack-db/friends-list';
 
 @Component({
   selector: 'app-chat-user-list',
@@ -12,7 +12,7 @@ export class ChatUserListComponent implements OnInit {
   public friendsList: any;
 
   constructor() {
-    this.friendsList = FriendsList.friends;
+    // this.friendsList = FriendsList.friends;
   }
 
   ngOnInit() {

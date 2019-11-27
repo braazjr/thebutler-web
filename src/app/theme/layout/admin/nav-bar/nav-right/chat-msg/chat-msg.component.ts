@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
-import {FriendsList} from '../../../../../../fack-db/friends-list';
-import {UserChat} from '../../../../../../fack-db/user-chat';
+// import {FriendsList} from '../../../../../../fack-db/friends-list';
+// import {UserChat} from '../../../../../../fack-db/user-chat';
 import {PerfectScrollbarComponent} from 'ngx-perfect-scrollbar';
 
 @Component({
@@ -26,8 +26,8 @@ export class ChatMsgComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.friendsList = FriendsList.friends;
-    this.userChat = UserChat.chat;
+    // this.friendsList = FriendsList.friends;
+    // this.userChat = UserChat.chat;
     this.chatMessage = findObjectByKeyValue(this.friendsList, 'id', this.friendId);
     if (this.chatMessage) {
       const message = findObjectByKeyValue(this.userChat, 'friend_id', this.friendId);
