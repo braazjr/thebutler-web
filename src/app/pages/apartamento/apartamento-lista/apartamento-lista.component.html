@@ -33,7 +33,7 @@
                 <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" [(ngModel)]="listaData.idBloco">
                 </ng-select>
               </div>
-              <div class="col-sm-2">
+              <div class="col-sm-1">
                 <label class="col-form-label">Número</label>
                 <input type="number" class="form-control" [(ngModel)]="listaData .numero">
               </div>
@@ -42,7 +42,7 @@
                 <ng-select [ngClass]="'ng-select'" [options]="filtroComMoradores" [(ngModel)]="listaData.comMoradores">
                 </ng-select>
               </div>
-              <div class="col-sm-2 m-t-35">
+              <div class="col-sm-3 m-t-35">
                 <button class="btn btn-primary btn-round m-r-5" (click)="getApartamentos()">
                   Pesquisar
                 </button>
