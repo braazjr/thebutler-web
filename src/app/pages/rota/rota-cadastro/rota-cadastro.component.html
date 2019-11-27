@@ -15,7 +15,7 @@
                 <i class="fa fa-list"></i>
               </button>
               <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-                (click)="salvar()" [disabled]="formulario.invalid">
+                (click)="salvar(rotaForm)">
                 <i class="fa fa-save"></i>
               </button>
             </div>
@@ -23,20 +23,19 @@
         </div>
       </div>
 
-      <form autocomplete="off" [formGroup]="formulario">
+      <form autocomplete="off" (ngSubmit)="salvar(rotaForm)" #rotaForm="ngForm">
         <div class="form-group row">
           <div class="col-sm-10">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nome')}">Nome</label>
-            <input type="text" class="form-control" #nome [(ngModel)]="rota.nome" formControlName="nome">
+            <label class="col-form-label">Nome</label>
+            <input type="text" class="form-control" #nome="ngModel" name="nome" [(ngModel)]="rota.nome" required
+              minlength="5" maxlength="40" [validForm]="{form: nome, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-2">
             <br><br>
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="ativo"
-                [ngClass]="{'form-control-danger' : !isValid('ativo')}" [(ngModel)]="rota.ativo"
-                formControlName="ativo">
-              <label class="custom-control-label" for="ativo"
-                [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label>
+              <input type="checkbox" class="custom-control-input" id="ativo" #ativo="ngModel" name="ativo"
+                [(ngModel)]="rota.ativo" required [validForm]="{form: ativo, isSubmit: isSubmit}">
+              <label class="custom-control-label" for="ativo">Ativo</label>
             </div>
           </div>
         </div>
