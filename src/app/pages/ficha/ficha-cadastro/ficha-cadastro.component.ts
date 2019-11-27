@@ -10,12 +10,9 @@ import { TipoDocumentoService } from '../../../services/tipo-documento.service';
 import { TipoMoradorService } from '../../../services/tipo-morador.service';
 import { WebCamComponent } from 'ack-angular-webcam';
 import { ToastService } from '../../../services/toast.service';
-// import { FileUploader } from 'ng2-file-upload';
-import { environment } from '../../../../environments/environment';
 import { ApartamentoService } from '../../../services/apartamento.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from 'src/app/shared/shared.service';
-import { FileUploadValidators } from '@iplab/ngx-file-upload';
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
@@ -31,32 +28,27 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   apartamento: Apartamento = new Apartamento();
   documentos: any[] = [];
 
-  listaResidentes: Morador[] = [];
+  listaMoradores: Morador[] = [];
 
   // lista de selects
   listaTipoMoradores: Array<IOption> = [];
   listaTipoDocumentos: Array<IOption> = [];
 
   formulario: FormGroup;
-  formularioResidente: FormGroup;
+  formularioMorador: FormGroup;
   isSubmit: boolean = false;
-  isSubmitResidente: boolean = false;
+  isSubmitMorador: boolean = false;
 
   telefoneMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   celularMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   telefoneRegex = /^\(\d{2}\)\d{4}-\d{4}$/;
   celularRegex = /^\(\d{2}\)\d{5}-\d{4}$/;
 
-  // webcam: WebCamComponent;
   image64Temp: any;
   imageChangedEvent: any;
   croppedImage: any;
   formFotoTemp: any;
   options = {};
-
-  // uploader: FileUploader;
-  hasBaseDropZoneOver = false;
-  hasAnotherDropZoneOver = false;
 
   public documentosForm = new FormGroup({
     files: new FormControl(null)
@@ -81,17 +73,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       if (params['id'] !== undefined) {
         this.apartamento.id = params['id'];
         this.getById();
-
-        // this.uploader = new FileUploader({
-        //   url: `${environment.urlSpring}/public/documento/upload-documento/${this.apartamento.id}/${this.sharedService.getUsuarioLogged().id}`,
-        //   headers: [{ name: 'Authorization', value: `Bearer ${localStorage.getItem('token')}` }],
-        //   // authTokenHeader: `Bearer ${localStorage.getItem('token')}`,
-        //   isHTML5: true,
-        //   // removeAfterUpload: true
-        // });
-        // this.uploader.onCompleteAll = () => {
-        //   this.getDocumentosPorApartamento();
-        // };
       }
     });
 
@@ -113,7 +94,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       })
     });
 
-    this.formularioResidente = this.formBuilder.group({
+    this.formularioMorador = this.formBuilder.group({
       id: [{ value: '', disabled: true }],
       nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
       ativo: ['', [Validators.required]],
@@ -150,13 +131,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     const responsavel = this.apartamento.moradores.filter((morador) => morador.tipoMorador)[0];
     if (responsavel) {
       this.formulario.get('responsavel').patchValue(responsavel);
-      this.listaResidentes = this.apartamento.moradores.filter((morador) => morador.id != responsavel.id);
+      this.listaMoradores = this.apartamento.moradores.filter((morador) => morador.id != responsavel.id);
     }
     this.spinner.hide();
-  }
-
-  isResidentValid(field) {
-    return this.formularioResidente.get(field).status === 'VALID' ? true : false;
   }
 
   getTipoMorador() {
@@ -173,43 +150,43 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     }, (error) => console.error(error));
   }
 
-  carregaEditarResidente(residente) {
-    this.formularioResidente.patchValue(residente);
+  carregaEditarMorador(morador) {
+    this.formularioMorador.patchValue(morador);
   }
 
-  removerResidente(residente: Morador) {
+  removerMorador(morador: Morador) {
     Swal.fire({
-      title: 'Remoção de residente',
-      text: `Residente já está cadastrado, deseja remove-lo?`,
+      title: 'Remoção de morador',
+      text: `Morador já está cadastrado, deseja remove-lo?`,
       type: 'warning',
       showCancelButton: true,
       cancelButtonText: 'Não',
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        const residenteParaRemover = this.listaResidentes.findIndex(resid => resid.documento === residente.documento);
-        this.listaResidentes.splice(residenteParaRemover, 1);
+        const moradorParaRemover = this.listaMoradores.findIndex(mora => mora.documento === morador.documento);
+        this.listaMoradores.splice(moradorParaRemover, 1);
       }
     });
   }
 
-  incluiResidente() {
-    if (this.formularioResidente.invalid) {
-      this.isSubmitResidente = true;
+  incluiMorador() {
+    if (this.formularioMorador.invalid) {
+      this.isSubmitMorador = true;
       return;
     } else {
-      const residente = this.formularioResidente.getRawValue();
-      if (this.formularioResidente.get('tipoDocumento').value != '0')
-        residente.tipoDocumento = this.formularioResidente.get('tipoDocumento').value;
+      const morador = this.formularioMorador.getRawValue();
+      if (this.formularioMorador.get('tipoDocumento').value != '0')
+        morador.tipoDocumento = this.formularioMorador.get('tipoDocumento').value;
 
-      if (!this.formularioResidente.get('id').value) {
-        this.listaResidentes.push(residente);
+      if (!this.formularioMorador.get('id').value) {
+        this.listaMoradores.push(morador);
       } else {
-        this.listaResidentes = this.listaResidentes.filter(resid => resid.id != residente.id);
-        this.listaResidentes.push(residente);
+        this.listaMoradores = this.listaMoradores.filter(mora => mora.id != morador.id);
+        this.listaMoradores.push(morador);
       }
 
-      this.resetResidenteForm();
+      this.resetMoradorForm();
     }
   }
 
@@ -219,14 +196,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.imageChangedEvent = this.image64Temp;
     }).catch(error => console.error(error));
   }
-
-  genBase64(webcam: WebCamComponent) {
-    webcam.getBase64()
-      .then(base => console.log(base))
-      .catch(e => console.error(e))
-  }
-
-  onCamSuccess() { }
 
   onCamError(error) {
     console.error(error);
@@ -268,7 +237,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value;
       apartamento.usuario = this.sharedService.getUsuarioLogged();
       apartamento.moradores = [];
-      apartamento.moradores = this.listaResidentes;
+      apartamento.moradores = this.listaMoradores;
       apartamento.moradores.push(this.formulario.getRawValue().responsavel);
       apartamento.moradores.forEach(morador => {
         morador.usuario = this.sharedService.getUsuarioLogged();
@@ -296,9 +265,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  resetResidenteForm() {
-    this.formularioResidente.reset();
-    this.formularioResidente.get('tipoDocumento').setValue('0');
+  resetMoradorForm() {
+    this.formularioMorador.reset();
+    this.formularioMorador.get('tipoDocumento').setValue('0');
   }
 
   getDocumentosPorApartamento() {
@@ -316,14 +285,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         );
       });
     }, () => this.spinner.hide());
-  }
-
-  fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
-  }
-
-  fileOverAnother(e: any): void {
-    this.hasAnotherDropZoneOver = e;
   }
 
   excluirDocumento(documento) {
@@ -371,12 +332,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     return this.formulario.get('responsavel').get(field).value;
   }
 
-  getFieldResidenteForm(field) {
-    return this.formularioResidente.get(field);
+  getFieldMoradorForm(field) {
+    return this.formularioMorador.get(field);
   }
 
-  getValueResidenteForm(field) {
-    return this.formularioResidente.get(field).value;
+  getValueMoradorForm(field) {
+    return this.formularioMorador.get(field).value;
   }
 
   removeFoto(form) {
