@@ -27,12 +27,11 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   apartamento: Apartamento = new Apartamento();
   documentos: any[] = [];
-
   listaMoradores: Morador[] = [];
 
-  // lista de selects
   listaTipoMoradores: Array<IOption> = [];
   listaTipoDocumentos: Array<IOption> = [];
+  isCollapsed: boolean = true;
 
   formulario: FormGroup;
   formularioMorador: FormGroup;

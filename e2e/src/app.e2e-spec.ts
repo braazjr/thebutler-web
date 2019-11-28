@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to gradient-able-v8.0.6!');
+    expect(page.getTitleText()).toEqual('Welcome to The Butler!');
   });
 
   afterEach(async () => {

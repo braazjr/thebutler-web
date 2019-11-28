@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "gradient-able-v8.0.6": {
+    "the-butler": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/gradient-able-v8.0.6",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -74,21 +74,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "gradient-able-v8.0.6:build"
+            "browserTarget": "the-butler:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "gradient-able-v8.0.6:build:production"
+              "browserTarget": "the-butler:build:production"
             },
             "develop": {
-              "browserTarget": "gradient-able-v8.0.6:build:develop"
+              "browserTarget": "the-butler:build:develop"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "gradient-able-v8.0.6:build"
+            "browserTarget": "the-butler:build"
           }
         },
         "test": {
@@ -125,18 +125,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "gradient-able-v8.0.6:serve"
+            "devServerTarget": "the-butler:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "gradient-able-v8.0.6:serve:production"
+              "devServerTarget": "the-butler:serve:production"
             },
             "develop": {
-              "devServerTarget": "gradient-able-v8.0.6:serve:develop"
+              "devServerTarget": "the-butler:serve:develop"
             }
           }
         }
       }
     }},
-  "defaultProject": "gradient-able-v8.0.6"
+  "defaultProject": "the-butler"
 }

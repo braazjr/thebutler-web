@@ -68,7 +68,7 @@
 <app-ui-modal #modalRedefinirSenha>
   <div class="app-modal-header">
     <h4 class="modal-title">Redefinição de senha de {{ usuario.nome }}</h4>
-    <button type="button" class="close basic-close" (click)="modal.hide()">
+    <button type="button" class="close basic-close" (click)="modalRedefinirSenha.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -92,7 +92,7 @@
     </form>
   </div>
   <div class="app-modal-footer">
-    <button type="button" class="btn btn-default waves-effect" (click)="modal.hide()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect" (click)="modalRedefinirSenha.hide()">Fechar</button>
     <button type="button" class="btn btn-primary waves-effect" (click)="redefinirSenha(modalRedefinirSenha)"
       [disabled]="formularioSenha.invalid || !senhaValidator()">Salvar</button>
   </div>
