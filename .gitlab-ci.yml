@@ -6,17 +6,12 @@ cache:
   paths:
     - node_modules/
 
-node-pre-build:
+node-build-develop:
   image: node:10
   stage: build
-  script:
+  before_script:
     - npm install
     - npm install -g @angular/cli@8
-
-node-build-develop:
-  image: node:8
-  stage: build
-  before_script:
   script: "ng build --aot --configuration=develop"
   only:
     - develop
@@ -37,10 +32,12 @@ deploy-develop:
   only:
     - develop
 
-node-build-master:
-  image: node:8
+node-build-production:
+  image: node:10
   stage: build
   before_script:
+    - npm install
+    - npm install -g @angular/cli@8
   script: "ng build --aot --configuration=production"
   only:
     - master
