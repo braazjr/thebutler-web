@@ -1,68 +1,62 @@
 <ng2-toasty></ng2-toasty>
 
 <div class="row">
-  <div class="col-sm-12 filter-bar">
-    <nav class="navbar navbar-light bg-faded m-b-30 p-10">
-      {{ !usuario.id ? 'Cadastro de Usuário' : ('Cadastro da Usuário: ' + usuario.primeiroNome + ' ' + usuario.ultimoNome) }}
-      <div class="nav-item nav-grid">
-        <span class="m-r-15">Ações: </span>
-
-        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
-          title="Lista de Usuários" [routerLink]="['/usuario/lista']">
-          <i class="icofont icofont-listing-box icofont-2x"></i>
-        </button>
-        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-          (click)="salvar()" [disabled]="formulario.invalid">
-          <i class="icofont icofont-save icofont-2x"></i>
-        </button>
-      </div>
-    </nav>
-  </div>
-</div>
-
-<div class="row">
   <div class="col-sm-12">
     <app-card>
-      <app-loader [observable]="observable"></app-loader>
-      <form id="formUsuario" autocomplete="off" [formGroup]="formulario">
+      <div class="row">
+        <div class="col-sm-12 filter-bar">
+          <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+            {{ !usuario.id ? 'Cadastro de ' : ('Cadastro da Usuário: ' + usuario.nome) }}
+            <div class="nav-item nav-grid">
+              <span class="m-r-15">Ações: </span>
+
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
+                title="Redefinir Senha" (click)="modalRedefinirSenha.show()" *ngIf="usuario.id">
+                <i class="fa fa-key"></i>
+              </button>
+              <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+                title="Lista de Usuários" [routerLink]="['/usuario/lista']">
+                <i class="fa fa-list"></i>
+              </button>
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
+                (click)="salvar(usuarioForm)">
+                <i class="fa fa-save"></i>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <form autocomplete="off" (ngSubmit)="salvar(usuarioForm)" #usuarioForm="ngForm">
         <div class="form-group row">
-          <div class="col-sm-5">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('primeiroNome')}">Primeiro
-              nome</label>
-            <input type="text" class="form-control form-control-round" #primeiroNome [(ngModel)]="usuario.primeiroNome"
-              formControlName="primeiroNome">
-          </div>
-          <div class="col-sm-5">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ultimoNome')}">Último
-              nome</label>
-            <input type="text" class="form-control form-control-round" #ultimoNome [(ngModel)]="usuario.ultimoNome"
-              formControlName="ultimoNome">
+          <div class="col-sm-10">
+            <label class="col-form-label">Nome</label>
+            <input type="text" class="form-control" #nome="ngModel" [(ngModel)]="usuario.nome" name="nome" required
+              minlength="10" maxlength="100" [validForm]="{form: nome, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
-            <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
-              size="small" [(ngModel)]="usuario.ativo" formControlName="ativo"></ui-switch>
+            <br><br>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="ativo" [(ngModel)]="usuario.ativo" name="ativo"
+                required #ativo="ngModel" [validForm]="{form: ativo, isSubmit: isSubmit}">
+              <label class="custom-control-label" for="ativo">Ativo</label>
+            </div>
           </div>
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('empresa')}">Empresa</label>
-            <ng-select [ngClass]="'ng-select'" [options]="listaEmpresas" [(ngModel)]="empresaId"
-              formControlName="empresa">
+            <label class="col-form-label">Empresa</label>
+            <ng-select [ngClass]="'ng-select'" [options]="listaEmpresas" [(ngModel)]="empresaId" name="empresa" required
+              #empresa="ngModel" [validForm]="{form: empresa, isSubmit: isSubmit}">
             </ng-select>
           </div>
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('login')}">Login</label>
-            <input type="text" class="form-control form-control-round" #login [(ngModel)]="usuario.login"
-              formControlName="login">
+            <label class="col-form-label">Login</label>
+            <input type="text" class="form-control" #login="ngModel" [(ngModel)]="usuario.login" name="login" required
+              minlength="5" maxlength="25" [validForm]="{form: login, isSubmit: isSubmit}">
           </div>
-          <!-- <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('senha')}">Senha</label>
-            <input type="text" class="form-control form-control-round" #senha [(ngModel)]="usuario.senha"
-              formControlName="senha">
-          </div> -->
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('permissao')}">Permissões</label>
+            <label class="col-form-label">Permissões</label>
             <ng-select [ngClass]="'ng-select'" [options]="listaPermissoes" [multiple]="true" [(ngModel)]="permissaoIds"
-              formControlName="permissao">
+              name="permissao" #permissoes="ngModel" [validForm]="{form: permissoes, isSubmit: isSubmit}">
             </ng-select>
           </div>
         </div>
@@ -71,21 +65,19 @@
   </div>
 </div>
 
-<app-modal-basic #modalRedefinirSenha>
+<app-ui-modal #modalRedefinirSenha>
   <div class="app-modal-header">
-    <h4 class="modal-title">Redefinição de senha de {{ usuario.primeiroNome }} {{ usuario.ultimoNome }}</h4>
-    <button type="button" class="close basic-close" (click)="modalClose(modalRedefinirSenha)">
+    <h4 class="modal-title">Redefinição de senha de {{ usuario.nome }}</h4>
+    <button type="button" class="close basic-close" (click)="modal.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="app-modal-body">
-    <app-loader [observable]="observable"></app-loader>
     <form autocomplete="off" [formGroup]="formularioSenha">
       <div class="form-group row">
         <div class="col-sm-6">
           <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValidSenha('senha')}">Senha</label>
-          <input type="password" class="form-control form-control-round" #senha [(ngModel)]="usuario.senhaNova"
-            formControlName="senha">
+          <input type="password" class="form-control" formControlName="senha">
         </div>
       </div>
       <div class="form-group row">
@@ -94,15 +86,14 @@
             [ngClass]="{'form-control-danger' : !isValidSenha('confirmaSenha') || !senhaValidator()}">
             Confirme a senha
           </label>
-          <input type="password" class="form-control form-control-round" #confirmaSenha
-            [(ngModel)]="usuario.confirmaSenha" formControlName="confirmaSenha">
+          <input type="password" class="form-control" formControlName="confirmaSenha">
         </div>
       </div>
     </form>
   </div>
   <div class="app-modal-footer">
-    <button type="button" class="btn btn-default waves-effect" (click)="modalClose(modalRedefinirSenha)">Fechar</button>
-    <button type="button" class="btn btn-primary waves-effect" (click)="salvar(modalRedefinirSenha)"
+    <button type="button" class="btn btn-default waves-effect" (click)="modal.hide()">Fechar</button>
+    <button type="button" class="btn btn-primary waves-effect" (click)="redefinirSenha(modalRedefinirSenha)"
       [disabled]="formularioSenha.invalid || !senhaValidator()">Salvar</button>
   </div>
-</app-modal-basic>
+</app-ui-modal>

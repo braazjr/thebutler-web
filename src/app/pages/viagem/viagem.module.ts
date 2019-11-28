@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { ViagemListaComponent } from './viagem-lista/viagem-lista.component';
 import { ViagemRoutingModule } from './viagem-routing.module';
 import { ViagemService } from '../../services/viagem.service';
-import { SharedModule } from '../../shared/shared.module';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { SharedTheButlerModule } from 'src/app/shared/shared-the-butler.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ViagemRoutingModule,
     SharedModule,
-    NgxDatatableModule
+    SharedTheButlerModule
   ],
   declarations: [ViagemListaComponent],
   providers: [

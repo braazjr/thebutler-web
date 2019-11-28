@@ -1,0 +1,33 @@
+.filter-bar > .navbar {
+    background-color: $header-dark-background !important;
+    color: $header-dark-text-color;
+
+    button {
+        color: $header-dark-text-color;
+    }
+}
+
+button, .pointer {
+    cursor: pointer !important;
+}
+
+ng-select.is-invalid, ng-select.ng-invalid {
+    border: 1px solid #FF5370 !important;
+    border-radius: 4px;
+
+    div {
+        border: none;
+    }
+}
+
+.ngx-datatable {
+    .datatable-header {
+        background-color: $header-dark-background !important;
+        color: $header-dark-text-color;
+    }
+
+    .datatable-footer {
+        background-color: $secondary-color !important;
+        color: $header-dark-text-color;
+    }
+}

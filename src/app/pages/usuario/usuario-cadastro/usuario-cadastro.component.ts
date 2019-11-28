@@ -5,49 +5,44 @@ import { IOption } from 'ng-select';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
-import { SharedService } from '../../../services/shared.service';
 import { ToastService } from '../../../services/toast.service';
-import swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-usuario-cadastro',
   templateUrl: './usuario-cadastro.component.html',
-  styleUrls: ['./usuario-cadastro.component.scss',
-    '../../../../assets/icon/icofont/css/icofont.scss']
+  styleUrls: ['./usuario-cadastro.component.scss']
 })
 export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
-
-  observable: any;
 
   usuario: Usuario = new Usuario();
   listaPermissoes: Array<IOption> = [];
   listaEmpresas: Array<IOption> = [];
   permissoes: any[] = [];
   permissaoIds: any[] = [];
-  empresaId: string;
+  empresaId: string = '0';
 
-  formulario: FormGroup;
   formularioSenha: FormGroup;
+  isSubmit: boolean = false;
 
-  constructor(private route: ActivatedRoute, private defaultService: DefaultService, private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef, private sharedService: SharedService, private toastService: ToastService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private defaultService: DefaultService,
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private toastService: ToastService,
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id'] !== undefined) {
         this.usuario.id = params['id'];
         this.getById();
+      } else {
+        this.carregarPermissoes();
+        this.carregarEmpresas();
       }
-    });
-
-    this.formulario = this.formBuilder.group({
-      empresa: ['', [Validators.required]],
-      permissao: ['', [Validators.required]],
-      primeiroNome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
-      ultimoNome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
-      ativo: ['', [Validators.required]],
-      login: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]],
-      // senha: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]]
     });
 
     this.formularioSenha = this.formBuilder.group({
@@ -57,7 +52,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   senhaValidator() {
-    return this.usuario.senhaNova === this.usuario.confirmaSenha ? true : false;
+    return this.formularioSenha.get('senha').value === this.formularioSenha.get('confirmaSenha').value ? true : false;
   }
 
   ngAfterViewChecked() {
@@ -65,94 +60,105 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
+    this.spinner.show();
     this.defaultService.getById('usuarios', this.usuario.id).subscribe(response => {
       this.usuario = response as Usuario;
       if (this.usuario.empresa) {
         this.empresaId = this.usuario.empresa.id.toString();
       }
-      // this.condominioId = this.bloco.condominio.id.toString();
+
       this.carregarPermissoes();
       this.carregarEmpresas();
+    }, error => {
+      this.spinner.hide();
+      console.error(error);
     });
   }
 
   carregarPermissoes() {
+    this.spinner.show();
     this.defaultService.get('permissoes').subscribe(response => {
       this.permissoes = response as any[];
       this.listaPermissoes = (response as any[]).map(perm => {
         if (this.usuario.id && this.usuario.permissoes.map(permissao => permissao.codigo).includes(perm.codigo)) {
           this.permissaoIds.push(perm.codigo.toString());
-          this.formulario.get('permissao').setErrors(null);
         }
 
         return ({ value: perm.codigo.toString(), label: perm.descricao });
       });
-    }, error => console.error(error));
+    }, error => {
+      this.spinner.hide();
+      console.error(error);
+    }, () => this.spinner.hide());
   }
 
   carregarEmpresas() {
+    this.spinner.show();
     this.defaultService.get('empresas').subscribe(response => {
-      this.listaEmpresas = (response as Empresa[]).map(emp => {
-        if (this.usuario.id && this.usuario.empresa && emp.id === this.usuario.empresa.id) {
-          return ({ value: emp.id.toString(), label: emp.nomeFantasia, disabled: false });
-        }
-
-        return ({ value: emp.id.toString(), label: emp.nomeFantasia, disabled: false });
-      });
-    });
-  }
-
-  isValid(field) {
-    return this.formulario.get(field).status === 'VALID' ? true : false;
+      this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia, disabled: false }));
+      this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+    }, error => {
+      this.spinner.hide();
+      console.error(error);
+    }, () => this.spinner.hide());
   }
 
   isValidSenha(field) {
     return this.formularioSenha.get(field).status === 'VALID' ? true : false;
   }
 
-  salvar(modal?) {
-    if (this.formulario.invalid) {
-      swal('Cadastro de usuário', 'Não é possível salvar o usuário!<br>Existem campos inválidos', 'error');
+  salvar(form) {
+    if (form.invalid) {
+      this.isSubmit = true;
+      return;
+    }
+
+    this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
+    this.usuario.empresa.id = Number(this.empresaId);
+
+    this.spinner.show();
+    if (!this.usuario.id) {
+      this.defaultService.salvar('usuarios', this.usuario).subscribe(response => {
+        this.usuario = response as Usuario;
+        this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.nome} salvo com sucesso!`);
+      }, error => {
+        this.spinner.hide();
+        console.error(error);
+        error.error.forEach(element => {
+          this.toastService.addToast('error', 'Cadastro Usuário!', element.mensagemUsuario);
+        });
+      }, () => this.spinner.hide());
     } else {
-      // this.usuario.usuario = this.sharedService.getUsuarioLogged();
-      this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
-      this.usuario.empresa.id = Number(this.empresaId);
-
-      if (!this.usuario.id) {
-        this.observable = this.defaultService.salvar('usuarios', this.usuario).subscribe(response => {
-          this.usuario = response as Usuario;
-          this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.primeiroNome} ${this.usuario.ultimoNome} salvo com sucesso!`);
-
-          if (modal)
-            modal.hide();
-        }, error => {
-          console.error(error);
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Cadastro Usuário!', element.mensagemUsuario);
-          });
+      this.spinner.show();
+      this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
+        this.usuario = response as Usuario;
+        this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.nome} atualizado com sucesso!`);
+      }, error => {
+        this.spinner.hide();
+        console.error(error);
+        error.error.forEach(element => {
+          this.toastService.addToast('error', 'Atualização Usuário!', element.mensagemUsuario);
         });
-      } else {
-        if (this.usuario.senhaNova)
-          this.usuario.senha = this.usuario.senhaNova;
-        this.observable = this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
-          this.usuario = response as Usuario;
-          this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.primeiroNome} ${this.usuario.ultimoNome} atualizado com sucesso!`);
-
-          if (modal)
-            modal.hide();
-        }, error => {
-          console.error(error);
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Atualização Usuário!', element.mensagemUsuario);
-          });
-        });
-      }
+      }, () => this.spinner.hide());
     }
   }
 
-  modalClose(modal) {
-    modal.hide();
-    this.usuario.senhaNova = undefined;
-    this.usuario.confirmaSenha = undefined
+  redefinirSenha(modal) {
+    this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
+
+    this.spinner.show();
+    this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
+      this.usuario = response as Usuario;
+      this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
+    }, error => {
+      this.spinner.hide();
+      console.error(error);
+      error.error.forEach(element => {
+        this.toastService.addToast('error', 'Redefinição de senha!', element.mensagemUsuario);
+      });
+    }, () => {
+      modal.hide();
+      this.spinner.hide();
+    });
   }
 }

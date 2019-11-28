@@ -1,64 +1,59 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AdminComponent } from './layout/admin/admin.component';
-import { RouteGuard } from './pages/auth/auth.route.guard';
-import { AuthComponent } from './layout/auth/auth.component';
-import { LetsencryptComponent } from './test/letsencrypt/letsencrypt.component';
+import { AdminComponent } from './theme/layout/admin/admin.component';
+import { AuthComponent } from './theme/layout/auth/auth.component';
+import { SecurityGuard } from './pages/security/security.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    canActivate: [RouteGuard],
+    canActivate: [SecurityGuard],
     children: [
       {
         path: '',
-        redirectTo: 'empresa/lista',
+        redirectTo: 'dashboard/home',
         pathMatch: 'full'
       },
-      // {
-      //   path: 'dashboards',
-      //   loadChildren: './pages/dashboards/dashboards.module#DashboardsModule'
-      // },
       {
-        path: 'empresa',
-        loadChildren: './pages/empresa/empresa.module#EmpresaModule'
+        path: 'dashboard',
+        loadChildren: () => import('./pages/dashboard/dashboard.module').then(module => module.DashboardModule)
       },
       {
-        path: 'construtora',
-        loadChildren: './pages/construtora/construtora.module#ConstrutoraModule'
+        path: 'empresa',
+        loadChildren: () => import('./pages/empresa/empresa.module').then(module => module.EmpresaModule)
       },
       {
         path: 'condominio',
-        loadChildren: './pages/condominio/condominio.module#CondominioModule'
+        loadChildren: () => import('./pages/condominio/condominio.module').then(module => module.CondominioModule)
       },
       {
         path: 'bloco',
-        loadChildren: './pages/bloco/bloco.module#BlocoModule'
+        loadChildren: () => import('./pages/bloco/bloco.module').then(module => module.BlocoModule)
       },
       {
         path: 'apartamento',
-        loadChildren: './pages/apartamento/apartamento.module#ApartamentoModule'
+        loadChildren: () => import('./pages/apartamento/apartamento.module').then(module => module.ApartamentoModule)
       },
       {
         path: 'ficha',
-        loadChildren: './pages/ficha/ficha.module#FichaModule'
+        loadChildren: () => import('./pages/ficha/ficha.module').then(module => module.FichaModule)
       },
       {
         path: 'morador',
-        loadChildren: './pages/morador/morador.module#MoradorModule'
+        loadChildren: () => import('./pages/morador/morador.module').then(module => module.MoradorModule)
       },
       {
         path: 'usuario',
-        loadChildren: './pages/usuario/usuario.module#UsuarioModule'
+        loadChildren: () => import('./pages/usuario/usuario.module').then(module => module.UsuarioModule)
       },
       {
         path: 'rota',
-        loadChildren: './pages/rota/rota.module#RotaModule'
+        loadChildren: () => import('./pages/rota/rota.module').then(module => module.RotaModule)
       },
       {
         path: 'viagem',
-        loadChildren: './pages/viagem/viagem.module#ViagemModule'
+        loadChildren: () => import('./pages/viagem/viagem.module').then(module => module.ViagemModule)
       }
     ]
   },
@@ -67,33 +62,10 @@ const routes: Routes = [
     component: AuthComponent,
     children: [
       {
-        path: 'auth',
-        loadChildren: './pages/auth/auth.module#AuthModule'
+        path: 'auth/login',
+        loadChildren: () => import('./pages/security/login/login.module').then(module => module.LoginModule)
       }
     ]
-  },
-  {
-    path: 'theme',
-    component: AdminComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: 'simple-page',
-        pathMatch: 'full'
-      },
-      {
-        path: 'simple-page',
-        loadChildren: './theme/simple-page/simple-page.module#SimplePageModule'
-      }
-    ]
-  },
-  {
-    path: '.well-known/acme-challenge/o418moXNb-Qptv0uHXmP__iluXB5lJRRurYMWJwfMmI',
-    component: LetsencryptComponent
-  },
-  {
-    path: '.well-known/acme-challenge/N4bRahduEcUDuLei26H7B7DG4BxTbRkvZ1iWR7zIaH4',
-    component: LetsencryptComponent
   }
 ];
 

@@ -14,5 +14,6 @@ export class Morador extends DadosGenericoHistoricoModel {
     tipoDocumento: string;
     tipoMorador: string;
     foto64: string;
+    fotoUrl: string;
 
 }

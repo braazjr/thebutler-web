@@ -1,29 +1,30 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Rota } from '../../../models/rota';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
-import { SharedService } from '../../../services/shared.service';
 import { ToastService } from '../../../services/toast.service';
-import swal from 'sweetalert2';
+import { SharedService } from 'src/app/shared/shared.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-rota-cadastro',
   templateUrl: './rota-cadastro.component.html',
-  styleUrls: ['./rota-cadastro.component.scss',
-    '../../../../assets/icon/icofont/css/icofont.scss']
+  styleUrls: ['./rota-cadastro.component.scss']
 })
 export class RotaCadastroComponent implements OnInit {
 
-  observable: any;
-
   rota: Rota = new Rota();
 
-  formulario: FormGroup;
+  isSubmit: boolean = false;
 
-  constructor(private route: ActivatedRoute, private defaultService: DefaultService, private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef, private sharedService: SharedService, private toastService: ToastService,
-    private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private defaultService: DefaultService,
+    private cdr: ChangeDetectorRef,
+    private sharedService: SharedService,
+    private toastService: ToastService,
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -32,11 +33,6 @@ export class RotaCadastroComponent implements OnInit {
         this.getById();
       }
     });
-
-    this.formulario = this.formBuilder.group({
-      ativo: ['', [Validators.required]],
-      nome: ['', [Validators.required, Validators.min(1), Validators.max(40)]]
-    });
   }
 
   ngAfterViewChecked() {
@@ -44,41 +40,45 @@ export class RotaCadastroComponent implements OnInit {
   }
 
   getById() {
+    this.spinner.show();
     this.defaultService.getById('rotas', this.rota.id).subscribe(response => {
       this.rota = response as Rota;
-    })
+    }, error => {
+      this.spinner.hide();
+      console.error(error);
+    }, () => this.spinner.hide())
   }
 
-  isValid(field) {
-    return this.formulario.get(field).status == 'VALID' ? true : false;
-  }
-
-  salvar() {
-    if (this.formulario.invalid) {
-      swal('Cadastro de rota', 'Não é possível salvar o rota!<br>Existem campos inválidos', 'error');
+  salvar(form) {
+    if (form.invalid) {
+      this.isSubmit = true;
+      return;
     } else {
       this.rota.usuario = this.sharedService.getUsuarioLogged();
 
+      this.spinner.show();
       if (!this.rota.id) {
-        this.observable = this.defaultService.salvar('rotas', this.rota).subscribe(response => {
+        this.defaultService.salvar('rotas', this.rota).subscribe(response => {
           this.rota = response as Rota;
           this.toastService.addToast('success', 'Cadastro Rota!', `Rota ${this.rota.nome} salvo com sucesso!`);
         }, error => {
+          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Rota!', element.mensagemUsuario);
           });
-        })
+        }, () => this.spinner.hide())
       } else {
-        this.observable = this.defaultService.atualizar('rotas', this.rota).subscribe(response => {
+        this.defaultService.atualizar('rotas', this.rota).subscribe(response => {
           this.rota = response as Rota;
           this.toastService.addToast('success', 'Atualização Rota!', `Rota ${this.rota.nome} atualizado com sucesso!`);
         }, error => {
+          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Rota!', element.mensagemUsuario);
           });
-        })
+        }, () => this.spinner.hide())
       }
     }
   }

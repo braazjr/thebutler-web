@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { DefaultService } from '../../../services/default.service';
-import swal from 'sweetalert2';
 import { Rota } from '../../../models/rota';
+import { NgxSpinnerService } from 'ngx-spinner';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-rota-lista',
   templateUrl: './rota-lista.component.html',
-  styleUrls: ['./rota-lista.component.scss',
-    '../../../../assets/icon/icofont/css/icofont.scss']
+  styleUrls: ['./rota-lista.component.scss']
 })
 export class RotaListaComponent implements OnInit {
-
-  observable: any;
 
   listaRotas: Rota[] = [];
   listaRotasTemp: Rota[] = [];
@@ -20,7 +19,8 @@ export class RotaListaComponent implements OnInit {
   offset = 0;
 
   constructor(
-    private _defaultService: DefaultService
+    private defaultService: DefaultService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -28,15 +28,17 @@ export class RotaListaComponent implements OnInit {
   }
 
   getRotas() {
-    this.observable = this._defaultService.get('rotas').subscribe(data => {
+    this.spinner.show();
+    this.defaultService.get('rotas').subscribe(data => {
       this.listaRotasTemp = this.listaRotas = data as Rota[];
     }, error => {
+      this.spinner.hide();
       console.error(error)
-    });
+    }, () => this.spinner.hide());
   }
 
   excluir(rota) {
-    swal({
+    Swal.fire({
       title: 'Exclusão de rota',
       text: `Deseja excluir a rota: ${rota.nome}?`,
       type: 'warning',
@@ -44,10 +46,15 @@ export class RotaListaComponent implements OnInit {
       cancelButtonText: 'Não',
       confirmButtonText: 'Sim'
     }).then((result) => {
-      if (result.value)
-        this.observable = this._defaultService.excluir('rotas', rota.id).subscribe(() => {
+      if (result.value) {
+        this.spinner.show();
+        this.defaultService.excluir('rotas', rota.id).subscribe(() => {
           this.getRotas();
+        }, error => {
+          this.spinner.hide();
+          console.error(error);
         });
+      }
     })
   }
 

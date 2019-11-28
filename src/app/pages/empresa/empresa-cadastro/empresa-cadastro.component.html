@@ -1,107 +1,105 @@
 <ng2-toasty></ng2-toasty>
 
 <div class="row">
-  <div class="col-sm-12 filter-bar">
-    <nav class="navbar navbar-light bg-faded m-b-30 p-10">
-      {{ !empresa.id ? 'Cadastro de Empresa' : ('Cadastro da Empresa: ' + empresa.nomeFantasia) }}
-      <div class="nav-item nav-grid">
-        <span class="m-r-15">Ações: </span>
-
-        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
-          title="Lista de Empresas" [routerLink]="['/empresa/lista']">
-          <i class="icofont icofont-listing-box icofont-2x"></i>
-        </button>
-        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-          (click)="salvar()" [disabled]="formulario.invalid">
-          <i class="icofont icofont-save icofont-2x"></i>
-        </button>
-      </div>
-    </nav>
-  </div>
-</div>
-
-<div class="row">
   <div class="col-sm-12">
     <app-card>
-      <app-loader [observable]="observable"></app-loader>
+      <div class="row">
+        <div class="col-sm-12 filter-bar">
+          <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+            {{ !empresa.id ? 'Cadastro de Empresa' : ('Cadastro da Empresa: ' + empresa.nomeFantasia) }}
+            <div class="nav-item nav-grid">
+              <span class="m-r-15">Ações: </span>
+
+              <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+                title="Lista de Empresas" [routerLink]="['/empresa/lista']">
+                <i class="fa fa-list"></i>
+              </button>
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
+                (click)="salvar()">
+                <i class="fa fa-save"></i>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+
       <form autocomplete="off" [formGroup]="formulario">
         <div class="form-group row">
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('cnpj')}">Cnpj</label>
-            <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('cnpj')}" #cnpj formControlName="cnpj"
-              [textMask]="{mask: cnpjMask}">
+            <label class="col-form-label">Cnpj</label>
+            <input type="text" class="form-control" formControlName="cnpj" [textMask]="{mask: cnpjMask}"
+              [validForm]="{form: formulario.get('cnpj'), isSubmit: isSubmit}">
           </div>
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nomeFantasia')}">Nome
-              Fantasia</label>
-            <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('nomeFantasia')}" #nomeFantasia
-              formControlName="nomeFantasia">
+            <label class="col-form-label">Nome Fantasia</label>
+            <input type="text" class="form-control" formControlName="nomeFantasia"
+              [validForm]="{form: formulario.get('nomeFantasia'), isSubmit: isSubmit}">
           </div>
-          <div class="col-sm-2" formGroupName="empresaConfig">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('empresaConfig.qtyApartamentos')}">Qtd. Cadastros</label>
-            <input type="number" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('empresaConfig.qtyApartamentos')}" #numero formControlName="qtyApartamentos">
+          <div class="col-sm-4 col-md-2" formGroupName="empresaConfig">
+            <label class="col-form-label">Qtd. Cadastros</label>
+            <input type="number" class="form-control" formControlName="qtyApartamentos"
+              [validForm]="{form: formulario.get('empresaConfig.qtyApartamentos'), isSubmit: isSubmit}">
           </div>
-          <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
-            <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
-              size="small" formControlName="ativo"></ui-switch>
+          <div class="col-sm-12 col-md-2">
+            <br><br>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="ativo" formControlName="ativo"
+                [validForm]="{form: formulario.get('ativo'), isSubmit: isSubmit}">
+              <label class="custom-control-label" for="ativo">Ativo</label>
+            </div>
           </div>
         </div>
         <div class="form-group row">
           <div class="col-sm-12">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('razaoSocial')}">
-              Razão Social
-            </label>
-            <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('razaoSocial')}" #razaoSocial formControlName="razaoSocial">
+            <label class="col-form-label">Razão Social</label>
+            <input type="text" class="form-control" formControlName="razaoSocial"
+              [validForm]="{form: formulario.get('razaoSocial'), isSubmit: isSubmit}">
           </div>
-          <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('cep')}">CEP</label>
-            <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('cep')}" #cep formControlName="cep"
-              [textMask]="{mask: cepMask}" (keyup)="validaCep($event)">
+          <div class="col-sm-3 col-md-2">
+            <label class="col-form-label">CEP</label>
+            <input type="text" class="form-control" formControlName="cep" [textMask]="{mask: cepMask}"
+              [validForm]="{form: formulario.get('cep'), isSubmit: isSubmit}" (keyup)="validaCep($event)">
           </div>
-          <div class="col-sm-10">
+          <div class="col-sm-9 col-md-10">
             <label class="col-form-label">Rua</label>
-            <input type="text" class="form-control form-control-round" #rua formControlName="rua">
+            <input type="text" class="form-control" formControlName="rua"
+              [validForm]="{form: formulario.get('rua'), isSubmit: isSubmit}">
           </div>
 
           <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
-            <input type="number" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('numero')}" #numero formControlName="numero">
+            <label class="col-form-label">Número</label>
+            <input type="number" class="form-control" formControlName="numero"
+              [validForm]="{form: formulario.get('numero'), isSubmit: isSubmit}">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label">Bairro</label>
-            <input type="text" class="form-control form-control-round" #bairro formControlName="bairro">
+            <input type="text" class="form-control" formControlName="bairro"
+              [validForm]="{form: formulario.get('bairro'), isSubmit: isSubmit}">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label">Cidade</label>
-            <input type="text" class="form-control form-control-round" #cidade formControlName="cidade">
+            <input type="text" class="form-control" formControlName="cidade"
+              [validForm]="{form: formulario.get('cidade'), isSubmit: isSubmit}">
           </div>
           <div class="col-sm-2">
             <label class="col-form-label">Estado</label>
-            <input type="text" class="form-control form-control-round" #estado formControlName="estado">
+            <input type="text" class="form-control" formControlName="estado"
+              [validForm]="{form: formulario.get('estado'), isSubmit: isSubmit}">
           </div>
           <div class="col-sm-12">
-            <label class="col-form-label"
-              [ngClass]="{'form-control-danger' : !isValid('complemento')}">Complemento</label>
-            <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('complemento')}" #complemento formControlName="complemento">
+            <label class="col-form-label">Complemento</label>
+            <input type="text" class="form-control" formControlName="complemento"
+              [validForm]="{form: formulario.get('complemento'), isSubmit: isSubmit}">
           </div>
           <div class="col-sm-8">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('email')}">E-mail</label>
-            <input type="email" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('email')}" #email formControlName="email">
+            <label class="col-form-label">E-mail</label>
+            <input type="email" class="form-control" formControlName="email"
+              [validForm]="{form: formulario.get('email'), isSubmit: isSubmit}">
           </div>
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('telefone')}">Telefone</label>
-            <input type="text" class="form-control form-control-round"
-              [ngClass]="{'form-control-danger' : !isValid('telefone')}" #telefone formControlName="telefone"
-              [textMask]="{mask: telefoneMask}">
+            <label class="col-form-label">Telefone</label>
+            <input type="text" class="form-control" formControlName="telefone" [textMask]="{mask: telefoneMask}"
+              [validForm]="{form: formulario.get('telefone'), isSubmit: isSubmit}">
           </div>
         </div>
       </form>

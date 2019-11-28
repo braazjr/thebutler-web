@@ -4,21 +4,19 @@ import { IOption } from 'ng-select';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
-import { SharedService } from '../../../services/shared.service';
 import { ToastService } from '../../../services/toast.service';
 import { Bloco } from '../../../models/bloco-model';
+import { SharedService } from 'src/app/shared/shared.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-apartamento-cadastro',
   templateUrl: './apartamento-cadastro.component.html',
-  styleUrls: ['./apartamento-cadastro.component.scss',
-    '../../../../assets/icon/icofont/css/icofont.scss']
+  styleUrls: ['./apartamento-cadastro.component.scss']
 })
 export class ApartamentoCadastroComponent implements OnInit {
-
-  observable: any;
 
   apartamento: Apartamento = new Apartamento();
   listaBlocos: Array<IOption> = [];
@@ -32,7 +30,8 @@ export class ApartamentoCadastroComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -43,7 +42,7 @@ export class ApartamentoCadastroComponent implements OnInit {
     });
 
     this.formulario = this.formBuilder.group({
-      blocoId: ['', [Validators.required, Validators.min(1)]],
+      blocoId: ['0', [Validators.required, Validators.min(1)]],
       ativo: ['', [Validators.required]],
       numero: ['', [Validators.required, Validators.min(1)]]
     });
@@ -56,6 +55,7 @@ export class ApartamentoCadastroComponent implements OnInit {
   }
 
   getById(id) {
+    this.spinner.show();
     this.defaultService.getById('apartamentos', id).subscribe(response => {
       this.apartamento = response as Apartamento;
       this.formulario.patchValue(response);
@@ -65,15 +65,12 @@ export class ApartamentoCadastroComponent implements OnInit {
   }
 
   carregarBlocos() {
+    this.spinner.show();
     this.defaultService.get('blocos').subscribe(response => {
-      this.listaBlocos = (response as Bloco[]).map(bloco => {
-        if (this.apartamento.id && bloco.id === this.apartamento.bloco.id) {
-          return ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome, selected: true })
-        }
-
-        return ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome })
-      });
-    }, error => console.error(error));
+      this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+      this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+    }, error => console.error(error),
+      () => this.spinner.hide());
   }
 
   isValid(field) {
@@ -82,15 +79,16 @@ export class ApartamentoCadastroComponent implements OnInit {
 
   salvar() {
     if (this.formulario.invalid) {
-      swal('Cadastro de apartamento', 'Não é possível salvar o apartamento!<br>Existem campos inválidos', 'error');
+      Swal.fire('Cadastro de apartamento', 'Não é possível salvar o apartamento!<br>Existem campos inválidos', 'error');
     } else {
       this.apartamento.usuario = this.sharedService.getUsuarioLogged();
       this.apartamento.bloco.id = this.formulario.get('blocoId').value;
       this.apartamento.numero = this.formulario.get('numero').value;
       this.apartamento.ativo = this.formulario.get('ativo').value;
 
+      this.spinner.show();
       if (!this.apartamento.id) {
-        this.observable = this.defaultService.salvar('apartamentos', this.apartamento).subscribe(response => {
+        this.defaultService.salvar('apartamentos', this.apartamento).subscribe(response => {
           this.apartamento = response as Apartamento;
           this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
         }, error => {
@@ -98,9 +96,12 @@ export class ApartamentoCadastroComponent implements OnInit {
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Apartamento!', element.mensagemUsuario);
           });
-        }, () => this.router.navigate([`/ficha/${this.apartamento.id}`]))
+        }, () => {
+          this.spinner.hide();
+          this.router.navigate([`/ficha/${this.apartamento.id}`]);
+        })
       } else {
-        this.observable = this.defaultService.atualizar('apartamentos', this.apartamento).subscribe(response => {
+        this.defaultService.atualizar('apartamentos', this.apartamento).subscribe(response => {
           this.apartamento = response as Apartamento;
           this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
         }, error => {
@@ -108,7 +109,10 @@ export class ApartamentoCadastroComponent implements OnInit {
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Apartamento!', element.mensagemUsuario);
           });
-        }, () => this.router.navigate([`/ficha/${this.apartamento.id}`]))
+        }, () => {
+          this.spinner.hide();
+          this.router.navigate([`/ficha/${this.apartamento.id}`]);
+        })
       }
     }
   }

@@ -4,16 +4,16 @@ import { IOption } from 'ng-select';
 import { DefaultService } from '../../../services/default.service';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
+import { NgxSpinnerService } from 'ngx-spinner';
+
+import * as lodash from 'lodash';
 
 @Component({
   selector: 'app-morador-lista',
   templateUrl: './morador-lista.component.html',
-  styleUrls: ['./morador-lista.component.scss',
-    '../../../../assets/icon/icofont/css/icofont.scss']
+  styleUrls: ['./morador-lista.component.scss']
 })
 export class MoradorListaComponent implements OnInit {
-
-  observable: any;
 
   listaData: {
     size: number,
@@ -51,14 +51,17 @@ export class MoradorListaComponent implements OnInit {
 
   constructor(
     private moradorService: MoradorService,
-    private defaultService: DefaultService
+    private defaultService: DefaultService,
+    private spinner: NgxSpinnerService
   ) {
     this.listaData = {
       size: 10,
       totalElements: 0,
       totalPages: 0,
       page: 0,
-      sort: 'nomeMorador,asc'
+      sort: 'nomeMorador,asc',
+      idBloco: '0',
+      idCondominio: '0'
     };
   }
 
@@ -80,26 +83,34 @@ export class MoradorListaComponent implements OnInit {
   }
 
   getMoradores() {
-    this.observable = this.moradorService.getViewApartamentoMorador(this.listaData).subscribe(data => {
+    const listaData = lodash.clone(this.listaData);
+    if (listaData.idBloco == '0') delete listaData.idBloco;
+    if (listaData.idCondominio ==='0') delete listaData.idCondominio;
+
+    this.spinner.show();
+    this.moradorService.getViewApartamentoMorador(listaData).subscribe(data => {
       this.listaData.page = data['number'];
       this.listaData.size = data['size'];
       this.listaData.totalElements = data['totalElements'];
       this.listaData.totalPages = data['totalPages'];
       this.listaMoradores = data['content'] as any[];
     }, error => {
+      this.spinner.hide();
       console.error(error)
-    });
+    }, () => this.spinner.hide());
   }
 
   carregarCondominios() {
     this.defaultService.get('condominios').subscribe(response => {
-      this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.construtora.nomeFantasia + ' - ' + cond.nome }));
+      this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+      this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
     }, error => console.error(error));
   }
 
   carregarBlocos() {
     this.defaultService.get('blocos').subscribe(response => {
       this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+      this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
     }, error => console.error(error));
   }
 

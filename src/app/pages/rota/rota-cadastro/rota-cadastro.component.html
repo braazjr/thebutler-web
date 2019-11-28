@@ -1,40 +1,42 @@
 <ng2-toasty></ng2-toasty>
 
 <div class="row">
-  <div class="col-sm-12 filter-bar">
-    <nav class="navbar navbar-light bg-faded m-b-30 p-10">
-      {{ !rota.id ? 'Cadastro de Rota' : ('Cadastro da Rota: ' + rota.nome) }}
-      <div class="nav-item nav-grid">
-        <span class="m-r-15">Ações: </span>
-
-        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
-          title="Lista de Rotas" [routerLink]="['/rota/lista']">
-          <i class="icofont icofont-listing-box icofont-2x"></i>
-        </button>
-        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-          (click)="salvar()" [disabled]="formulario.invalid">
-          <i class="icofont icofont-save icofont-2x"></i>
-        </button>
-      </div>
-    </nav>
-  </div>
-</div>
-
-<div class="row">
   <div class="col-sm-12">
     <app-card>
-      <app-loader [observable]="observable"></app-loader>
-      <form autocomplete="off" [formGroup]="formulario">
+      <div class="row">
+        <div class="col-sm-12 filter-bar">
+          <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+            {{ !rota.id ? 'Cadastro de Rota' : ('Cadastro da Rota: ' + rota.nome) }}
+            <div class="nav-item nav-grid">
+              <span class="m-r-15">Ações: </span>
+
+              <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+                title="Lista de Rotas" [routerLink]="['/rota/lista']">
+                <i class="fa fa-list"></i>
+              </button>
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
+                (click)="salvar(rotaForm)">
+                <i class="fa fa-save"></i>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <form autocomplete="off" (ngSubmit)="salvar(rotaForm)" #rotaForm="ngForm">
         <div class="form-group row">
           <div class="col-sm-10">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nome')}">Nome</label>
-            <input type="text" class="form-control form-control-round" #nome [(ngModel)]="rota.nome"
-              formControlName="nome">
+            <label class="col-form-label">Nome</label>
+            <input type="text" class="form-control" #nome="ngModel" name="nome" [(ngModel)]="rota.nome" required
+              minlength="5" maxlength="40" [validForm]="{form: nome, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
-            <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
-              size="small" [(ngModel)]="rota.ativo" formControlName="ativo"></ui-switch>
+            <br><br>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="ativo" #ativo="ngModel" name="ativo"
+                [(ngModel)]="rota.ativo" required [validForm]="{form: ativo, isSubmit: isSubmit}">
+              <label class="custom-control-label" for="ativo">Ativo</label>
+            </div>
           </div>
         </div>
       </form>

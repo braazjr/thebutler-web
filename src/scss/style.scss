@@ -1,99 +1,106 @@
-/**
-
+/**======================================================================
+=========================================================================
 Template Name: Gradient Able Admin Template
-Author: #
-Email: #
-File: style.scss
-**/
-
-
-/* =============
+Author: Codedthemes
+supports: https://codedthemes.com/submit-ticket/
+File: style.css
+=========================================================================
+=========================================================================
   == Table of Contents==
-
-	- Custom Css
 	- Generic classes
 		-	Margin, Padding, Font class, text align, position, floating, overflow, background class, text color, display class, boarder class
 	- Theme Elements
-		-	Icons, Accordion, Button, Redial, floating actions, FAB, tabs, typography, buttons, box shadow, slider page, error page, Breadcrumb, pagination, Basic card, Login card
-	- General Elements
-		-	Modal, Nestable, Lable & Badges, List, Portlates, Preloader, Calender, To-Do, Materialize general elements, Lables
-	- Advance Form Elements
+		-	Accordion, Button, tabs, typography, buttons, box shadow, Lable & Badges, Alert, Pagination, Breadcumb, Cards, Collapse,
+        -   Carousel, Grid, Progress, Model, tooltip, popover, Datepicker, Gridstack, lightbox, notification, Nestable, pnotify, rating,
+        -   Rangeslider, Slider, Syntax Highlighter, Tour, Treeview, Toolbar, Session Timeout, Session idle Timeout, offline, Animation
+    - Forms
+        -   Forms Elements, Advance Form Control, Validation, Masking, Wizard, Picker, Select
 	- Pages
-		-	Loader page, Invoice, Tasklist, Task detail, Range-slider, Counter, Maintenance, Color, FAQ, Progress, Panels & wells, Contact card, Auth pages, Flag
-		-	Gallery, Products pages, Widget, Email, Social timeline, Datatable, Chat, Blog, Wizard, CRM dashboard, Task board, Issue list, Chartlist, X-editable
-		-	Home chat, Dashboard 1-2-3-4
-	- Responsive media class
+		-   authentication, Maintenance, Maps, Landing page messages, task, Todo, Notes, Charts, Icons, Gallery, Editors,
+        -   Invoice, Full Calender, File Upload,
+=================================================================================
+=================================================================================== */
 
-============= */
 
-// General theme contents
-@import '~bootstrap/scss/bootstrap';
-@import "partials/variables";
-@import "partials/mixins";
-@import "partials/general";
-@import "partials/generic";
-// Menu
-@import "partials/menu/pcmenu";
-// Important Theme elements
-@import "partials/theme-elements/button";
-@import "partials/theme-elements/form-elements";
-// Theme elements
-@import "partials/theme-elements/label-badges";
-@import "partials/theme-elements/icon-layout";
-@import "partials/theme-elements/ready-to-use";
-@import "partials/theme-elements/box-shadow";
-// Tables
-@import "partials/tables/tables";
-// Widget
-@import "partials/widget-dashboard/widget";
-//@import "partials/widget-dashboard/dashboard";
-// Other
-@import "partials/other/alert";
-@import "partials/other/authentication";
-@import "partials/other/breadcrumb";
-@import "partials/other/charts";
-@import "partials/other/chat";
-@import "partials/other/color";
-//@import "partials/other/draggable";
-//@import "partials/other/e-payment";
-//@import "partials/other/editors";
-//@import "partials/other/fb-wall";
-//@import "partials/other/full-calender";
-//@import "partials/other/job-find";
-@import "partials/other/mail-pages";
-@import "partials/other/maps";
-//@import "partials/other/navbars";
-//@import "partials/other/note";
-//@import "partials/other/prism";
-@import "partials/other/progress-bar";
-@import "partials/other/pre-loader";
-@import "partials/other/range-slider";
-//@import "partials/other/rating";
-//To-do
-@import "partials/todo/todo";
-// Responsive css
-@import "partials/responsive/responsive";
-// dark layout css
-@import "partials/dark";
+// Theme Font
+@import "themes/font/theme-font";
 
-//angular custom
-@import "partials/custom";
+// theme scrollbar
+@import "themes/plugin/perfect-scrollbar";
 
-@import '~ngx-bar-rating/themes/br-default-theme';
-@import '~ngx-bar-rating/themes/br-bootstrap-theme';
-@import '~ngx-bar-rating/themes/br-fontawesome-theme';
-@import '~ngx-bar-rating/themes/br-fontawesome-o-theme';
-@import '~ngx-bar-rating/themes/br-horizontal-theme';
-@import '~ngx-bar-rating/themes/br-vertical-theme';
-@import '~ngx-bar-rating/themes/br-stars-theme';
-@import '~ngx-bar-rating/themes/br-movie-theme';
-@import '~ngx-bar-rating/themes/br-square-theme';
+// main framework
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "settings/custom-variables";
+@import "settings/theme-variables";
 
-@import "partials/menu/pccoded-horizontal-menu";
-@import '~angular-tree-component/dist/angular-tree-component.css';
+// ng module
+@import "ng-module/ng-module";
 
-@import "~ng2-toasty/style-bootstrap.css";
-@import "~ng2-toasty/style-default.css";
-@import "~ng2-toasty/style-material.css";
+// bootstrap
+@import "~bootstrap/scss/bootstrap";
 
-@import "onsmart.scss"
+
+// icon
+@import "themes/font/datta-icon";
+@import "themes/font/feather";
+@import "themes/font/fontawesome";
+@import "themes/font/flaticon";
+
+// bootstrap css
+@import "themes/bootstrap-overlay/card";
+@import "themes/bootstrap-overlay/button";
+@import "themes/bootstrap-overlay/radiobox-checkbox";
+@import "themes/bootstrap-overlay/switches";
+@import "themes/bootstrap-overlay/badge";
+
+@import "themes/general";
+@import "themes/generic";
+@import "themes/plugin/animate";
+
+
+// theme layouts
+@import "themes/layouts/menu-lite";
+@import "themes/layouts/menu-ng";
+@import "layout-dark";
+
+// Dashboard Widgets
+@import "themes/dashboard/widget";
+
+// custom plugin
+@import "themes/plugin/sweatalert";
+@import "themes/plugin/lightbox";
+@import "themes/plugin/notification";
+@import "themes/plugin/pnotify";
+@import "themes/plugin/bar-rating";
+@import "themes/plugin/rangeslider";
+@import "themes/plugin/daterange";
+@import "themes/plugin/tags-input";
+@import "themes/plugin/maxlength";
+@import "themes/plugin/wizard";
+@import "themes/plugin/select2";
+@import "themes/plugin/data-tables";
+
+// Charts
+@import "themes/plugin/highcharts";
+@import "themes/plugin/peitychart";
+
+
+// pages
+@import "themes/pages/authentication";
+@import "themes/pages/maintaince";
+@import "themes/pages/pages";
+@import "themes/pages/help-desk";
+@import "themes/pages/fullcalender";
+@import "themes/pages/icon-lauouts";
+@import "themes/pages/user";
+@import "themes/pages/task-board";
+
+@import "themes/chat/chat";
+
+// custom
+@import "themes/custom";
+@import "layout-rtl";
+
+@import "thebutler.scss";
+@import "ngx/table.scss";

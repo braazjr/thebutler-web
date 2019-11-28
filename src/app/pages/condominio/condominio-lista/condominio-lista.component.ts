@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Condominio } from '../../../models/condominio-model';
 import { DefaultService } from '../../../services/default.service';
-import swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-condominio-lista',
   templateUrl: './condominio-lista.component.html',
-  styleUrls: ['./condominio-lista.component.scss',
-    '../../../../assets/icon/icofont/css/icofont.scss']
+  styleUrls: ['./condominio-lista.component.scss']
 })
 export class CondominioListaComponent implements OnInit {
-
-  observable: any;
 
   listaCondominios: Condominio[] = [];
   listaCondominiosTemp: Condominio[] = [];
@@ -20,7 +19,8 @@ export class CondominioListaComponent implements OnInit {
   offset = 0;
 
   constructor(
-    private _defaultService: DefaultService
+    private defaultService: DefaultService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -28,15 +28,16 @@ export class CondominioListaComponent implements OnInit {
   }
 
   getCondominios() {
-    this.observable = this._defaultService.get('condominios').subscribe(data => {
+    this.spinner.show();
+    this.defaultService.get('condominios').subscribe(data => {
       this.listaCondominiosTemp = this.listaCondominios = data as Condominio[];
     }, error => {
       console.error(error)
-    });
+    }, () => this.spinner.hide());
   }
 
   excluir(condominio) {
-    swal({
+    Swal.fire({
       title: 'Exclusão de condominio',
       text: `Deseja excluir a condominio: ${condominio.nome}?`,
       type: 'warning',
@@ -44,10 +45,14 @@ export class CondominioListaComponent implements OnInit {
       cancelButtonText: 'Não',
       confirmButtonText: 'Sim'
     }).then((result) => {
-      if (result.value)
-        this.observable = this._defaultService.excluir('condominios', condominio.id).subscribe(() => {
+      if (result.value) {
+        this.spinner.show();
+        this.defaultService.excluir('condominios', condominio.id).subscribe(() => {
           this.getCondominios();
-        });
+        }, error => {
+          console.error(error)
+        }, () => this.spinner.hide());
+      }
     })
   }
 
@@ -55,7 +60,7 @@ export class CondominioListaComponent implements OnInit {
     const val = event.target.value.toLowerCase();
 
     const temp = this.listaCondominios.filter(function (cond) {
-      return (cond.nome.toLowerCase().indexOf(val) !== -1 || cond.construtora.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
+      return (cond.nome.toLowerCase().indexOf(val) !== -1 || cond.empresa.nomeFantasia.toLowerCase().indexOf(val) !== -1) || !val;
     });
 
     this.listaCondominiosTemp = temp;

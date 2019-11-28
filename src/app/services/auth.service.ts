@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { UsuarioService } from './usuario.service';
-import { SharedService } from './shared.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -16,8 +15,9 @@ export class AuthService {
   jwtPayload: any;
   tokensRenokeUrl = `${environment.urlSpring}/tokens/revoke`;
 
-  // tslint:disable-next-line:max-line-length
-  constructor(private http: HttpClient, private router: Router, private usuarioService: UsuarioService, private sharedService: SharedService) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router  ) { }
 
   login(usuario: String, senha: String): Observable<void> {
     const hds = new HttpHeaders({
@@ -50,14 +50,6 @@ export class AuthService {
   }
 
   logout() {
-    // this.http.delete(this.tokensRenokeUrl, { withCredentials: true })
-    //   .toPromise()
-    //   .then(() => {
-    //     console.log('teste')
-    //     this.limparAccessToken();
-    //     this.router.navigate(['/login']);
-    //   });
-
     this.limparAccessToken();
     this.router.navigate(['/auth/login']);
   }
@@ -70,7 +62,6 @@ export class AuthService {
 
   isAccessTokenInvalido() {
     const token = localStorage.getItem('token');
-
     const jwtHelper: JwtHelperService = new JwtHelperService();
 
     return !token || jwtHelper.isTokenExpired(token);
@@ -99,17 +90,17 @@ export class AuthService {
       });
   }
 
-  temQualquerPermissao(roles) {
-    for (const role of roles) {
-      if (this.temQualquerPermissao(role)) {
-        return true;
-      }
-    }
+  // temQualquerPermissao(roles) {
+  //   for (const role of roles) {
+  //     if (this.temQualquerPermissao(role)) {
+  //       return true;
+  //     }
+  //   }
 
-    return false;
-  }
+  //   return false;
+  // }
 
-  atualizaUsuario() {
-    this.sharedService.usuario = JSON.parse(localStorage.getItem('usuario'));
-  }
+  // atualizaUsuario() {
+  //   this.sharedService.usuario = JSON.parse(localStorage.getItem('usuario'));
+  // }
 }

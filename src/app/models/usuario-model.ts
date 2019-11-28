@@ -4,13 +4,9 @@ export class Usuario {
 
     id: number;
     login: string;
-    primeiroNome: string;
-    ultimoNome: string;
+    nome: string;
     ativo: boolean;
     senha: string;
     empresa: Empresa = new Empresa();
     permissoes: any[] = [];
-
-    senhaNova: string;
-    confirmaSenha?: string;
 }

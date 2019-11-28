@@ -1,93 +1,95 @@
 <ng2-toasty></ng2-toasty>
 
 <div class="row">
-  <div class="col-sm-12 filter-bar">
-    <nav class="navbar navbar-light bg-faded m-b-30 p-10">
-      {{ !condominio.id ? 'Cadastro de Condominio' : ('Cadastro da Condominio: ' + condominio.nome) }}
-      <div class="nav-item nav-grid">
-        <span class="m-r-15">Ações: </span>
-
-        <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
-          title="Lista de Condominios" [routerLink]="['/condominio/lista']">
-          <i class="icofont icofont-listing-box icofont-2x"></i>
-        </button>
-        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-          (click)="salvar()" [disabled]="formulario.invalid">
-          <i class="icofont icofont-save icofont-2x"></i>
-        </button>
-      </div>
-    </nav>
-  </div>
-</div>
-
-<div class="row">
   <div class="col-sm-12">
     <app-card>
-      <app-loader [observable]="observable"></app-loader>
-      <form autocomplete="off" [formGroup]="formulario">
+      <div class="row">
+        <div class="col-sm-12 filter-bar">
+          <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+            {{ !condominio.id ? 'Cadastro de Condominio' : ('Cadastro da Condominio: ' + condominio.nome) }}
+            <div class="nav-item nav-grid">
+              <span class="m-r-15">Ações: </span>
+
+              <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+                title="Lista de Condominios" [routerLink]="['/condominio/lista']">
+                <i class="fa fa-list"></i>
+              </button>
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
+                (click)="salvar(condominioForm)">
+                <i class="fa fa-save"></i>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      <form autocomplete="off" (ngSubmit)="salvar(condominioForm)" #condominioForm="ngForm">
         <div class="form-group row">
-          <div class="col-sm-4">
-            <label class="col-form-label"
-              [ngClass]="{'form-control-danger' : !isValid('construtora')}">Construtora</label>
-            <ng-select [ngClass]="'ng-select'" [options]="listaConstrutoras" [(ngModel)]="construtoraId"
-              formControlName="construtora">
+          <div class="col-sm-6 col-md-4">
+            <label class="col-form-label">Empresa</label>
+            <ng-select [ngClass]="'ng-select'" [options]="listaEmpresas" #empresa="ngModel" name="empresa"
+              [(ngModel)]="empresaId" [validForm]="{form: empresa, isSubmit: isSubmit}" required>
             </ng-select>
           </div>
           <div class="col-sm-6">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('nome')}">Nome</label>
-            <input type="text" class="form-control form-control-round" #nome [(ngModel)]="condominio.nome"
-              formControlName="nome">
+            <label class="col-form-label">Nome</label>
+            <input type="text" class="form-control" #nome="ngModel" name="nome" [(ngModel)]="condominio.nome"
+              [validForm]="{form: nome, isSubmit: isSubmit}" required minlength="5" maxlength="30">
           </div>
-          <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('ativo')}">Ativo</label><br>
-            <ui-switch class="js-small" [ngClass]="{'form-control-danger' : !isValid('ativo')}" color="#3498DB"
-              size="small" [(ngModel)]="condominio.ativo" formControlName="ativo"></ui-switch>
+          <div class="col-sm-12 col-md-2">
+            <br><br>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="ativo" #ativo="ngModel" name="ativo"
+                [(ngModel)]="condominio.ativo" [validForm]="{form: ativo, isSubmit: isSubmit}" required>
+              <label class="custom-control-label" for="ativo">Ativo</label>
+            </div>
           </div>
-          <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('cep')}">CEP</label>
-            <input type="text" class="form-control form-control-round" #cep [(ngModel)]="condominio.cep"
-              formControlName="cep" [textMask]="{mask: cepMask}" (keyup)="validaCep($event)">
+          <div class="col-sm-3 col-md-2">
+            <label class="col-form-label">CEP</label>
+            <input type="text" class="form-control" #cep="ngModel" name="cep" [(ngModel)]="condominio.cep"
+              [textMask]="{mask: cepMask}" (keyup)="validaCep($event)" [validForm]="{form: cep, isSubmit: isSubmit}"
+              required>
           </div>
-          <div class="col-sm-10">
+          <div class="col-sm-9 col-md-10">
             <label class="col-form-label">Rua</label>
-            <input type="text" class="form-control form-control-round" #rua [(ngModel)]="condominio.rua"
-              formControlName="rua">
+            <input type="text" class="form-control" #rua="ngModel" [(ngModel)]="condominio.rua" name="rua"
+              [validForm]="{form: rua, isSubmit: isSubmit}" disabled>
           </div>
           <div class="col-sm-2">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
-            <input type="number" class="form-control form-control-round" #numero [(ngModel)]="condominio.numero"
-              formControlName="numero">
+            <label class="col-form-label">Número</label>
+            <input type="number" class="form-control" #numero="ngModel" [(ngModel)]="condominio.numero" name="numero"
+              [validForm]="{form: numero, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label">Bairro</label>
-            <input type="text" class="form-control form-control-round" #bairro [(ngModel)]="condominio.bairro"
-              formControlName="bairro">
+            <input type="text" class="form-control" #bairro="ngModel" [(ngModel)]="condominio.bairro" name="bairro"
+              [validForm]="{form: bairro, isSubmit: isSubmit}" disabled>
           </div>
           <div class="col-sm-4">
             <label class="col-form-label">Cidade</label>
-            <input type="text" class="form-control form-control-round" #cidade [(ngModel)]="condominio.cidade"
-              formControlName="cidade">
+            <input type="text" class="form-control" #cidade="ngModel" [(ngModel)]="condominio.cidade" name="cidade"
+              [validForm]="{form: cidade, isSubmit: isSubmit}" disabled>
           </div>
           <div class="col-sm-2">
             <label class="col-form-label">Estado</label>
-            <input type="text" class="form-control form-control-round" #estado [(ngModel)]="condominio.estado"
-              formControlName="estado">
+            <input type="text" class="form-control" #estado="ngModel" [(ngModel)]="condominio.estado" name="estado"
+              [validForm]="{form: estado, isSubmit: isSubmit}" disabled>
           </div>
           <div class="col-sm-12">
-            <label class="col-form-label"
-              [ngClass]="{'form-control-danger' : !isValid('complemento')}">Complemento</label>
-            <input type="text" class="form-control form-control-round" #complemento [(ngModel)]="condominio.complemento"
-              formControlName="complemento">
+            <label class="col-form-label">Complemento</label>
+            <input type="text" class="form-control" #complemento="ngModel" [(ngModel)]="condominio.complemento"
+              name="complemento" [validForm]="{form: complemento, isSubmit: isSubmit}" maxlength="50">
           </div>
           <div class="col-sm-8">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('email')}">E-mail</label>
-            <input type="email" class="form-control form-control-round" #email [(ngModel)]="condominio.email"
-              formControlName="email">
+            <label class="col-form-label">E-mail</label>
+            <input type="email" class="form-control" #email="ngModel" [(ngModel)]="condominio.email" name="email"
+              [validForm]="{form: email, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-4">
-            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('telefone')}">Telefone</label>
-            <input type="text" class="form-control form-control-round" #telefone [(ngModel)]="condominio.telefone"
-              formControlName="telefone" [textMask]="{mask: telefoneMask}">
+            <label class="col-form-label">Telefone</label>
+            <input type="text" class="form-control" #telefone="ngModel" [(ngModel)]="condominio.telefone"
+              name="telefone" [textMask]="{mask: telefoneMask}" [validForm]="{form: telefone, isSubmit: isSubmit}"
+              required>
           </div>
         </div>
       </form>

@@ -3,29 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RotaListaComponent } from './rota-lista/rota-lista.component';
 import { RotaCadastroComponent } from './rota-cadastro/rota-cadastro.component';
 import { RotaRoutingModule } from './rota-routing.module';
-import { SharedModule } from '../../shared/shared.module';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UiSwitchModule } from 'ng2-ui-switch';
-import { ToastyModule } from 'ng2-toasty';
-import { DefaultService } from '../../services/default.service';
-import { ToastService } from '../../services/toast.service';
+import { SharedTheButlerModule } from 'src/app/shared/shared-the-butler.module';
+import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     RotaRoutingModule,
     SharedModule,
-    NgxDatatableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    UiSwitchModule,
-    ToastyModule.forRoot()
+    SharedTheButlerModule
   ],
   declarations: [RotaListaComponent, RotaCadastroComponent],
-  providers: [
-    DefaultService,
-    ToastService
-  ]
 })
 export class RotaModule { }
