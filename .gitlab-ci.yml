@@ -7,11 +7,11 @@ cache:
     - node_modules/
 
 node-pre-build:
-  image: node:8
+  image: node:10
   stage: build
   script:
     - npm install
-    - npm install -g @angular/cli@7
+    - npm install -g @angular/cli@8
 
 node-build-develop:
   image: node:8
