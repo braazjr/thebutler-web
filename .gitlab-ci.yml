@@ -7,10 +7,10 @@ cache:
     - node_modules/
 
 node-build:
-  image: node:8
+  image: node:10
   stage: build
   before_script:
-    - npm install -g @angular/cli@7
+    - npm install -g @angular/cli@8
     - npm install
   script: "ng build --aot"
   only:
