@@ -1,1 +1,1 @@
-web: ng build --aot --configuration=${HEROKU_ENVIRONMENT} && node server.js
+web: npm install && ng build --aot --configuration=${HEROKU_ENVIRONMENT} && node server.js
