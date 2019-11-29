@@ -6,15 +6,16 @@ cache:
   paths:
     - node_modules/
 
-node-build-develop:
+node-build:
   image: node:10
   stage: build
   before_script:
     - npm install
     - npm install -g @angular/cli@8
-  script: "ng build --aot --configuration=develop"
+  script: "ng build --aot"
   only:
     - develop
+    - master
   
 deploy-develop:
   stage: deploy
@@ -31,16 +32,6 @@ deploy-develop:
     #- heroku run rake db:migrate --exit-code --app api-butler
   only:
     - develop
-
-node-build-production:
-  image: node:10
-  stage: build
-  before_script:
-    - npm install
-    - npm install -g @angular/cli@8
-  script: "ng build --aot --configuration=production"
-  only:
-    - master
 
 deploy-production:
   stage: deploy
