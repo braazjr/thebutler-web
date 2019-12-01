@@ -36,7 +36,7 @@ const NavigationItems = [
         id: 'dashboard',
         title: 'Dashboard',
         type: 'item',
-        icon: 'feather icon-home',
+        icon: 'fa fa-home',
         url: '/dashboard/home',
         breadcrumbs: false
       },
@@ -44,7 +44,7 @@ const NavigationItems = [
         id: 'dados-mestre',
         title: 'Dados mestre',
         type: 'collapse',
-        icon: 'feather icon-layout',
+        icon: 'fa fa-stream',
         children: [
           {
             id: 'empresa',
@@ -155,7 +155,7 @@ const NavigationItems = [
         id: 'controle-acesso',
         title: 'Controle de acesso',
         type: 'collapse',
-        icon: 'feather icon-layout',
+        icon: 'fa fa-users',
         children: [
           {
             id: 'usuario',
@@ -185,7 +185,7 @@ const NavigationItems = [
         id: 'buscontrol',
         title: 'BUSControl',
         type: 'collapse',
-        icon: 'feather icon-layout',
+        icon: 'fa fa-bus',
         children: [
           {
             id: 'rota',
