@@ -45,6 +45,7 @@
     "css-animator": "^2.3.1",
     "datatables.net": "^1.10.19",
     "datatables.net-dt": "^1.10.19",
+    "express": "^4.17.1",
     "famfamfam-flags": "^1.0.0",
     "file-saver": "^2.0.2",
     "fullcalendar": "^3.10.0",
