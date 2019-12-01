@@ -15,4 +15,16 @@ export class UsuarioService {
 
     return this.http.get(`${environment.urlSpring}/usuarios`, { headers: hds, withCredentials: true, params: pageable });
   }
+
+  redefinirSenha(idUsuario: number, senhaAtual: string, senhaNova: string) {
+    const hds = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+
+    return this.http.patch(
+      `${environment.urlSpring}/usuarios/${idUsuario}/redefinir-senha`,
+      { senhaAtual: senhaAtual, senhaNova: senhaNova },
+      { headers: hds, withCredentials: true }
+    );
+  }
 }

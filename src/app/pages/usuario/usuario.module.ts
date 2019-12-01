@@ -5,6 +5,7 @@ import { UsuarioCadastroComponent } from './usuario-cadastro/usuario-cadastro.co
 import { MoradorRoutingModule } from './usuario-routing.module';
 import { SharedTheButlerModule } from 'src/app/shared/shared-the-butler.module';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { ModalAlterarSenhaComponent } from 'src/app/shared/components/modal-alterar-senha/modal-alterar-senha.component';
 
 @NgModule({
   imports: [
@@ -14,5 +15,6 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
     SharedTheButlerModule
   ],
   declarations: [UsuarioListaComponent, UsuarioCadastroComponent],
+  entryComponents: [ModalAlterarSenhaComponent]
 })
 export class UsuarioModule { }

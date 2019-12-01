@@ -2,7 +2,6 @@ import { Empresa } from './../../../models/empresa-model';
 import { Component, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { Usuario } from '../../../models/usuario-model';
 import { IOption } from 'ng-select';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
 import { ToastService } from '../../../services/toast.service';
@@ -22,13 +21,11 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   permissaoIds: any[] = [];
   empresaId: string = '0';
 
-  formularioSenha: FormGroup;
   isSubmit: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private defaultService: DefaultService,
-    private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
     private toastService: ToastService,
     private spinner: NgxSpinnerService
@@ -44,15 +41,6 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
         this.carregarEmpresas();
       }
     });
-
-    this.formularioSenha = this.formBuilder.group({
-      senha: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
-      confirmaSenha: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
-    })
-  }
-
-  senhaValidator() {
-    return this.formularioSenha.get('senha').value === this.formularioSenha.get('confirmaSenha').value ? true : false;
   }
 
   ngAfterViewChecked() {
@@ -103,10 +91,6 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     }, () => this.spinner.hide());
   }
 
-  isValidSenha(field) {
-    return this.formularioSenha.get(field).status === 'VALID' ? true : false;
-  }
-
   salvar(form) {
     if (form.invalid) {
       this.isSubmit = true;
@@ -141,24 +125,5 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
         });
       }, () => this.spinner.hide());
     }
-  }
-
-  redefinirSenha(modal) {
-    this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
-
-    this.spinner.show();
-    this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
-      this.usuario = response as Usuario;
-      this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
-    }, error => {
-      this.spinner.hide();
-      console.error(error);
-      error.error.forEach(element => {
-        this.toastService.addToast('error', 'Redefinição de senha!', element.mensagemUsuario);
-      });
-    }, () => {
-      modal.hide();
-      this.spinner.hide();
-    });
   }
 }

@@ -1,5 +1,5 @@
 <ul class="navbar-nav ml-auto">
-  <li>
+  <!-- <li>
     <div class="dropdown" ngbDropdown placement="auto">
       <a ngbDropdownToggle href="javascript:" data-toggle="dropdown"><i class="icon feather icon-bell"></i><span class="badge bg-danger"><span class="sr-only"></span></span></a>
       <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right notification">
@@ -57,7 +57,7 @@
         <i class="icon feather icon-mail"></i><span class="badge bg-success"><span class="sr-only"></span></span>
       </a>
     </div>
-  </li>
+  </li> -->
   <li>
     <div class="dropdown drp-user" ngbDropdown placement="auto">
       <a href="javascript:" ngbDropdownToggle data-toggle="dropdown">
@@ -67,22 +67,20 @@
         <div class="pro-head">
           <img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image">
           <span>John Doe</span>
-          <a href="javascript:" class="dud-logout" title="Logout">
+          <!-- <a href="javascript:" class="dud-logout" title="Logout">
             <i class="feather icon-log-out"></i>
-          </a>
+          </a> -->
         </div>
         <ul class="pro-body">
-          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
-          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
-          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
-          <li (click)="logout()"><a href="javascript:" class="dropdown-item"><i class="feather icon-lock"></i> Sair/Logout</a></li>
+          <li (click)="modalRedefinirSenha.show()"><a href="javascript:" class="dropdown-item"><i class="fa fa-key"></i> Alterar senha</a></li>
+          <li (click)="logout()"><a href="javascript:" class="dropdown-item"><i class="fa fa-lock"></i> Sair/Logout</a></li>
         </ul>
       </div>
     </div>
   </li>
 </ul>
 
-<section class="header-user-list" *ngIf="visibleUserList && !this.gradientConfig['rtl-layout']" [ngClass]="{'open': visibleUserList}" [@slideInOutLeft]>
+<!-- <section class="header-user-list" *ngIf="visibleUserList && !this.gradientConfig['rtl-layout']" [ngClass]="{'open': visibleUserList}" [@slideInOutLeft]>
   <app-chat-user-list (onChatToggle)="onChatToggle($event)" (onChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false;"></app-chat-user-list>
 </section>
 
@@ -96,4 +94,6 @@
 
 <section class="header-chat" *ngIf="chatMessage && this.gradientConfig['rtl-layout']" [ngClass]="{'open': chatMessage}" [@slideInOutRight]>
   <app-chat-msg (onChatToggle)="this.chatMessage = !this.chatMessage" [friendId]="friendId"></app-chat-msg>
-</section>
+</section> -->
+
+<modal-alterar-senha #modalRedefinirSenha [usuario]="usuario"></modal-alterar-senha>

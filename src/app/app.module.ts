@@ -27,8 +27,11 @@ import { ToggleFullScreenDirective } from './theme/shared/full-screen/toggle-ful
 /* Menu Items */
 import { NavigationItem } from './theme/layout/admin/navigation/navigation';
 import { NgbButtonsModule, NgbDropdownModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { AuthService } from './services/auth.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedTheButlerModule } from './shared/shared-the-butler.module';
+import { ModalAlterarSenhaComponent } from './shared/components/modal-alterar-senha/modal-alterar-senha.component';
 
 @NgModule({
   declarations: [
@@ -59,12 +62,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     NgbTooltipModule,
     NgbButtonsModule,
     NgbTabsetModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    SharedTheButlerModule
   ],
   providers: [
     NavigationItem,
     AuthService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ModalAlterarSenhaComponent]
 })
 export class AppModule { }

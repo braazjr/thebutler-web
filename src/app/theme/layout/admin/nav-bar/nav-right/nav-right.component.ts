@@ -1,8 +1,10 @@
-import {Component, DoCheck, OnInit} from '@angular/core';
-import {NgbDropdownConfig} from '@ng-bootstrap/ng-bootstrap';
-import {animate, style, transition, trigger} from '@angular/animations';
-import {GradientConfig} from '../../../../../app-config';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { GradientConfig } from '../../../../../app-config';
 import { AuthService } from 'src/app/services/auth.service';
+import { Usuario } from 'src/app/models/usuario-model';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-nav-right',
@@ -12,20 +14,20 @@ import { AuthService } from 'src/app/services/auth.service';
   animations: [
     trigger('slideInOutLeft', [
       transition(':enter', [
-        style({transform: 'translateX(100%)'}),
-        animate('300ms ease-in', style({transform: 'translateX(0%)'}))
+        style({ transform: 'translateX(100%)' }),
+        animate('300ms ease-in', style({ transform: 'translateX(0%)' }))
       ]),
       transition(':leave', [
-        animate('300ms ease-in', style({transform: 'translateX(100%)'}))
+        animate('300ms ease-in', style({ transform: 'translateX(100%)' }))
       ])
     ]),
     trigger('slideInOutRight', [
       transition(':enter', [
-        style({transform: 'translateX(-100%)'}),
-        animate('300ms ease-in', style({transform: 'translateX(0%)'}))
+        style({ transform: 'translateX(-100%)' }),
+        animate('300ms ease-in', style({ transform: 'translateX(0%)' }))
       ]),
       transition(':leave', [
-        animate('300ms ease-in', style({transform: 'translateX(-100%)'}))
+        animate('300ms ease-in', style({ transform: 'translateX(-100%)' }))
       ])
     ])
   ]
@@ -36,15 +38,20 @@ export class NavRightComponent implements OnInit, DoCheck {
   public friendId: boolean;
   public gradientConfig: any;
 
+  usuario: Usuario;
+
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private sharedService: SharedService
   ) {
     this.visibleUserList = false;
     this.chatMessage = false;
     this.gradientConfig = GradientConfig.config;
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.usuario = this.sharedService.getUsuarioLogged();
+  }
 
   onChatToggle(friendID) {
     this.friendId = friendID;

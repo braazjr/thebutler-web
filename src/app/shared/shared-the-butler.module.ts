@@ -11,9 +11,11 @@ import { ToastService } from '../services/toast.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ValidFormDirectiveDirective } from './directives/valid-form-directive.directive';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalAlterarSenhaComponent } from './components/modal-alterar-senha/modal-alterar-senha.component';
+import { ModalModule } from '../theme/shared/components';
 
 @NgModule({
-  declarations: [ValidFormDirectiveDirective],
+  declarations: [ValidFormDirectiveDirective, ModalAlterarSenhaComponent],
   imports: [
     CommonModule,
     NgxDatatableModule,
@@ -22,7 +24,8 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
     ToastyModule.forRoot(),
     SelectModule,
     NgxSpinnerModule,
-    NgbCollapseModule
+    NgbCollapseModule,
+    ModalModule
   ],
   providers: [
     DefaultService,
@@ -37,7 +40,8 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
     SelectModule,
     NgxSpinnerModule,
     ValidFormDirectiveDirective,
-    NgbCollapseModule
+    NgbCollapseModule,
+    ModalAlterarSenhaComponent
   ]
 })
 export class SharedTheButlerModule { }
