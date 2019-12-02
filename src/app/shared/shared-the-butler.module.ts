@@ -13,6 +13,8 @@ import { ValidFormDirectiveDirective } from './directives/valid-form-directive.d
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalAlterarSenhaComponent } from './components/modal-alterar-senha/modal-alterar-senha.component';
 import { ModalModule } from '../theme/shared/components';
+import { AuthInterceptorModule } from './seguranca/auth-interceptor/auth-interceptor.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [ValidFormDirectiveDirective, ModalAlterarSenhaComponent],
@@ -25,7 +27,9 @@ import { ModalModule } from '../theme/shared/components';
     SelectModule,
     NgxSpinnerModule,
     NgbCollapseModule,
-    ModalModule
+    ModalModule,
+    HttpClientModule,
+    AuthInterceptorModule
   ],
   providers: [
     DefaultService,

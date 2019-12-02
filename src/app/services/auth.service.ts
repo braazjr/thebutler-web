@@ -80,7 +80,7 @@ export class AuthService {
       .map(response => {
         this.armazenarToken(response['access_token']);
 
-        console.info('Novo access token criado!');
+        console.info('-- novo access token criado');
 
         return Promise.resolve(null);
       })
@@ -89,18 +89,4 @@ export class AuthService {
         return Promise.resolve(null);
       });
   }
-
-  // temQualquerPermissao(roles) {
-  //   for (const role of roles) {
-  //     if (this.temQualquerPermissao(role)) {
-  //       return true;
-  //     }
-  //   }
-
-  //   return false;
-  // }
-
-  // atualizaUsuario() {
-  //   this.sharedService.usuario = JSON.parse(localStorage.getItem('usuario'));
-  // }
 }
