@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../../services/usuario.service';
 import { Usuario } from '../../../models/usuario-model';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-usuario-lista',
@@ -21,7 +20,6 @@ export class UsuarioListaComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private spinner: NgxSpinnerService
   ) {
     this.listaData = {
       size: 10,
@@ -38,7 +36,6 @@ export class UsuarioListaComponent implements OnInit {
   setPage(pageInfo) {
     this.listaData.page = pageInfo.offset;
 
-    this.spinner.show();
     this.usuarioService.getUsuarioPorEmpresa(this.listaData).subscribe(data => {
       this.listaData = {
         page: data['number'],
@@ -48,9 +45,8 @@ export class UsuarioListaComponent implements OnInit {
       };
       this.listaUsuarios = data['content'] as Usuario[];
     }, error => {
-      this.spinner.hide();
       console.error(error);
-    }, () => this.spinner.hide());
+    });
   }
 
   listarPermissoes(permissoes: any[]) {

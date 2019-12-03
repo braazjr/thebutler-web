@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
 import { ToastService } from '../../../services/toast.service';
 import { SharedService } from 'src/app/shared/shared.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-rota-cadastro',
@@ -23,7 +22,6 @@ export class RotaCadastroComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -40,13 +38,12 @@ export class RotaCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.spinner.show();
     this.defaultService.getById('rotas', this.rota.id).subscribe(response => {
       this.rota = response as Rota;
     }, error => {
       this.spinner.hide();
       console.error(error);
-    }, () => this.spinner.hide())
+    })
   }
 
   salvar(form) {
@@ -56,29 +53,26 @@ export class RotaCadastroComponent implements OnInit {
     } else {
       this.rota.usuario = this.sharedService.getUsuarioLogged();
 
-      this.spinner.show();
       if (!this.rota.id) {
         this.defaultService.salvar('rotas', this.rota).subscribe(response => {
           this.rota = response as Rota;
           this.toastService.addToast('success', 'Cadastro Rota!', `Rota ${this.rota.nome} salvo com sucesso!`);
         }, error => {
-          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Rota!', element.mensagemUsuario);
           });
-        }, () => this.spinner.hide())
+        })
       } else {
         this.defaultService.atualizar('rotas', this.rota).subscribe(response => {
           this.rota = response as Rota;
           this.toastService.addToast('success', 'Atualização Rota!', `Rota ${this.rota.nome} atualizado com sucesso!`);
         }, error => {
-          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Rota!', element.mensagemUsuario);
           });
-        }, () => this.spinner.hide())
+        })
       }
     }
   }

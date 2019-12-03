@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Condominio } from '../../../models/condominio-model';
 import { DefaultService } from '../../../services/default.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import Swal from 'sweetalert2';
 
@@ -20,7 +19,6 @@ export class CondominioListaComponent implements OnInit {
 
   constructor(
     private defaultService: DefaultService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -28,12 +26,11 @@ export class CondominioListaComponent implements OnInit {
   }
 
   getCondominios() {
-    this.spinner.show();
     this.defaultService.get('condominios').subscribe(data => {
       this.listaCondominiosTemp = this.listaCondominios = data as Condominio[];
     }, error => {
       console.error(error)
-    }, () => this.spinner.hide());
+    });
   }
 
   excluir(condominio) {
@@ -46,12 +43,11 @@ export class CondominioListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.spinner.show();
         this.defaultService.excluir('condominios', condominio.id).subscribe(() => {
           this.getCondominios();
         }, error => {
           console.error(error)
-        }, () => this.spinner.hide());
+        });
       }
     })
   }

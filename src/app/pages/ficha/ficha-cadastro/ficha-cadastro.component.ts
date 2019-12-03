@@ -11,7 +11,6 @@ import { TipoMoradorService } from '../../../services/tipo-morador.service';
 import { WebCamComponent } from 'ack-angular-webcam';
 import { ToastService } from '../../../services/toast.service';
 import { ApartamentoService } from '../../../services/apartamento.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from 'src/app/shared/shared.service';
 
 import * as fileSaver from 'file-saver';
@@ -64,7 +63,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     private toastService: ToastService,
     private documentoService: DocumentoService,
     private apartamentoService: ApartamentoService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -118,14 +116,14 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
-    this.spinner.show();
+    /*this.spinner.show()*/;
     this.defaultService.getById('apartamentos', this.apartamento.id).subscribe(response => {
       this.apartamento = response as Apartamento;
       this.formulario.patchValue(response);
       this.carregaFicha();
     }, (error) => {
       console.error(error);
-      this.spinner.hide();
+      /*this.spinner.hide()*/;
     });
   }
 
@@ -135,7 +133,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.formulario.get('responsavel').patchValue(responsavel);
       this.listaMoradores = this.apartamento.moradores.filter((morador) => morador.id != responsavel.id);
     }
-    this.spinner.hide();
+    /*this.spinner.hide()*/;
   }
 
   getTipoMorador() {
@@ -246,7 +244,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         morador.usuario = this.sharedService.getUsuarioLogged();
       });
 
-      this.spinner.show();
+      /*this.spinner.show()*/;
       this.defaultService.atualizar('apartamentos', apartamento).subscribe(() => {
         this.getById();
         this.toastService.addToast(
@@ -255,7 +253,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
           `Ficha atualizada com sucesso!`
         );
       }, error => {
-        this.spinner.hide();
+        /*this.spinner.hide()*/;
         console.error(error);
         error.error.forEach(element => {
           this.toastService.addToast(
@@ -264,7 +262,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
             element.mensagemUsuario
           );
         });
-      }, () => this.spinner.hide());
+      });
     }
   }
 
@@ -274,11 +272,11 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getDocumentosPorApartamento() {
-    this.spinner.show();
+    /*this.spinner.show()*/;
     this.documentoService.getDocumentosPorApartamento(this.apartamento.id).subscribe(response => {
       this.documentos = response as any[];
     }, error => {
-      this.spinner.hide();
+      /*this.spinner.hide()*/;
       console.error(error);
       error.error.forEach(element => {
         this.toastService.addToast(
@@ -287,7 +285,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
           element.mensagemUsuario
         );
       });
-    }, () => this.spinner.hide());
+    });
   }
 
   excluirDocumento(documento) {
@@ -300,11 +298,11 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.spinner.show();
+        /*this.spinner.show()*/;
         this.documentoService.excluirDocumento(documento.id).subscribe(() => {
           this.getDocumentosPorApartamento();
         }, error => {
-          this.spinner.hide();
+          /*this.spinner.hide()*/;
           console.error(error);
         });
       }
@@ -312,11 +310,11 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getFicha() {
-    this.spinner.show();
+    /*this.spinner.show()*/;
     this.apartamentoService.getFicha(this.apartamento.id).subscribe((response) => {
       this.saveFile(response['body'], `Ficha-Apartamento-${this.apartamento.numero}-${this.apartamento.bloco.nome}-${this.apartamento.bloco.condominio.nome}`);
     }, error => {
-      this.spinner.hide();
+      /*this.spinner.hide()*/;
       console.error(error);
     })
   }
@@ -324,7 +322,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   saveFile(data: any, filename?: string) {
     const blob = new Blob([data], { type: 'application/pdf; charset=utf-8' });
     fileSaver.saveAs(blob, filename);
-    this.spinner.hide();
+    /*this.spinner.hide()*/;
   }
 
   getFieldResponsavelForm(field) {
@@ -349,12 +347,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   importarFotos() {
-    this.spinner.show();
+    /*this.spinner.show()*/;
     this.documentoService.uploadDocumentos(this.apartamento.id, this.documentosForm.value.files[0])
       .subscribe(() => {
-        this.spinner.hide();
+        /*this.spinner.hide()*/;
       }, error => {
-        this.spinner.hide();
+        /*this.spinner.hide()*/;
         console.error(error);
       })
   }

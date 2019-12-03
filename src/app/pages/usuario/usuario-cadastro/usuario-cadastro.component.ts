@@ -5,7 +5,6 @@ import { IOption } from 'ng-select';
 import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
 import { ToastService } from '../../../services/toast.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-usuario-cadastro',
@@ -28,7 +27,6 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     private defaultService: DefaultService,
     private cdr: ChangeDetectorRef,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -48,7 +46,6 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
-    this.spinner.show();
     this.defaultService.getById('usuarios', this.usuario.id).subscribe(response => {
       this.usuario = response as Usuario;
       if (this.usuario.empresa) {
@@ -58,13 +55,11 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
       this.carregarPermissoes();
       this.carregarEmpresas();
     }, error => {
-      this.spinner.hide();
       console.error(error);
     });
   }
 
   carregarPermissoes() {
-    this.spinner.show();
     this.defaultService.get('permissoes').subscribe(response => {
       this.permissoes = response as any[];
       this.listaPermissoes = (response as any[]).map(perm => {
@@ -75,20 +70,17 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
         return ({ value: perm.codigo.toString(), label: perm.descricao });
       });
     }, error => {
-      this.spinner.hide();
       console.error(error);
-    }, () => this.spinner.hide());
+    });
   }
 
   carregarEmpresas() {
-    this.spinner.show();
     this.defaultService.get('empresas').subscribe(response => {
       this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia, disabled: false }));
       this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
     }, error => {
-      this.spinner.hide();
       console.error(error);
-    }, () => this.spinner.hide());
+    });
   }
 
   salvar(form) {
@@ -100,30 +92,26 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
     this.usuario.empresa.id = Number(this.empresaId);
 
-    this.spinner.show();
     if (!this.usuario.id) {
       this.defaultService.salvar('usuarios', this.usuario).subscribe(response => {
         this.usuario = response as Usuario;
         this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.nome} salvo com sucesso!`);
       }, error => {
-        this.spinner.hide();
         console.error(error);
         error.error.forEach(element => {
           this.toastService.addToast('error', 'Cadastro Usuário!', element.mensagemUsuario);
         });
-      }, () => this.spinner.hide());
+      });
     } else {
-      this.spinner.show();
       this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
         this.usuario = response as Usuario;
         this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.nome} atualizado com sucesso!`);
       }, error => {
-        this.spinner.hide();
         console.error(error);
         error.error.forEach(element => {
           this.toastService.addToast('error', 'Atualização Usuário!', element.mensagemUsuario);
         });
-      }, () => this.spinner.hide());
+      });
     }
   }
 }

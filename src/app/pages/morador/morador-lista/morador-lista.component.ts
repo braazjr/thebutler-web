@@ -4,7 +4,6 @@ import { IOption } from 'ng-select';
 import { DefaultService } from '../../../services/default.service';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import * as lodash from 'lodash';
 
@@ -52,7 +51,6 @@ export class MoradorListaComponent implements OnInit {
   constructor(
     private moradorService: MoradorService,
     private defaultService: DefaultService,
-    private spinner: NgxSpinnerService
   ) {
     this.listaData = {
       size: 10,
@@ -85,9 +83,8 @@ export class MoradorListaComponent implements OnInit {
   getMoradores() {
     const listaData = lodash.clone(this.listaData);
     if (listaData.idBloco == '0') delete listaData.idBloco;
-    if (listaData.idCondominio ==='0') delete listaData.idCondominio;
+    if (listaData.idCondominio === '0') delete listaData.idCondominio;
 
-    this.spinner.show();
     this.moradorService.getViewApartamentoMorador(listaData).subscribe(data => {
       this.listaData.page = data['number'];
       this.listaData.size = data['size'];
@@ -95,9 +92,8 @@ export class MoradorListaComponent implements OnInit {
       this.listaData.totalPages = data['totalPages'];
       this.listaMoradores = data['content'] as any[];
     }, error => {
-      this.spinner.hide();
       console.error(error)
-    }, () => this.spinner.hide());
+    });
   }
 
   carregarCondominios() {

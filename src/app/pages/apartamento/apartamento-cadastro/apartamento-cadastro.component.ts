@@ -7,7 +7,6 @@ import { DefaultService } from '../../../services/default.service';
 import { ToastService } from '../../../services/toast.service';
 import { Bloco } from '../../../models/bloco-model';
 import { SharedService } from 'src/app/shared/shared.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import Swal from 'sweetalert2';
 
@@ -31,7 +30,6 @@ export class ApartamentoCadastroComponent implements OnInit {
     private sharedService: SharedService,
     private toastService: ToastService,
     private router: Router,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -55,7 +53,6 @@ export class ApartamentoCadastroComponent implements OnInit {
   }
 
   getById(id) {
-    this.spinner.show();
     this.defaultService.getById('apartamentos', id).subscribe(response => {
       this.apartamento = response as Apartamento;
       this.formulario.patchValue(response);
@@ -65,12 +62,15 @@ export class ApartamentoCadastroComponent implements OnInit {
   }
 
   carregarBlocos() {
-    this.spinner.show();
     this.defaultService.get('blocos').subscribe(response => {
       this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
       this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error),
-      () => this.spinner.hide());
+    }, error => {
+      console.error(error)
+      error.error.forEach(element => {
+        this.toastService.addToast('error', 'Cadastro Apartamento!', element.mensagemUsuario);
+      });
+    })
   }
 
   isValid(field) {
@@ -86,7 +86,6 @@ export class ApartamentoCadastroComponent implements OnInit {
       this.apartamento.numero = this.formulario.get('numero').value;
       this.apartamento.ativo = this.formulario.get('ativo').value;
 
-      this.spinner.show();
       if (!this.apartamento.id) {
         this.defaultService.salvar('apartamentos', this.apartamento).subscribe(response => {
           this.apartamento = response as Apartamento;
@@ -97,7 +96,6 @@ export class ApartamentoCadastroComponent implements OnInit {
             this.toastService.addToast('error', 'Cadastro Apartamento!', element.mensagemUsuario);
           });
         }, () => {
-          this.spinner.hide();
           this.router.navigate([`/ficha/${this.apartamento.id}`]);
         })
       } else {
@@ -110,7 +108,6 @@ export class ApartamentoCadastroComponent implements OnInit {
             this.toastService.addToast('error', 'Atualização Apartamento!', element.mensagemUsuario);
           });
         }, () => {
-          this.spinner.hide();
           this.router.navigate([`/ficha/${this.apartamento.id}`]);
         })
       }

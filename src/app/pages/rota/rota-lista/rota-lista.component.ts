@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DefaultService } from '../../../services/default.service';
 import { Rota } from '../../../models/rota';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import Swal from 'sweetalert2';
 
@@ -20,7 +19,6 @@ export class RotaListaComponent implements OnInit {
 
   constructor(
     private defaultService: DefaultService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -28,13 +26,11 @@ export class RotaListaComponent implements OnInit {
   }
 
   getRotas() {
-    this.spinner.show();
     this.defaultService.get('rotas').subscribe(data => {
       this.listaRotasTemp = this.listaRotas = data as Rota[];
     }, error => {
-      this.spinner.hide();
       console.error(error)
-    }, () => this.spinner.hide());
+    });
   }
 
   excluir(rota) {
@@ -47,11 +43,9 @@ export class RotaListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.spinner.show();
         this.defaultService.excluir('rotas', rota.id).subscribe(() => {
           this.getRotas();
         }, error => {
-          this.spinner.hide();
           console.error(error);
         });
       }

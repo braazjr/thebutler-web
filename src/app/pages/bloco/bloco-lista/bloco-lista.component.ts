@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Bloco } from '../../../models/bloco-model';
 import { DefaultService } from '../../../services/default.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import Swal from 'sweetalert2';
 
@@ -20,7 +19,6 @@ export class BlocoListaComponent implements OnInit {
 
   constructor(
     private defaultService: DefaultService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -28,12 +26,11 @@ export class BlocoListaComponent implements OnInit {
   }
 
   getBlocos() {
-    this.spinner.show();
     this.defaultService.get('blocos').subscribe(data => {
       this.listaBlocosTemp = this.listaBlocos = data as Bloco[];
     }, error => {
       console.error(error)
-    }, () => this.spinner.hide());
+    });
   }
 
   excluir(bloco: Bloco) {
@@ -46,7 +43,6 @@ export class BlocoListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.spinner.show()
         this.defaultService.excluir('blocos', bloco.id).subscribe(() => {
           this.getBlocos();
         });

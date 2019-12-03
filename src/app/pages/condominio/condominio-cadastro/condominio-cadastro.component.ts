@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
 import { ToastService } from '../../../services/toast.service';
 import { SharedService } from 'src/app/shared/shared.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Empresa } from 'src/app/models/empresa-model';
 
 @Component({
@@ -31,7 +30,6 @@ export class CondominioCadastroComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -50,7 +48,6 @@ export class CondominioCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.spinner.show();
     this.defaultService.getById('condominios', this.condominio.id).subscribe(response => {
       this.condominio = response as Condominio;
       this.empresaId = this.condominio.empresa.id.toString();
@@ -65,24 +62,20 @@ export class CondominioCadastroComponent implements OnInit {
   }
 
   buscaCep(cep) {
-    this.spinner.show();
     this.defaultService.getDadosCep(cep).subscribe(response => {
       this.condominio.rua = response['logradouro'];
       this.condominio.bairro = response['bairro'];
       this.condominio.cidade = response['localidade'];
       this.condominio.estado = response['uf'];
       this.condominio.complemento = response['complemento'];
-      this.spinner.hide();
     })
   }
 
   carregarEmpresas() {
-    this.spinner.show();
     this.defaultService.get('empresas').subscribe(response => {
       this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia }));
       this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error)
-      , () => this.spinner.hide());
+    }, error => console.error(error));
   }
 
   salvar(form) {
@@ -93,29 +86,26 @@ export class CondominioCadastroComponent implements OnInit {
       this.condominio.usuario = this.sharedService.getUsuarioLogged();
       this.condominio.empresa.id = Number(this.empresaId);
 
-      this.spinner.show();
       if (!this.condominio.id) {
         this.defaultService.salvar('condominios', this.condominio).subscribe(response => {
           this.condominio = response as Condominio;
           this.toastService.addToast('success', 'Cadastro Condomínio!', `Condomínio ${this.condominio.nome} salvo com sucesso!`);
         }, error => {
-          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Condomínio!', element.mensagemUsuario);
           });
-        }, () => this.spinner.hide())
+        })
       } else {
         this.defaultService.atualizar('condominios', this.condominio).subscribe(response => {
           this.condominio = response as Condominio;
           this.toastService.addToast('success', 'Atualização Condomínio!', `Condomínio ${this.condominio.nome} atualizado com sucesso!`);
         }, error => {
-          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Condomínio!', element.mensagemUsuario);
           });
-        }, () => this.spinner.hide())
+        })
       }
     }
   }

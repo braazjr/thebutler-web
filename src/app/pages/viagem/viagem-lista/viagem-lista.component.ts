@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ViagemService } from '../../../services/viagem.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { DefaultService } from 'src/app/services/default.service';
 import { Condominio } from 'src/app/models/condominio-model';
 import { Bloco } from 'src/app/models/bloco-model';
@@ -46,7 +45,6 @@ export class ViagemListaComponent implements OnInit {
 
   constructor(
     private viagemService: ViagemService,
-    private spinner: NgxSpinnerService,
     private defaultService: DefaultService
   ) {
     this.listaData = {
@@ -82,7 +80,6 @@ export class ViagemListaComponent implements OnInit {
   }
 
   getViagens() {
-    this.spinner.show();
     const listaData = lodash.clone(this.listaData);
     if (listaData.numeroApartamento == null) delete listaData.numeroApartamento;
 
@@ -93,9 +90,8 @@ export class ViagemListaComponent implements OnInit {
       this.listaData.totalPages = data['totalPages'];
       this.listaViagens = data['content'] as any[];
     }, error => {
-      this.spinner.hide();
       console.error(error);
-    }, () => this.spinner.hide());
+    });
   }
 
   toggleExpandRow(row) {

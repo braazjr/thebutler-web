@@ -7,7 +7,6 @@ import { IOption } from 'ng-select';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
 import { SharedService } from 'src/app/shared/shared.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 import Swal from 'sweetalert2';
 import * as lodash from 'lodash';
@@ -58,7 +57,6 @@ export class ApartamentoListaComponent implements OnInit {
     private apartamentoService: ApartamentoService,
     private toastService: ToastService,
     private sharedService: SharedService,
-    private spinner: NgxSpinnerService
   ) {
     this.listaData = {
       size: 10,
@@ -91,7 +89,6 @@ export class ApartamentoListaComponent implements OnInit {
 
   getApartamentos() {
     const listaData = lodash.clone(this.listaData);
-    this.spinner.show();
     if (listaData.comMoradores == '0')
       delete listaData.comMoradores;
 
@@ -103,8 +100,7 @@ export class ApartamentoListaComponent implements OnInit {
       this.listaApartamentos = data['content'] as any[];
     }, error => {
       console.error(error);
-      this.spinner.hide();
-    }, () => this.spinner.hide());
+    });
   }
 
   excluir(apartamento: Apartamento) {
@@ -117,11 +113,9 @@ export class ApartamentoListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.spinner.show();
         this.defaultService.excluir('apartamentos', apartamento.id).subscribe(() => {
           this.toastService.addToast('success', 'Exclusão de Apartamento!', `Apartamento excluído com sucesso!`);
           this.setPage({ offset: 0 });
-          this.spinner.hide();
         });
       }
     })

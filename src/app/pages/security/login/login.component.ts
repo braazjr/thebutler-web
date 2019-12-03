@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +20,6 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -33,7 +31,6 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
     this.authService.login(this.form.login, this.form.senha)
       .subscribe(() => {
         console.info('-- login efetuado com sucesso!');
@@ -43,9 +40,7 @@ export class LoginComponent implements OnInit {
         } else {
           console.error(this.alerta = error);
         }
-        this.spinner.hide();
       }, () => {
-        this.spinner.hide();
         this.router.navigate(['/dashboard/home']);
       });
   }

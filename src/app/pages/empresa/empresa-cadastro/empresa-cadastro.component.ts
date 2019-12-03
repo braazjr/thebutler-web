@@ -4,11 +4,8 @@ import { Empresa } from '../../../models/empresa-model';
 import { DefaultService } from '../../../services/default.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastService } from '../../../services/toast.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { SharedService } from 'src/app/shared/shared.service';
 import { EmpresaConfig } from 'src/app/models/empresa-config';
-
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-empresa-cadastro',
@@ -37,7 +34,6 @@ export class EmpresaCadastroComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private toastService: ToastService,
     private sharedService: SharedService,
-    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -74,7 +70,6 @@ export class EmpresaCadastroComponent implements OnInit {
   }
 
   getById(id) {
-    this.spinner.show();
     this.defaultService.getById('empresas', id).subscribe(response => {
       this.empresa = response as Empresa;
 
@@ -82,7 +77,6 @@ export class EmpresaCadastroComponent implements OnInit {
         this.empresa.empresaConfig = new EmpresaConfig();
 
       this.formulario.patchValue(this.empresa);
-      this.spinner.hide();
     })
   }
 
@@ -93,14 +87,12 @@ export class EmpresaCadastroComponent implements OnInit {
   }
 
   buscaCep(cep) {
-    this.spinner.show();
     this.defaultService.getDadosCep(cep).subscribe(response => {
       this.formulario.get('rua').setValue(response['logradouro']);
       this.formulario.get('bairro').setValue(response['bairro']);
       this.formulario.get('cidade').setValue(response['localidade']);
       this.formulario.get('estado').setValue(response['uf']);
       this.formulario.get('complemento').setValue(response['complemento']);
-      this.spinner.hide();
     })
   }
 
@@ -116,30 +108,26 @@ export class EmpresaCadastroComponent implements OnInit {
       this.empresa = this.formulario.getRawValue();
       this.empresa.usuario = this.sharedService.getUsuarioLogged();
 
-      this.spinner.show();
       if (!this.empresa.id) {
         this.defaultService.salvar('empresas', this.empresa).subscribe(response => {
           this.empresa = response as Empresa;
           this.toastService.addToast('success', 'Cadastro Empresa!', `Empresa ${this.empresa.nomeFantasia} salva com sucesso!`);
         }, error => {
-          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Empresa!', element.mensagemUsuario);
           });
-        }, () => this.spinner.hide())
+        })
       } else {
         this.defaultService.atualizar('empresas', this.empresa).subscribe(response => {
           this.empresa = response as Empresa;
           this.toastService.addToast('success', 'Atualização Empresa!', `Empresa ${this.empresa.nomeFantasia} atualizada com sucesso!`);
-          this.spinner.hide();
         }, error => {
-          this.spinner.hide();
           console.error(error);
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Empresa!', element.mensagemUsuario);
           });
-        }, () => this.spinner.hide());
+        });
       }
     }
   }

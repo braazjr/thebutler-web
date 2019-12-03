@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario-model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastService } from 'src/app/services/toast.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
@@ -20,7 +19,6 @@ export class ModalAlterarSenhaComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private spinner: NgxSpinnerService,
     private usuarioService: UsuarioService,
     private toastService: ToastService
   ) { }
@@ -49,7 +47,6 @@ export class ModalAlterarSenhaComponent implements OnInit {
   }
 
   redefinirSenha(modal) {
-    this.spinner.show();
     this.usuarioService.redefinirSenha(
       this.usuario.id,
       this.usuario.senha,
@@ -58,14 +55,12 @@ export class ModalAlterarSenhaComponent implements OnInit {
       this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
       this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
     }, error => {
-      this.spinner.hide();
       console.error(error);
       error.error.forEach(element => {
         this.toastService.addToast('error', 'Redefinição de senha!', element.mensagemUsuario);
       });
     }, () => {
       modal.hide();
-      this.spinner.hide();
     });
   }
 
