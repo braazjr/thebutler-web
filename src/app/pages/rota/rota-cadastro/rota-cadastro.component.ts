@@ -41,7 +41,6 @@ export class RotaCadastroComponent implements OnInit {
     this.defaultService.getById('rotas', this.rota.id).subscribe(response => {
       this.rota = response as Rota;
     }, error => {
-      this.spinner.hide();
       console.error(error);
     })
   }
