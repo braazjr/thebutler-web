@@ -31,7 +31,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   listaTipoMoradores: Array<IOption> = [];
   listaTipoDocumentos: Array<IOption> = [];
-  isCollapsed: boolean = true;
+  isCollapsed: boolean = false;
 
   formulario: FormGroup;
   formularioMorador: FormGroup;
@@ -89,8 +89,10 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         documento: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
         foto64: [],
-        fotoUrl: []
-      })
+        fotoUrl: [],
+        observacao: ['', [Validators.maxLength(255)]]
+      }),
+      observacao: ['', [Validators.maxLength(255)]]
     });
 
     this.formularioMorador = this.formBuilder.group({
@@ -103,7 +105,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       documento: ['', [Validators.required]],
       email: [''],
       foto64: [],
-      fotoUrl: []
+      fotoUrl: [],
+      observacao: ['', [Validators.maxLength(255)]]
     });
 
     this.getTipoMorador();
@@ -234,6 +237,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       let apartamento: Apartamento;
       apartamento = lodash.clone(this.apartamento);
       apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value;
+      apartamento.observacao = this.formulario.get('observacao').value;
       apartamento.usuario = this.sharedService.getUsuarioLogged();
       apartamento.moradores = [];
       apartamento.moradores = this.listaMoradores;
