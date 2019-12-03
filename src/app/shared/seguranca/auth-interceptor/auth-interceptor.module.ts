@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if (!this.isOAuthUrl(req) && this.authService.isAccessTokenInvalido()) {
       console.info('-- requisição com access token inválido. Obtendo novo token...');
 
-      this.authService.obterNovoAccessToken()
+      return this.authService.obterNovoAccessToken()
         .pipe(
           switchMap(() => {
             console.info('-- novo token gerado. seguindo com requisição...');
@@ -28,6 +28,12 @@ export class AuthInterceptor implements HttpInterceptor {
             }));
           })
         )
+    } else if (!this.isOAuthUrl(req)) {
+      return next.handle(req.clone({
+        setHeaders: {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+      }));
     } else {
       return next.handle(req);
     }

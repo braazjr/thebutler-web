@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -10,11 +10,7 @@ export class ViagemService {
   ) { }
 
   getViagens(pageable) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.get(`${environment.urlSpring}/viagens`, { headers: hds, withCredentials: true, params: pageable });
+    return this.http.get(`${environment.urlSpring}/viagens`, { withCredentials: true, params: pageable });
   }
 
 }

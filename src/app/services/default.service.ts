@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -8,43 +8,23 @@ export class DefaultService {
   constructor(private http: HttpClient) { }
 
   get(model) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.get(`${environment.urlSpring}/${model}/`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/${model}/`, { withCredentials: true });
   }
 
   getById(model, id) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.get(`${environment.urlSpring}/${model}/${id}`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/${model}/${id}`, { withCredentials: true });
   }
 
   salvar(model, entity) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.post(`${environment.urlSpring}/${model}`, entity, { headers: hds, withCredentials: true });
+    return this.http.post(`${environment.urlSpring}/${model}`, entity, { withCredentials: true });
   }
 
   atualizar(model, entity) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.put(`${environment.urlSpring}/${model}/${entity.id}`, entity, { headers: hds, withCredentials: true });
+    return this.http.put(`${environment.urlSpring}/${model}/${entity.id}`, entity, { withCredentials: true });
   }
 
   excluir(model, id) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.delete(`${environment.urlSpring}/${model}/${id}`, { headers: hds, withCredentials: true });
+    return this.http.delete(`${environment.urlSpring}/${model}/${id}`, { withCredentials: true });
   }
 
   getDadosCep(cep) {
@@ -52,19 +32,11 @@ export class DefaultService {
   }
 
   getDashboard(dash) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { withCredentials: true });
   }
 
   getUniqueInteger(dash) {
-    const hds = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    });
-
-    return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { headers: hds, withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { withCredentials: true });
   }
 
 }

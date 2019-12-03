@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import { SharedService } from 'src/app/shared/shared.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +10,7 @@ export class SecurityGuard implements CanActivate {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private sharedService: SharedService
+    private router: Router
   ) { }
 
   canActivate(
@@ -30,16 +28,11 @@ export class SecurityGuard implements CanActivate {
           this.router.navigate(['/auth/login']);
           return false;
         }
+        console.info('-- novo token gerado. seguindo com a navegação...');
 
         return true;
       });
     }
-    //  else if (next.data.roles && !this.authService.temQualquerPermissao(next.data.roles)) {
-    //     this.router.navigate(['/nao-autorizado']);
-    //     return false;
-    // }
-
-    // this.authService.atualizaUsuario();
 
     return true;
   }

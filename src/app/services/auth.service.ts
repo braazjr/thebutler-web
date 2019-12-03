@@ -17,7 +17,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router  ) { }
+    private router: Router) { }
 
   login(usuario: String, senha: String): Observable<void> {
     const hds = new HttpHeaders({
@@ -33,12 +33,8 @@ export class AuthService {
         this.armazenarToken(response['access_token']);
       })
       .catch(response => {
-        if (response.status === 400) {
-          const responseJson = response.json();
-
-          if (responseJson.error === 'invalid_grant') {
-            return Promise.reject('Usuário ou senha inválida!');
-          }
+        if (response.status === 400 && response.error === 'invalid_grant') {
+          return Promise.reject('Usuário ou senha inválida!');
         }
 
         return Promise.reject(response);
