@@ -75,6 +75,9 @@ export class BlocoCadastroComponent implements OnInit {
     if (form.invalid) {
       this.isSubmit = true;
       return;
+    } else if (!this.bloco.nome && !this.bloco.numero) {
+      this.isSubmit = true;
+      this.toastService.addToast('error', 'Cadastro Bloco!', 'O nome ou número deve ser preenchido!');
     } else {
       this.bloco.usuario = this.sharedService.getUsuarioLogged();
       this.bloco.condominio.id = Number(this.condominioId);
@@ -85,6 +88,7 @@ export class BlocoCadastroComponent implements OnInit {
           this.bloco = response as Bloco;
           this.toastService.addToast('success', 'Cadastro Bloco!', `Bloco ${this.bloco.nome} salvo com sucesso!`);
         }, error => {
+          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Cadastro Bloco!', element.mensagemUsuario);
@@ -95,6 +99,7 @@ export class BlocoCadastroComponent implements OnInit {
           this.bloco = response as Bloco;
           this.toastService.addToast('success', 'Atualização Bloco!', `Bloco ${this.bloco.nome} atualizado com sucesso!`);
         }, error => {
+          this.spinner.hide();
           console.error(error)
           error.error.forEach(element => {
             this.toastService.addToast('error', 'Atualização Bloco!', element.mensagemUsuario);
