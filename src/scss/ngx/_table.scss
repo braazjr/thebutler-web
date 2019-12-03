@@ -36,7 +36,7 @@ ngx-datatable.data-table {
     }
     &.sortable {
       &:before, &:after {
-        font-family: 'IcoFont' !important;
+        // font-family: 'IcoFont' !important;
         position: absolute;
         top: 10px;
         color: #ccc;
@@ -62,11 +62,11 @@ ngx-datatable.data-table {
 .data-table {
   datatable-header-cell.sortable {
     &:after {
-      content: "\eb53";
+      // content: "\eb53";
       right: 10px;
     }
     &:before {
-      content: "\eb56";
+      // content: "\eb56";
       right: 15px;
     }
     &.sort-active {
@@ -126,35 +126,35 @@ ngx-datatable.data-table {
   }
 }
 
-.datatable-ti-right:before {
-  content: "\eb27";
-  font-family: 'icofont';
-  font-style: normal;
-}
+// .datatable-ti-right:before {
+//   content: "\eb27";
+//   font-family: 'icofont';
+//   font-style: normal;
+// }
 
-.datatable-ti-skip:before {
-  content: "\eb3a";
-  font-family: 'icofont';
-  font-style: normal;
-}
+// .datatable-ti-skip:before {
+//   content: "\eb3a";
+//   font-family: 'icofont';
+//   font-style: normal;
+// }
 
-.datatable-ti-left:before {
-  content: "\eb26";
-  font-family: 'icofont';
-  font-style: normal;
-}
+// .datatable-ti-left:before {
+//   content: "\eb26";
+//   font-family: 'icofont';
+//   font-style: normal;
+// }
 
-.datatable-ti-down:before {
-  content: "\eb28";
-  font-family: 'icofont';
-  font-style: normal;
-}
+// .datatable-ti-down:before {
+//   content: "\eb28";
+//   font-family: 'icofont';
+//   font-style: normal;
+// }
 
-.datatable-ti-prev:before {
-  content: "\eb39";
-  font-family: 'icofont';
-  font-style: normal;
-}
+// .datatable-ti-prev:before {
+//   content: "\eb39";
+//   font-family: 'icofont';
+//   font-style: normal;
+// }
 
 .dt-desc {
   th, td {
@@ -224,19 +224,19 @@ ngx-datatable.data-table {
 }
 
 .full-data-table {
-  .glyphicon {
-    font-family: IcoFont;
-    position: absolute;
-    right: 14px;
-    font-size: 20px;
-    top: 9px;
-    &.glyphicon-triangle-bottom:before {
-      content: "\eb53";
-    }
-    &.glyphicon-triangle-top:before {
-      content: "\eb56";
-    }
-  }
+  // .glyphicon {
+  //   font-family: IcoFont;
+  //   position: absolute;
+  //   right: 14px;
+  //   font-size: 20px;
+  //   top: 9px;
+  //   &.glyphicon-triangle-bottom:before {
+  //     content: "\eb53";
+  //   }
+  //   &.glyphicon-triangle-top:before {
+  //     content: "\eb56";
+  //   }
+  // }
   th {
     position: relative;
   }

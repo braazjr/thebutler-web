@@ -13,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!this.isOAuthUrl(req) && this.authService.isAccessTokenInvalido()) {
+    if (!this.isPublic(req) && this.authService.isAccessTokenInvalido()) {
       console.info('-- requisição com access token inválido. Obtendo novo token...');
 
       return this.authService.obterNovoAccessToken()
@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
             }));
           })
         )
-    } else if (!this.isOAuthUrl(req)) {
+    } else if (!this.isPublic(req)) {
       return next.handle(req.clone({
         setHeaders: {
           "Authorization": `Bearer ${localStorage.getItem('token')}`
@@ -39,8 +39,8 @@ export class AuthInterceptor implements HttpInterceptor {
     }
   }
 
-  isOAuthUrl(req) {
-    return req.url.split('/')[3] == 'oauth';
+  isPublic(req) {
+    return req.url.split('/')[3] == 'oauth' || req.url.startsWith('https://viacep.com.br');
   }
 }
 
