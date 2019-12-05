@@ -15,7 +15,7 @@
                 <i class="fa fa-list"></i>
               </button>
               <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-                (click)="salvar()" [disabled]="formulario.invalid">
+                (click)="salvar()" [disabled]="formulario.invalid" *ngIf="temPacoteParaCadastro()">
                 <i class="fa fa-save"></i>
               </button>
             </div>
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <form autocomplete="off" [formGroup]="formulario">
+      <form autocomplete="off" [formGroup]="formulario" *ngIf="temPacoteParaCadastro()">
         <div class="form-group row">
           <div class="col-sm-6 col-md-4">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('blocoId')}">Bloco</label>
@@ -45,6 +45,10 @@
           </div>
         </div>
       </form>
+
+      <app-alert [type]="'danger'" *ngIf="!temPacoteParaCadastro()" class="m-10">
+        Seu pacote de cadastros estourou! Entre em contato com o administrador do The Butler!
+      </app-alert>
     </app-card>
   </div>
 </div>

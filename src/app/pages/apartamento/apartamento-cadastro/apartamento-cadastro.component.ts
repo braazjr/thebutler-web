@@ -113,4 +113,18 @@ export class ApartamentoCadastroComponent implements OnInit {
       }
     }
   }
+
+  temPacoteParaCadastro() {
+    if (this.sharedService.isAdmin()) {
+      return true;
+    } else if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig) {
+      const totalElements = localStorage.getItem('apartamento.totalElements');
+
+      if (totalElements) {
+        return this.sharedService.getUsuarioLogged().empresa.empresaConfig.qtyApartamentos > Number(totalElements);
+      } else {
+        this.router.navigate([`/apartamento`]);
+      }
+    }
+  }
 }

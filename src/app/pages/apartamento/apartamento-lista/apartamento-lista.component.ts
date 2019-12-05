@@ -98,6 +98,8 @@ export class ApartamentoListaComponent implements OnInit {
       this.listaData.totalElements = data['totalElements'];
       this.listaData.totalPages = data['totalPages'];
       this.listaApartamentos = data['content'] as any[];
+
+      localStorage.setItem('apartamento.totalElements', String(this.listaData.totalElements));
     }, error => {
       console.error(error);
     });
@@ -133,14 +135,6 @@ export class ApartamentoListaComponent implements OnInit {
       this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
       this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
     }, error => console.error(error));
-  }
-
-  temPacoteParaCadastro() {
-    if (this.sharedService.isAdmin()) {
-      return true;
-    } else if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig) {
-      return this.sharedService.getUsuarioLogged().empresa.empresaConfig.qtyApartamentos > this.listaData.totalElements;
-    }
   }
 
   limparPesquisa() {
