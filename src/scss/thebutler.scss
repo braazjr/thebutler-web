@@ -31,3 +31,13 @@ ng-select.is-invalid, ng-select.ng-invalid {
         color: $header-dark-text-color;
     }
 }
+
+.swal2-container .swal2-modal {
+    border: 2px solid $header-dark-background !important;
+
+    .swal2-styled.swal2-confirm {
+        border-left-color: $header-dark-background !important;
+        border-right-color: $header-dark-background !important;
+        background-color: $header-dark-background !important;
+    }
+}
