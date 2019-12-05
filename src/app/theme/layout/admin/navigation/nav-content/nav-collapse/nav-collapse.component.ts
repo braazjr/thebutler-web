@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {NavigationItem} from '../../navigation';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {GradientConfig} from '../../../../../../app-config';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-nav-collapse',
@@ -25,7 +26,9 @@ export class NavCollapseComponent implements OnInit {
   public gradientConfig: any;
   public themeLayout: string;
 
-  constructor() {
+  constructor(
+    private sharedService: SharedService
+  ) {
     this.visible = false;
     this.gradientConfig = GradientConfig.config;
     this.themeLayout = this.gradientConfig.layout;
@@ -66,4 +69,7 @@ export class NavCollapseComponent implements OnInit {
     parent.classList.toggle('pcoded-trigger');
   }
 
+  filterForRoles(children) {
+    return children.filter(child => !child.profiles || (child.profiles.length > 0 && this.sharedService.checkRole(child.profiles)));
+  }
 }

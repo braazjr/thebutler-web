@@ -66,6 +66,15 @@ const routes: Routes = [
         loadChildren: () => import('./pages/security/login/login.module').then(module => module.LoginModule)
       }
     ]
+  },
+  {
+    path: '',
+    children: [
+      {
+        path: 'access-denied',
+        loadChildren: () => import('./pages/access-denied/access-denied.module').then(module => module.AccessDeniedModule)
+      }
+    ]
   }
 ];
 

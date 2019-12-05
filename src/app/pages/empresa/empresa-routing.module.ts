@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EmpresaCadastroComponent } from './empresa-cadastro/empresa-cadastro.component';
 import { EmpresaListaComponent } from './empresa-lista/empresa-lista.component';
+import { EmpresaGuard } from './empresa.guard';
 
 const routes: Routes = [
   {
@@ -9,7 +10,9 @@ const routes: Routes = [
     data: {
       title: 'Empresas',
       status: false,
+      profiles: ['ADMIN']
     },
+    canActivate: [EmpresaGuard],
     children: [
       {
         path: 'cadastro',

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 export interface NavigationItem {
   id: string;
@@ -19,6 +19,7 @@ export interface NavigationItem {
     type?: string;
   };
   children?: Navigation[];
+  profiles?: string[];
 }
 
 export interface Navigation extends NavigationItem {
@@ -51,6 +52,7 @@ const NavigationItems = [
             title: 'Empresas',
             type: 'collapse',
             breadcrumbs: false,
+            profiles: ['ADMIN'],
             children: [
               {
                 id: 'empresa-lista',
@@ -224,6 +226,7 @@ const NavigationItems = [
 
 @Injectable()
 export class NavigationItem {
+
   public get() {
     return NavigationItems;
   }
