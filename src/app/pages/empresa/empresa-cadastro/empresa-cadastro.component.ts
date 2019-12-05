@@ -60,6 +60,7 @@ export class EmpresaCadastroComponent implements OnInit {
       rua: [{ value: '', disabled: true }, []],
       numero: ['', [Validators.min(1)]],
       empresaConfig: this.formBuilder.group({
+        id: ['', []],
         qtyApartamentos: ['', [Validators.required]]
       })
     });
