@@ -71,14 +71,15 @@ export class EmpresaCadastroComponent implements OnInit {
   }
 
   getById(id) {
-    this.defaultService.getById('empresas', id).subscribe(response => {
-      this.empresa = response as Empresa;
+    this.defaultService.getById('empresas', id)
+      .subscribe(response => {
+        this.empresa = response as Empresa;
 
-      if (!this.empresa.empresaConfig)
-        this.empresa.empresaConfig = new EmpresaConfig();
+        if (!this.empresa.empresaConfig)
+          this.empresa.empresaConfig = new EmpresaConfig();
 
-      this.formulario.patchValue(this.empresa);
-    })
+        this.formulario.patchValue(this.empresa);
+      });
   }
 
   validaCep(value) {
@@ -88,13 +89,14 @@ export class EmpresaCadastroComponent implements OnInit {
   }
 
   buscaCep(cep) {
-    this.defaultService.getDadosCep(cep).subscribe(response => {
-      this.formulario.get('rua').setValue(response['logradouro']);
-      this.formulario.get('bairro').setValue(response['bairro']);
-      this.formulario.get('cidade').setValue(response['localidade']);
-      this.formulario.get('estado').setValue(response['uf']);
-      this.formulario.get('complemento').setValue(response['complemento']);
-    })
+    this.defaultService.getDadosCep(cep)
+      .subscribe(response => {
+        this.formulario.get('rua').setValue(response['logradouro']);
+        this.formulario.get('bairro').setValue(response['bairro']);
+        this.formulario.get('cidade').setValue(response['localidade']);
+        this.formulario.get('estado').setValue(response['uf']);
+        this.formulario.get('complemento').setValue(response['complemento']);
+      });
   }
 
   isValid(field) {
@@ -110,25 +112,17 @@ export class EmpresaCadastroComponent implements OnInit {
       this.empresa.usuario = this.sharedService.getUsuarioLogged();
 
       if (!this.empresa.id) {
-        this.defaultService.salvar('empresas', this.empresa).subscribe(response => {
-          this.empresa = response as Empresa;
-          this.toastService.addToast('success', 'Cadastro Empresa!', `Empresa ${this.empresa.nomeFantasia} salva com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Cadastro Empresa!', element.mensagemUsuario);
+        this.defaultService.salvar('empresas', this.empresa)
+          .subscribe(response => {
+            this.empresa = response as Empresa;
+            this.toastService.addToast('success', 'Cadastro Empresa!', `Empresa ${this.empresa.nomeFantasia} salva com sucesso!`);
           });
-        })
       } else {
-        this.defaultService.atualizar('empresas', this.empresa).subscribe(response => {
-          this.empresa = response as Empresa;
-          this.toastService.addToast('success', 'Atualização Empresa!', `Empresa ${this.empresa.nomeFantasia} atualizada com sucesso!`);
-        }, error => {
-          console.error(error);
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Atualização Empresa!', element.mensagemUsuario);
+        this.defaultService.atualizar('empresas', this.empresa)
+          .subscribe(response => {
+            this.empresa = response as Empresa;
+            this.toastService.addToast('success', 'Atualização Empresa!', `Empresa ${this.empresa.nomeFantasia} atualizada com sucesso!`);
           });
-        });
       }
     }
   }

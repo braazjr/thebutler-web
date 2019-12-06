@@ -48,20 +48,20 @@ export class BlocoCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.defaultService.getById('blocos', this.bloco.id).subscribe(response => {
-      this.bloco = response as Bloco;
-      this.condominioId = this.bloco.condominio.id.toString();
-      this.carregarCondominios();
-    }, error => {
-      console.error(error);
-    })
+    this.defaultService.getById('blocos', this.bloco.id)
+      .subscribe(response => {
+        this.bloco = response as Bloco;
+        this.condominioId = this.bloco.condominio.id.toString();
+        this.carregarCondominios();
+      });
   }
 
   carregarCondominios() {
-    this.defaultService.get('condominios').subscribe(response => {
-      this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
-      this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('condominios')
+      .subscribe(response => {
+        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   salvar(form) {
@@ -76,25 +76,17 @@ export class BlocoCadastroComponent implements OnInit {
       this.bloco.condominio.id = Number(this.condominioId);
 
       if (!this.bloco.id) {
-        this.defaultService.salvar('blocos', this.bloco).subscribe(response => {
-          this.bloco = response as Bloco;
-          this.toastService.addToast('success', 'Cadastro Bloco!', `Bloco ${this.bloco.nome} salvo com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Cadastro Bloco!', element.mensagemUsuario);
+        this.defaultService.salvar('blocos', this.bloco)
+          .subscribe(response => {
+            this.bloco = response as Bloco;
+            this.toastService.addToast('success', 'Cadastro Bloco!', `Bloco ${this.bloco.nome} salvo com sucesso!`);
           });
-        })
       } else {
-        this.defaultService.atualizar('blocos', this.bloco).subscribe(response => {
-          this.bloco = response as Bloco;
-          this.toastService.addToast('success', 'Atualização Bloco!', `Bloco ${this.bloco.nome} atualizado com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Atualização Bloco!', element.mensagemUsuario);
+        this.defaultService.atualizar('blocos', this.bloco)
+          .subscribe(response => {
+            this.bloco = response as Bloco;
+            this.toastService.addToast('success', 'Atualização Bloco!', `Bloco ${this.bloco.nome} atualizado com sucesso!`);
           });
-        })
       }
     }
   }

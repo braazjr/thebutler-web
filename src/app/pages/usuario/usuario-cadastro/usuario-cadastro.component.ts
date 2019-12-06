@@ -26,7 +26,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     private route: ActivatedRoute,
     private defaultService: DefaultService,
     private cdr: ChangeDetectorRef,
-    private toastService: ToastService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -46,41 +46,38 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
-    this.defaultService.getById('usuarios', this.usuario.id).subscribe(response => {
-      this.usuario = response as Usuario;
-      if (this.usuario.empresa) {
-        this.empresaId = this.usuario.empresa.id.toString();
-      }
+    this.defaultService.getById('usuarios', this.usuario.id)
+      .subscribe(response => {
+        this.usuario = response as Usuario;
+        if (this.usuario.empresa) {
+          this.empresaId = this.usuario.empresa.id.toString();
+        }
 
-      this.carregarPermissoes();
-      this.carregarEmpresas();
-    }, error => {
-      console.error(error);
-    });
+        this.carregarPermissoes();
+        this.carregarEmpresas();
+      });
   }
 
   carregarPermissoes() {
-    this.defaultService.get('permissoes').subscribe(response => {
-      this.permissoes = response as any[];
-      this.listaPermissoes = (response as any[]).map(perm => {
-        if (this.usuario.id && this.usuario.permissoes.map(permissao => permissao.codigo).includes(perm.codigo)) {
-          this.permissaoIds.push(perm.codigo.toString());
-        }
+    this.defaultService.get('permissoes')
+      .subscribe(response => {
+        this.permissoes = response as any[];
+        this.listaPermissoes = (response as any[]).map(perm => {
+          if (this.usuario.id && this.usuario.permissoes.map(permissao => permissao.codigo).includes(perm.codigo)) {
+            this.permissaoIds.push(perm.codigo.toString());
+          }
 
-        return ({ value: perm.codigo.toString(), label: perm.descricao });
+          return ({ value: perm.codigo.toString(), label: perm.descricao });
+        });
       });
-    }, error => {
-      console.error(error);
-    });
   }
 
   carregarEmpresas() {
-    this.defaultService.get('empresas').subscribe(response => {
-      this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia, disabled: false }));
-      this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => {
-      console.error(error);
-    });
+    this.defaultService.get('empresas')
+      .subscribe(response => {
+        this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia, disabled: false }));
+        this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   salvar(form) {
@@ -93,25 +90,17 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     this.usuario.empresa.id = Number(this.empresaId);
 
     if (!this.usuario.id) {
-      this.defaultService.salvar('usuarios', this.usuario).subscribe(response => {
-        this.usuario = response as Usuario;
-        this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.nome} salvo com sucesso!`);
-      }, error => {
-        console.error(error);
-        error.error.forEach(element => {
-          this.toastService.addToast('error', 'Cadastro Usuário!', element.mensagemUsuario);
+      this.defaultService.salvar('usuarios', this.usuario)
+        .subscribe(response => {
+          this.usuario = response as Usuario;
+          this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.nome} salvo com sucesso!`);
         });
-      });
     } else {
-      this.defaultService.atualizar('usuarios', this.usuario).subscribe(response => {
-        this.usuario = response as Usuario;
-        this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.nome} atualizado com sucesso!`);
-      }, error => {
-        console.error(error);
-        error.error.forEach(element => {
-          this.toastService.addToast('error', 'Atualização Usuário!', element.mensagemUsuario);
+      this.defaultService.atualizar('usuarios', this.usuario)
+        .subscribe(response => {
+          this.usuario = response as Usuario;
+          this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.nome} atualizado com sucesso!`);
         });
-      });
     }
   }
 }

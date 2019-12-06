@@ -48,11 +48,12 @@ export class CondominioCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.defaultService.getById('condominios', this.condominio.id).subscribe(response => {
-      this.condominio = response as Condominio;
-      this.empresaId = this.condominio.empresa.id.toString();
-      this.carregarEmpresas();
-    })
+    this.defaultService.getById('condominios', this.condominio.id)
+      .subscribe(response => {
+        this.condominio = response as Condominio;
+        this.empresaId = this.condominio.empresa.id.toString();
+        this.carregarEmpresas();
+      });
   }
 
   validaCep(value) {
@@ -62,20 +63,22 @@ export class CondominioCadastroComponent implements OnInit {
   }
 
   buscaCep(cep) {
-    this.defaultService.getDadosCep(cep).subscribe(response => {
-      this.condominio.rua = response['logradouro'];
-      this.condominio.bairro = response['bairro'];
-      this.condominio.cidade = response['localidade'];
-      this.condominio.estado = response['uf'];
-      this.condominio.complemento = response['complemento'];
-    })
+    this.defaultService.getDadosCep(cep)
+      .subscribe(response => {
+        this.condominio.rua = response['logradouro'];
+        this.condominio.bairro = response['bairro'];
+        this.condominio.cidade = response['localidade'];
+        this.condominio.estado = response['uf'];
+        this.condominio.complemento = response['complemento'];
+      });
   }
 
   carregarEmpresas() {
-    this.defaultService.get('empresas').subscribe(response => {
-      this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia }));
-      this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('empresas')
+      .subscribe(response => {
+        this.listaEmpresas = (response as Empresa[]).map(emp => ({ value: emp.id.toString(), label: emp.nomeFantasia }));
+        this.listaEmpresas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   salvar(form) {
@@ -87,25 +90,17 @@ export class CondominioCadastroComponent implements OnInit {
       this.condominio.empresa.id = Number(this.empresaId);
 
       if (!this.condominio.id) {
-        this.defaultService.salvar('condominios', this.condominio).subscribe(response => {
-          this.condominio = response as Condominio;
-          this.toastService.addToast('success', 'Cadastro Condomínio!', `Condomínio ${this.condominio.nome} salvo com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Cadastro Condomínio!', element.mensagemUsuario);
+        this.defaultService.salvar('condominios', this.condominio)
+          .subscribe(response => {
+            this.condominio = response as Condominio;
+            this.toastService.addToast('success', 'Cadastro Condomínio!', `Condomínio ${this.condominio.nome} salvo com sucesso!`);
           });
-        })
       } else {
-        this.defaultService.atualizar('condominios', this.condominio).subscribe(response => {
-          this.condominio = response as Condominio;
-          this.toastService.addToast('success', 'Atualização Condomínio!', `Condomínio ${this.condominio.nome} atualizado com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Atualização Condomínio!', element.mensagemUsuario);
+        this.defaultService.atualizar('condominios', this.condominio)
+          .subscribe(response => {
+            this.condominio = response as Condominio;
+            this.toastService.addToast('success', 'Atualização Condomínio!', `Condomínio ${this.condominio.nome} atualizado com sucesso!`);
           });
-        })
       }
     }
   }

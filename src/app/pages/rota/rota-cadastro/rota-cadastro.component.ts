@@ -38,11 +38,10 @@ export class RotaCadastroComponent implements OnInit {
   }
 
   getById() {
-    this.defaultService.getById('rotas', this.rota.id).subscribe(response => {
-      this.rota = response as Rota;
-    }, error => {
-      console.error(error);
-    })
+    this.defaultService.getById('rotas', this.rota.id)
+      .subscribe(response => {
+        this.rota = response as Rota;
+      });
   }
 
   salvar(form) {
@@ -53,25 +52,17 @@ export class RotaCadastroComponent implements OnInit {
       this.rota.usuario = this.sharedService.getUsuarioLogged();
 
       if (!this.rota.id) {
-        this.defaultService.salvar('rotas', this.rota).subscribe(response => {
-          this.rota = response as Rota;
-          this.toastService.addToast('success', 'Cadastro Rota!', `Rota ${this.rota.nome} salvo com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Cadastro Rota!', element.mensagemUsuario);
+        this.defaultService.salvar('rotas', this.rota)
+          .subscribe(response => {
+            this.rota = response as Rota;
+            this.toastService.addToast('success', 'Cadastro Rota!', `Rota ${this.rota.nome} salvo com sucesso!`);
           });
-        })
       } else {
-        this.defaultService.atualizar('rotas', this.rota).subscribe(response => {
-          this.rota = response as Rota;
-          this.toastService.addToast('success', 'Atualização Rota!', `Rota ${this.rota.nome} atualizado com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Atualização Rota!', element.mensagemUsuario);
+        this.defaultService.atualizar('rotas', this.rota)
+          .subscribe(response => {
+            this.rota = response as Rota;
+            this.toastService.addToast('success', 'Atualização Rota!', `Rota ${this.rota.nome} atualizado com sucesso!`);
           });
-        })
       }
     }
   }

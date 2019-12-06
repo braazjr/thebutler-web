@@ -116,15 +116,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
-    /*this.spinner.show()*/;
-    this.defaultService.getById('apartamentos', this.apartamento.id).subscribe(response => {
-      this.apartamento = response as Apartamento;
-      this.formulario.patchValue(response);
-      this.carregaFicha();
-    }, (error) => {
-      console.error(error);
-      /*this.spinner.hide()*/;
-    });
+    this.defaultService.getById('apartamentos', this.apartamento.id)
+      .subscribe(response => {
+        this.apartamento = response as Apartamento;
+        this.formulario.patchValue(response);
+        this.carregaFicha();
+      });
   }
 
   carregaFicha() {
@@ -133,21 +130,22 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.formulario.get('responsavel').patchValue(responsavel);
       this.listaMoradores = this.apartamento.moradores.filter((morador) => morador.id != responsavel.id);
     }
-    /*this.spinner.hide()*/;
   }
 
   getTipoMorador() {
-    this.tipoMoradorService.getTiposMorador().subscribe(response => {
-      this.listaTipoMoradores = (response as any[]).map(tipo => ({ value: tipo.toString(), label: tipo.toString() }));
-      this.listaTipoMoradores.unshift({ value: '0', label: 'Selecione uma opção' })
-    }, (error) => console.error(error));
+    this.tipoMoradorService.getTiposMorador()
+      .subscribe(response => {
+        this.listaTipoMoradores = (response as any[]).map(tipo => ({ value: tipo.toString(), label: tipo.toString() }));
+        this.listaTipoMoradores.unshift({ value: '0', label: 'Selecione uma opção' })
+      });
   }
 
   getTipoDocumento() {
-    this.tipoDocumentoService.getTiposDocumento().subscribe(response => {
-      this.listaTipoDocumentos = (response as any[]).map(tipo => ({ value: tipo.toString(), label: tipo.toString() }));
-      this.listaTipoDocumentos.unshift({ value: '0', label: 'Selecione uma opção' })
-    }, (error) => console.error(error));
+    this.tipoDocumentoService.getTiposDocumento()
+      .subscribe(response => {
+        this.listaTipoDocumentos = (response as any[]).map(tipo => ({ value: tipo.toString(), label: tipo.toString() }));
+        this.listaTipoDocumentos.unshift({ value: '0', label: 'Selecione uma opção' })
+      });
   }
 
   carregaEditarMorador(morador) {
@@ -244,25 +242,15 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         morador.usuario = this.sharedService.getUsuarioLogged();
       });
 
-      /*this.spinner.show()*/;
-      this.defaultService.atualizar('apartamentos', apartamento).subscribe(() => {
-        this.getById();
-        this.toastService.addToast(
-          'success',
-          `Atualização da ficha do apartamento ${this.apartamento.numero}`,
-          `Ficha atualizada com sucesso!`
-        );
-      }, error => {
-        /*this.spinner.hide()*/;
-        console.error(error);
-        error.error.forEach(element => {
+      this.defaultService.atualizar('apartamentos', apartamento)
+        .subscribe(() => {
+          this.getById();
           this.toastService.addToast(
-            'error',
+            'success',
             `Atualização da ficha do apartamento ${this.apartamento.numero}`,
-            element.mensagemUsuario
+            `Ficha atualizada com sucesso!`
           );
         });
-      });
     }
   }
 
@@ -272,20 +260,10 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getDocumentosPorApartamento() {
-    /*this.spinner.show()*/;
-    this.documentoService.getDocumentosPorApartamento(this.apartamento.id).subscribe(response => {
-      this.documentos = response as any[];
-    }, error => {
-      /*this.spinner.hide()*/;
-      console.error(error);
-      error.error.forEach(element => {
-        this.toastService.addToast(
-          'error',
-          `Captura dos documentos do apartamento ${this.apartamento.numero}`,
-          element.mensagemUsuario
-        );
+    this.documentoService.getDocumentosPorApartamento(this.apartamento.id)
+      .subscribe(response => {
+        this.documentos = response as any[];
       });
-    });
   }
 
   excluirDocumento(documento) {
@@ -298,31 +276,24 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        /*this.spinner.show()*/;
-        this.documentoService.excluirDocumento(documento.id).subscribe(() => {
-          this.getDocumentosPorApartamento();
-        }, error => {
-          /*this.spinner.hide()*/;
-          console.error(error);
-        });
+        this.documentoService.excluirDocumento(documento.id)
+          .subscribe(() => {
+            this.getDocumentosPorApartamento();
+          });
       }
     });
   }
 
   getFicha() {
-    /*this.spinner.show()*/;
-    this.apartamentoService.getFicha(this.apartamento.id).subscribe((response) => {
-      this.saveFile(response['body'], `Ficha-Apartamento-${this.apartamento.numero}-${this.apartamento.bloco.nome}-${this.apartamento.bloco.condominio.nome}`);
-    }, error => {
-      /*this.spinner.hide()*/;
-      console.error(error);
-    })
+    this.apartamentoService.getFicha(this.apartamento.id)
+      .subscribe((response) => {
+        this.saveFile(response['body'], `Ficha-Apartamento-${this.apartamento.numero}-${this.apartamento.bloco.nome}-${this.apartamento.bloco.condominio.nome}`);
+      });
   }
 
   saveFile(data: any, filename?: string) {
     const blob = new Blob([data], { type: 'application/pdf; charset=utf-8' });
     fileSaver.saveAs(blob, filename);
-    /*this.spinner.hide()*/;
   }
 
   getFieldResponsavelForm(field) {
@@ -347,13 +318,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   importarFotos() {
-    /*this.spinner.show()*/;
     this.documentoService.uploadDocumentos(this.apartamento.id, this.documentosForm.value.files[0])
       .subscribe(() => {
-        /*this.spinner.hide()*/;
-      }, error => {
-        /*this.spinner.hide()*/;
-        console.error(error);
-      })
+      });
   }
 }

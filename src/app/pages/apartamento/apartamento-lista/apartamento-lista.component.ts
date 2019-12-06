@@ -6,7 +6,6 @@ import { ToastService } from '../../../services/toast.service';
 import { IOption } from 'ng-select';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
-import { SharedService } from 'src/app/shared/shared.service';
 
 import Swal from 'sweetalert2';
 import * as lodash from 'lodash';
@@ -56,7 +55,6 @@ export class ApartamentoListaComponent implements OnInit {
     private defaultService: DefaultService,
     private apartamentoService: ApartamentoService,
     private toastService: ToastService,
-    private sharedService: SharedService,
   ) {
     this.listaData = {
       size: 10,
@@ -92,17 +90,16 @@ export class ApartamentoListaComponent implements OnInit {
     if (listaData.comMoradores == '0')
       delete listaData.comMoradores;
 
-    this.apartamentoService.getApartamentos(listaData).subscribe(data => {
-      this.listaData.page = data['number'];
-      this.listaData.size = data['size'];
-      this.listaData.totalElements = data['totalElements'];
-      this.listaData.totalPages = data['totalPages'];
-      this.listaApartamentos = data['content'] as any[];
+    this.apartamentoService.getApartamentos(listaData)
+      .subscribe(data => {
+        this.listaData.page = data['number'];
+        this.listaData.size = data['size'];
+        this.listaData.totalElements = data['totalElements'];
+        this.listaData.totalPages = data['totalPages'];
+        this.listaApartamentos = data['content'] as any[];
 
-      localStorage.setItem('apartamento.totalElements', String(this.listaData.totalElements));
-    }, error => {
-      console.error(error);
-    });
+        localStorage.setItem('apartamento.totalElements', String(this.listaData.totalElements));
+      });
   }
 
   excluir(apartamento: Apartamento) {
@@ -115,26 +112,29 @@ export class ApartamentoListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.defaultService.excluir('apartamentos', apartamento.id).subscribe(() => {
-          this.toastService.addToast('success', 'Exclusão de Apartamento!', `Apartamento excluído com sucesso!`);
-          this.setPage({ offset: 0 });
-        });
+        this.defaultService.excluir('apartamentos', apartamento.id)
+          .subscribe(() => {
+            this.toastService.addToast('success', 'Exclusão de Apartamento!', `Apartamento excluído com sucesso!`);
+            this.setPage({ offset: 0 });
+          });
       }
     })
   }
 
   carregarCondominios() {
-    this.defaultService.get('condominios').subscribe(response => {
-      this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
-      this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('condominios')
+      .subscribe(response => {
+        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   carregarBlocos() {
-    this.defaultService.get('blocos').subscribe(response => {
-      this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
-      this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('blocos')
+      .subscribe(response => {
+        this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+        this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   limparPesquisa() {

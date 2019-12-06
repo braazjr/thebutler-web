@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario-model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/services/toast.service';
@@ -47,21 +47,13 @@ export class ModalAlterarSenhaComponent implements OnInit {
   }
 
   redefinirSenha(modal) {
-    this.usuarioService.redefinirSenha(
-      this.usuario.id,
-      this.usuario.senha,
-      this.formularioSenha.get('confirmaSenha').value
-    ).subscribe(() => {
-      this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
-      this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
-    }, error => {
-      console.error(error);
-      error.error.forEach(element => {
-        this.toastService.addToast('error', 'Redefinição de senha!', element.mensagemUsuario);
+    this.usuarioService.redefinirSenha(this.usuario.id, this.usuario.senha, this.formularioSenha.get('confirmaSenha').value)
+      .subscribe(() => {
+        this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
+        this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
+      }, () => {
+        modal.hide();
       });
-    }, () => {
-      modal.hide();
-    });
   }
 
 }

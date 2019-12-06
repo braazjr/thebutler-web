@@ -50,7 +50,7 @@ export class MoradorListaComponent implements OnInit {
 
   constructor(
     private moradorService: MoradorService,
-    private defaultService: DefaultService,
+    private defaultService: DefaultService
   ) {
     this.listaData = {
       size: 10,
@@ -85,29 +85,30 @@ export class MoradorListaComponent implements OnInit {
     if (listaData.idBloco == '0') delete listaData.idBloco;
     if (listaData.idCondominio === '0') delete listaData.idCondominio;
 
-    this.moradorService.getViewApartamentoMorador(listaData).subscribe(data => {
-      this.listaData.page = data['number'];
-      this.listaData.size = data['size'];
-      this.listaData.totalElements = data['totalElements'];
-      this.listaData.totalPages = data['totalPages'];
-      this.listaMoradores = data['content'] as any[];
-    }, error => {
-      console.error(error)
-    });
+    this.moradorService.getViewApartamentoMorador(listaData)
+      .subscribe(data => {
+        this.listaData.page = data['number'];
+        this.listaData.size = data['size'];
+        this.listaData.totalElements = data['totalElements'];
+        this.listaData.totalPages = data['totalPages'];
+        this.listaMoradores = data['content'] as any[];
+      });
   }
 
   carregarCondominios() {
-    this.defaultService.get('condominios').subscribe(response => {
-      this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
-      this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('condominios')
+      .subscribe(response => {
+        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   carregarBlocos() {
-    this.defaultService.get('blocos').subscribe(response => {
-      this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
-      this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('blocos')
+      .subscribe(response => {
+        this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+        this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   limparPesquisa() {

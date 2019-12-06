@@ -28,11 +28,10 @@ export class EmpresaListaComponent implements OnInit {
   }
 
   getEmpresas() {
-    this.observable = this.defaultService.get('empresas').subscribe(data => {
-      this.listaEmpresasTemp = this.listaEmpresas = data as Empresa[];
-    }, error => {
-      console.error(error)
-    });
+    this.observable = this.defaultService.get('empresas')
+      .subscribe(data => {
+        this.listaEmpresasTemp = this.listaEmpresas = data as Empresa[];
+      });
   }
 
   excluir(empresa) {
@@ -45,9 +44,10 @@ export class EmpresaListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value)
-        this.observable = this.defaultService.excluir('empresas', empresa.id).subscribe(() => {
-          this.getEmpresas();
-        });
+        this.observable = this.defaultService.excluir('empresas', empresa.id)
+          .subscribe(() => {
+            this.getEmpresas();
+          });
     })
   }
 

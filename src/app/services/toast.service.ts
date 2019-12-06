@@ -15,7 +15,7 @@ export class ToastService {
       title: title,
       msg: msg,
       showClose: showClose ? showClose : true,
-      timeout: timeout ? timeout : 5000,
+      timeout: timeout && type != 'error' ? timeout : 10000,
       theme: 'material',
       onAdd: (toast: ToastData) => {
         /* added */

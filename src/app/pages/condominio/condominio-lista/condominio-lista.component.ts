@@ -18,7 +18,7 @@ export class CondominioListaComponent implements OnInit {
   offset = 0;
 
   constructor(
-    private defaultService: DefaultService,
+    private defaultService: DefaultService
   ) { }
 
   ngOnInit() {
@@ -26,11 +26,10 @@ export class CondominioListaComponent implements OnInit {
   }
 
   getCondominios() {
-    this.defaultService.get('condominios').subscribe(data => {
-      this.listaCondominiosTemp = this.listaCondominios = data as Condominio[];
-    }, error => {
-      console.error(error)
-    });
+    this.defaultService.get('condominios')
+      .subscribe(data => {
+        this.listaCondominiosTemp = this.listaCondominios = data as Condominio[];
+      });
   }
 
   excluir(condominio) {
@@ -43,11 +42,10 @@ export class CondominioListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.defaultService.excluir('condominios', condominio.id).subscribe(() => {
-          this.getCondominios();
-        }, error => {
-          console.error(error)
-        });
+        this.defaultService.excluir('condominios', condominio.id)
+          .subscribe(() => {
+            this.getCondominios();
+          });
       }
     })
   }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Usuario } from '../models/usuario-model';
+import { ToastService } from '../services/toast.service';
 
 import * as lodash from 'lodash';
 
@@ -11,7 +12,9 @@ export class SharedService {
 
   jwtHelper: JwtHelperService = new JwtHelperService();
 
-  constructor() { }
+  constructor(
+    private toastService: ToastService
+  ) { }
 
   isAdmin() {
     if (localStorage.getItem('token') !== null) {
@@ -38,5 +41,16 @@ export class SharedService {
     }
 
     return false;
+  }
+
+  showErrors(error, titulo) {
+    console.error(error);
+    if (error.error) {
+      error.error.forEach(element => {
+        this.toastService.addToast('error', titulo, element.mensagemUsuario);
+      });
+    } else if (error.message) {
+      this.toastService.addToast('error', titulo, error.message);
+    }
   }
 }

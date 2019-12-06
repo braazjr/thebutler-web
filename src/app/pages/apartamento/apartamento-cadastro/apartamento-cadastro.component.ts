@@ -53,24 +53,21 @@ export class ApartamentoCadastroComponent implements OnInit {
   }
 
   getById(id) {
-    this.defaultService.getById('apartamentos', id).subscribe(response => {
-      this.apartamento = response as Apartamento;
-      this.formulario.patchValue(response);
-      this.formulario.get('blocoId').setValue(this.apartamento.bloco.id.toString());
-      this.carregarBlocos();
-    })
+    this.defaultService.getById('apartamentos', id)
+      .subscribe(response => {
+        this.apartamento = response as Apartamento;
+        this.formulario.patchValue(response);
+        this.formulario.get('blocoId').setValue(this.apartamento.bloco.id.toString());
+        this.carregarBlocos();
+      });
   }
 
   carregarBlocos() {
-    this.defaultService.get('blocos').subscribe(response => {
-      this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
-      this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => {
-      console.error(error)
-      error.error.forEach(element => {
-        this.toastService.addToast('error', 'Cadastro Apartamento!', element.mensagemUsuario);
+    this.defaultService.get('blocos')
+      .subscribe(response => {
+        this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+        this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
-    })
   }
 
   isValid(field) {
@@ -87,35 +84,27 @@ export class ApartamentoCadastroComponent implements OnInit {
       this.apartamento.ativo = this.formulario.get('ativo').value;
 
       if (!this.apartamento.id) {
-        this.defaultService.salvar('apartamentos', this.apartamento).subscribe(response => {
-          this.apartamento = response as Apartamento;
-          this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Cadastro Apartamento!', element.mensagemUsuario);
-          });
-        }, () => {
-          this.router.navigate([`/ficha/${this.apartamento.id}`]);
-        })
+        this.defaultService.salvar('apartamentos', this.apartamento)
+          .subscribe(response => {
+            this.apartamento = response as Apartamento;
+            this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
+          }, () => {
+            this.router.navigate([`/ficha/${this.apartamento.id}`]);
+          })
       } else {
-        this.defaultService.atualizar('apartamentos', this.apartamento).subscribe(response => {
-          this.apartamento = response as Apartamento;
-          this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
-        }, error => {
-          console.error(error)
-          error.error.forEach(element => {
-            this.toastService.addToast('error', 'Atualização Apartamento!', element.mensagemUsuario);
-          });
-        }, () => {
-          this.router.navigate([`/ficha/${this.apartamento.id}`]);
-        })
+        this.defaultService.atualizar('apartamentos', this.apartamento)
+          .subscribe(response => {
+            this.apartamento = response as Apartamento;
+            this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
+          }, () => {
+            this.router.navigate([`/ficha/${this.apartamento.id}`]);
+          })
       }
     }
   }
 
   temPacoteParaCadastro() {
-    if (this.sharedService.isAdmin()) {
+    if (this.sharedService.isAdmin() || this.apartamento.id) {
       return true;
     } else if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig) {
       const totalElements = localStorage.getItem('apartamento.totalElements');

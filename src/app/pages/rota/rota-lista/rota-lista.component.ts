@@ -18,7 +18,7 @@ export class RotaListaComponent implements OnInit {
   offset = 0;
 
   constructor(
-    private defaultService: DefaultService,
+    private defaultService: DefaultService
   ) { }
 
   ngOnInit() {
@@ -26,11 +26,10 @@ export class RotaListaComponent implements OnInit {
   }
 
   getRotas() {
-    this.defaultService.get('rotas').subscribe(data => {
-      this.listaRotasTemp = this.listaRotas = data as Rota[];
-    }, error => {
-      console.error(error)
-    });
+    this.defaultService.get('rotas')
+      .subscribe(data => {
+        this.listaRotasTemp = this.listaRotas = data as Rota[];
+      });
   }
 
   excluir(rota) {
@@ -43,11 +42,10 @@ export class RotaListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.defaultService.excluir('rotas', rota.id).subscribe(() => {
-          this.getRotas();
-        }, error => {
-          console.error(error);
-        });
+        this.defaultService.excluir('rotas', rota.id)
+          .subscribe(() => {
+            this.getRotas();
+          });
       }
     })
   }

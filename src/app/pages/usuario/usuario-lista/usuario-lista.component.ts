@@ -19,7 +19,7 @@ export class UsuarioListaComponent implements OnInit {
   usuario: Usuario;
 
   constructor(
-    private usuarioService: UsuarioService,
+    private usuarioService: UsuarioService
   ) {
     this.listaData = {
       size: 10,
@@ -36,17 +36,16 @@ export class UsuarioListaComponent implements OnInit {
   setPage(pageInfo) {
     this.listaData.page = pageInfo.offset;
 
-    this.usuarioService.getUsuarioPorEmpresa(this.listaData).subscribe(data => {
-      this.listaData = {
-        page: data['number'],
-        size: data['size'],
-        totalElements: data['totalElements'],
-        totalPages: data['totalPages']
-      };
-      this.listaUsuarios = data['content'] as Usuario[];
-    }, error => {
-      console.error(error);
-    });
+    this.usuarioService.getUsuarioPorEmpresa(this.listaData)
+      .subscribe(data => {
+        this.listaData = {
+          page: data['number'],
+          size: data['size'],
+          totalElements: data['totalElements'],
+          totalPages: data['totalPages']
+        };
+        this.listaUsuarios = data['content'] as Usuario[];
+      });
   }
 
   listarPermissoes(permissoes: any[]) {

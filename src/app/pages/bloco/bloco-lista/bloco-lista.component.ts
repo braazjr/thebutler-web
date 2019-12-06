@@ -18,7 +18,7 @@ export class BlocoListaComponent implements OnInit {
   offset = 0;
 
   constructor(
-    private defaultService: DefaultService,
+    private defaultService: DefaultService
   ) { }
 
   ngOnInit() {
@@ -26,11 +26,10 @@ export class BlocoListaComponent implements OnInit {
   }
 
   getBlocos() {
-    this.defaultService.get('blocos').subscribe(data => {
-      this.listaBlocosTemp = this.listaBlocos = data as Bloco[];
-    }, error => {
-      console.error(error)
-    });
+    this.defaultService.get('blocos')
+      .subscribe(data => {
+        this.listaBlocosTemp = this.listaBlocos = data as Bloco[];
+      });
   }
 
   excluir(bloco: Bloco) {
@@ -43,9 +42,10 @@ export class BlocoListaComponent implements OnInit {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.defaultService.excluir('blocos', bloco.id).subscribe(() => {
-          this.getBlocos();
-        });
+        this.defaultService.excluir('blocos', bloco.id)
+          .subscribe(() => {
+            this.getBlocos();
+          });
       }
     })
   }

@@ -83,15 +83,14 @@ export class ViagemListaComponent implements OnInit {
     const listaData = lodash.clone(this.listaData);
     if (listaData.numeroApartamento == null) delete listaData.numeroApartamento;
 
-    this.viagemService.getViagens(listaData).subscribe(data => {
-      this.listaData.page = data['number'];
-      this.listaData.size = data['size'];
-      this.listaData.totalElements = data['totalElements'];
-      this.listaData.totalPages = data['totalPages'];
-      this.listaViagens = data['content'] as any[];
-    }, error => {
-      console.error(error);
-    });
+    this.viagemService.getViagens(listaData)
+      .subscribe(data => {
+        this.listaData.page = data['number'];
+        this.listaData.size = data['size'];
+        this.listaData.totalElements = data['totalElements'];
+        this.listaData.totalPages = data['totalPages'];
+        this.listaViagens = data['content'] as any[];
+      });
   }
 
   toggleExpandRow(row) {
@@ -99,17 +98,19 @@ export class ViagemListaComponent implements OnInit {
   }
 
   carregarCondominios() {
-    this.defaultService.get('condominios').subscribe(response => {
-      this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
-      this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('condominios')
+      .subscribe(response => {
+        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   carregarBlocos() {
-    this.defaultService.get('blocos').subscribe(response => {
-      this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
-      this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    }, error => console.error(error));
+    this.defaultService.get('blocos')
+      .subscribe(response => {
+        this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+        this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 
   limparPesquisa() {
