@@ -7,7 +7,7 @@
     }
 }
 
-button, .pointer {
+button, .pointer, button > label {
     cursor: pointer !important;
 }
 

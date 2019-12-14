@@ -11,21 +11,21 @@
             <div class="nav-item nav-grid">
               <span class="m-r-15">Ações: </span>
 
-              <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
                 title="Visualizar Ficha" (click)="getFicha()">
-                <i class="fa fa-print"></i>
+                <label class="badge badge-light m-t-10">Download Ficha</label>
               </button>
-              <button type="button" class="btn btn-sm-light m-r-10" data-toggle="tooltip" data-placement="top"
+              <button type="button" class="btn btn-sm-light" data-toggle="tooltip" data-placement="top"
                 title="Documentos" (click)="getDocumentosPorApartamento(); modalDocumentos.show()">
-                <i class="fa fa-file-alt"></i>
+                <label class="badge badge-light m-t-10">Documentos</label>
               </button>
-              <button type="button" class="btn btn-sm m-r-10" data-toggle="tooltip" data-placement="top"
+              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
                 title="Lista de Apartamentos" [routerLink]="['/apartamento/lista']">
-                <i class="fa fa-list"></i>
+                <label class="badge badge-light m-t-10">Lista</label>
               </button>
               <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
                 (click)="salvar()">
-                <i class="fa fa-save"></i>
+                <label class="badge badge-light m-t-10">Salvar</label>
               </button>
             </div>
           </nav>
@@ -229,7 +229,7 @@
                           </div>
                         </div>
                         <div class="col-sm-9 col-md-4">
-                          <button class="btn btn-primary btn-round btn-sm m-t-35 m-r-10" (click)="incluiMorador()">
+                          <button class="btn btn-primary btn-round btn-sm m-t-35" (click)="incluiMorador()">
                             Adicionar
                           </button>
                           <button class="btn btn-warning btn-round btn-sm m-t-35"
