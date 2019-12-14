@@ -35,6 +35,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
         this.usuario.id = params['id'];
         this.getById();
       } else {
+        this.usuario.ativo = true;
         this.carregarPermissoes();
         this.carregarEmpresas();
       }
