@@ -36,12 +36,14 @@ export class ApartamentoCadastroComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id'] !== undefined) {
         this.getById(params['id']);
+      } else {
+        this.apartamento.ativo = true;
       }
     });
 
     this.formulario = this.formBuilder.group({
       blocoId: ['0', [Validators.required, Validators.min(1)]],
-      ativo: ['', [Validators.required]],
+      ativo: [true, [Validators.required]],
       numero: ['', [Validators.required, Validators.min(1)]]
     });
 

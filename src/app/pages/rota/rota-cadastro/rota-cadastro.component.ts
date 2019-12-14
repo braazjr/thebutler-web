@@ -29,6 +29,8 @@ export class RotaCadastroComponent implements OnInit {
       if (params['id'] !== undefined) {
         this.rota.id = params['id'];
         this.getById();
+      } else {
+        this.rota.ativo = true;
       }
     });
   }

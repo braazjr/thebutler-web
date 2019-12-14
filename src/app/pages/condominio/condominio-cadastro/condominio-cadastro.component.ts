@@ -37,6 +37,8 @@ export class CondominioCadastroComponent implements OnInit {
       if (params['id'] !== undefined) {
         this.condominio.id = params['id'];
         this.getById();
+      } else {
+        this.condominio.ativo = true;
       }
     });
 

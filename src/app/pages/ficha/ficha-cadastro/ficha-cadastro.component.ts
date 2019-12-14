@@ -78,7 +78,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       responsavel: this.formBuilder.group({
         id: [{ value: '', disabled: true }],
         nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
-        ativo: ['', [Validators.required]],
+        ativo: [true, [Validators.required]],
         celular: ['', [Validators.pattern(this.celularRegex)]],
         telefone: ['', [Validators.pattern(this.telefoneRegex)]],
         placaCarro: [''],
@@ -96,7 +96,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     this.formularioMorador = this.formBuilder.group({
       id: [{ value: '', disabled: true }],
       nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
-      ativo: ['', [Validators.required]],
+      ativo: [true, [Validators.required]],
       celular: ['', [Validators.pattern(this.celularRegex)]],
       parentesco: ['', [Validators.required]],
       tipoDocumento: ['0'],

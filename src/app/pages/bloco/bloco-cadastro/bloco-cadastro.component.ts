@@ -37,6 +37,8 @@ export class BlocoCadastroComponent implements OnInit {
       if (params['id'] !== undefined) {
         this.bloco.id = params['id'];
         this.getById();
+      } else {
+        this.bloco.ativo = true;
       }
     });
 

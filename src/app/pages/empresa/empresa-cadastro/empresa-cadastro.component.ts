@@ -48,7 +48,7 @@ export class EmpresaCadastroComponent implements OnInit {
       id: ['', []],
       cnpj: ['', [Validators.required, Validators.pattern(this.cnpjRegex)]],
       nomeFantasia: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      ativo: ['', [Validators.required]],
+      ativo: [true, [Validators.required]],
       razaoSocial: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       bairro: [{ value: '', disabled: true }, []],
       cidade: [{ value: '', disabled: true }, []],
