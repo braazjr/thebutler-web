@@ -11,22 +11,13 @@
             <div class="nav-item nav-grid">
               <span class="m-r-15">Ações: </span>
 
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
-                title="Visualizar Ficha" (click)="getFicha()">
-                <label class="badge badge-light m-t-10">Download Ficha</label>
-              </button>
-              <button type="button" class="btn btn-sm-light" data-toggle="tooltip" data-placement="top"
-                title="Documentos" (click)="getDocumentosPorApartamento(); modalDocumentos.show()">
-                <label class="badge badge-light m-t-10">Documentos</label>
-              </button>
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
-                title="Lista de Apartamentos" [routerLink]="['/apartamento/lista']">
-                <label class="badge badge-light m-t-10">Lista</label>
-              </button>
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-                (click)="salvar()">
-                <label class="badge badge-light m-t-10">Salvar</label>
-              </button>
+              <label class="badge badge-light m-t-10 pointer" (click)="getFicha()">Download Ficha</label>
+              <label class="badge badge-light m-t-10 pointer"
+                (click)="getDocumentosPorApartamento(); modalDocumentos.show()">
+                Documentos
+              </label>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/apartamento/lista']">Lista</label>
+              <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
             </div>
           </nav>
         </div>

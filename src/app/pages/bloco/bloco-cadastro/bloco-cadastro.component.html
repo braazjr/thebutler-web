@@ -10,14 +10,8 @@
             <div class="nav-item nav-grid">
               <span class="m-r-15">Ações: </span>
 
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
-                title="Lista de Blocos" [routerLink]="['/bloco/lista']">
-                <label class="badge badge-light m-t-10">Lista</label>
-              </button>
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-                (click)="salvar(blocoForm)">
-                <label class="badge badge-light m-t-10">Salvar</label>
-              </button>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/bloco/lista']">Lista</label>
+              <label class="badge badge-light m-t-10 pointer" (click)="salvar(blocoForm)">Salvar</label>
             </div>
           </nav>
         </div>

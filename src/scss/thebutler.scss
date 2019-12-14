@@ -7,8 +7,12 @@
     }
 }
 
-button, .pointer, button > label {
+button, .pointer {
     cursor: pointer !important;
+}
+
+.nav-item > label {
+    margin-right: 10px !important;
 }
 
 ng-select.is-invalid, ng-select.ng-invalid {

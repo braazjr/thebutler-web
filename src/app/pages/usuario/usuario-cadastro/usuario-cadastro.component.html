@@ -10,18 +10,10 @@
             <div class="nav-item nav-grid">
               <span class="m-r-15">Ações: </span>
 
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
-                title="Redefinir Senha" (click)="modalRedefinirSenha.show()" *ngIf="usuario.id">
-                <label class="badge badge-light m-t-10">Redefinir senha</label>
-              </button>
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top"
-                title="Lista de Usuários" [routerLink]="['/usuario/lista']">
-                <label class="badge badge-light m-t-10">Lista</label>
-              </button>
-              <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Salvar"
-                (click)="salvar(usuarioForm)">
-                <label class="badge badge-light m-t-10">Salvar</label>
-              </button>
+              <label class="badge badge-light m-t-10 pointer" (click)="modalRedefinirSenha.show()"
+                *ngIf="usuario.id">Redefinir senha</label>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/usuario/lista']">Lista</label>
+              <label class="badge badge-light m-t-10 pointer" (click)="salvar(usuarioForm)">Salvar</label>
             </div>
           </nav>
         </div>
