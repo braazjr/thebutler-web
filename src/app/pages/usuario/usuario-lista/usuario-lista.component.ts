@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../../services/usuario.service';
 import { Usuario } from '../../../models/usuario-model';
+import { DefaultService } from 'src/app/services/default.service';
+
+import Swal from 'sweetalert2';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-usuario-lista',
@@ -19,7 +23,9 @@ export class UsuarioListaComponent implements OnInit {
   usuario: Usuario;
 
   constructor(
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private defaultService: DefaultService,
+    private toastService: ToastService
   ) {
     this.listaData = {
       size: 10,
@@ -54,5 +60,24 @@ export class UsuarioListaComponent implements OnInit {
     }
 
     return permissoes.map(permissao => permissao.descricao).join(', ');
+  }
+
+  excluir(usuario: Usuario) {
+    Swal.fire({
+      title: 'Exclusão de usuário',
+      text: `Deseja excluir o usuário: ${usuario.nome}?`,
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Não',
+      confirmButtonText: 'Sim'
+    }).then((result) => {
+      if (result.value) {
+        this.defaultService.excluir('usuarios', usuario.id)
+          .subscribe(() => {
+            this.toastService.addToast('success', 'Exclusão de usuário!', `Usuário excluído com sucesso!`);
+            this.setPage({ offset: 0 });
+          });
+      }
+    })
   }
 }
