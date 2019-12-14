@@ -34,7 +34,7 @@
               <label class="custom-control-label" for="ativo">Ativo</label>
             </div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-4" *ngIf="sharedService.isAdmin()">
             <label class="col-form-label">Empresa</label>
             <ng-select [ngClass]="'ng-select'" [options]="listaEmpresas" [(ngModel)]="empresaId" name="empresa" required
               #empresa="ngModel" [validForm]="{form: empresa, isSubmit: isSubmit}">

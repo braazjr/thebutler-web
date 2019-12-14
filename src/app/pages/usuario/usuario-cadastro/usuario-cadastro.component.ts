@@ -5,6 +5,7 @@ import { IOption } from 'ng-select';
 import { ActivatedRoute } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
 import { ToastService } from '../../../services/toast.service';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-usuario-cadastro',
@@ -26,7 +27,8 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     private route: ActivatedRoute,
     private defaultService: DefaultService,
     private cdr: ChangeDetectorRef,
-    private toastService: ToastService
+    private toastService: ToastService,
+    public sharedService: SharedService
   ) { }
 
   ngOnInit() {
@@ -37,7 +39,12 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
       } else {
         this.usuario.ativo = true;
         this.carregarPermissoes();
-        this.carregarEmpresas();
+
+        if (this.sharedService.isAdmin()) {
+          this.carregarEmpresas();
+        } else {
+          this.empresaId = this.sharedService.getUsuarioLogged().empresa.id.toString();
+        }
       }
     });
   }
