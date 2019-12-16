@@ -3,6 +3,7 @@ import { Usuario } from 'src/app/models/usuario-model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastService } from 'src/app/services/toast.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { switchMap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'modal-alterar-senha',
@@ -48,12 +49,15 @@ export class ModalAlterarSenhaComponent implements OnInit {
 
   redefinirSenha(modal) {
     this.usuarioService.redefinirSenha(this.usuario.id, this.usuario.senha, this.formularioSenha.get('confirmaSenha').value)
-      .subscribe(() => {
-        this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
-        this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
-      }, () => {
-        modal.hide();
-      });
+      .pipe(
+        switchMap((response: any) => {
+          this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
+          this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
+
+          return response;
+        }),
+        finalize(() => modal.hide())
+      )
   }
 
 }

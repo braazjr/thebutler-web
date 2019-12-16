@@ -9,6 +9,7 @@ import { Bloco } from '../../../models/bloco-model';
 import { SharedService } from 'src/app/shared/shared.service';
 
 import Swal from 'sweetalert2';
+import { switchMap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-apartamento-cadastro',
@@ -87,20 +88,26 @@ export class ApartamentoCadastroComponent implements OnInit {
 
       if (!this.apartamento.id) {
         this.defaultService.salvar('apartamentos', this.apartamento)
-          .subscribe(response => {
-            this.apartamento = response as Apartamento;
-            this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
-          }, () => {
-            this.router.navigate([`/ficha/${this.apartamento.id}`]);
-          })
+          .pipe(
+            switchMap((response: any) => {
+              this.apartamento = response as Apartamento;
+              this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
+
+              return response;
+            }),
+            finalize(() => this.router.navigate([`/ficha/${this.apartamento.id}`]))
+          )
       } else {
         this.defaultService.atualizar('apartamentos', this.apartamento)
-          .subscribe(response => {
-            this.apartamento = response as Apartamento;
-            this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
-          }, () => {
-            this.router.navigate([`/ficha/${this.apartamento.id}`]);
-          })
+          .pipe(
+            switchMap((response: any) => {
+              this.apartamento = response as Apartamento;
+              this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
+
+              return response;
+            }),
+            finalize(() => this.router.navigate([`/ficha/${this.apartamento.id}`]))
+          )
       }
     }
   }
