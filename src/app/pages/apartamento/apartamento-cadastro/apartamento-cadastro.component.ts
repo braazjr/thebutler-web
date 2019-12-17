@@ -90,7 +90,6 @@ export class ApartamentoCadastroComponent implements OnInit {
           .subscribe(response => {
             this.apartamento = response as Apartamento;
             this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
-          }, () => {
             this.router.navigate([`/ficha/${this.apartamento.id}`]);
           })
       } else {
@@ -98,7 +97,6 @@ export class ApartamentoCadastroComponent implements OnInit {
           .subscribe(response => {
             this.apartamento = response as Apartamento;
             this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
-          }, () => {
             this.router.navigate([`/ficha/${this.apartamento.id}`]);
           })
       }

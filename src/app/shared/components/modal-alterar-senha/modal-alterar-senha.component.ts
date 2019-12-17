@@ -51,7 +51,6 @@ export class ModalAlterarSenhaComponent implements OnInit {
       .subscribe(() => {
         this.usuario.senha = this.formularioSenha.get('confirmaSenha').value;
         this.toastService.addToast('success', 'Redefinição de senha!', `Senha redefinida com sucesso!`);
-      }, () => {
         modal.hide();
       });
   }
