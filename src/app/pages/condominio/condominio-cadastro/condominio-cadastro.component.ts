@@ -28,7 +28,7 @@ export class CondominioCadastroComponent implements OnInit {
     private route: ActivatedRoute,
     private defaultService: DefaultService,
     private cdr: ChangeDetectorRef,
-    private sharedService: SharedService,
+    public sharedService: SharedService,
     private toastService: ToastService,
   ) { }
 

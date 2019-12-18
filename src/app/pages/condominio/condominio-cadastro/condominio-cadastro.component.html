@@ -19,23 +19,25 @@
 
       <form autocomplete="off" (ngSubmit)="salvar(condominioForm)" #condominioForm="ngForm">
         <div class="form-group row">
-          <div class="col-sm-6 col-md-4">
-            <label class="col-form-label">Empresa</label>
-            <ng-select [ngClass]="'ng-select'" [options]="listaEmpresas" #empresa="ngModel" name="empresa"
-              [(ngModel)]="empresaId" [validForm]="{form: empresa, isSubmit: isSubmit}" required>
-            </ng-select>
-          </div>
-          <div class="col-sm-6">
-            <label class="col-form-label">Nome</label>
-            <input type="text" class="form-control" #nome="ngModel" name="nome" [(ngModel)]="condominio.nome"
-              [validForm]="{form: nome, isSubmit: isSubmit}" required minlength="5" maxlength="30">
-          </div>
-          <div class="col-sm-12 col-md-2">
-            <br><br>
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="ativo" #ativo="ngModel" name="ativo"
-                [(ngModel)]="condominio.ativo" [validForm]="{form: ativo, isSubmit: isSubmit}" required>
-              <label class="custom-control-label" for="ativo">Ativo</label>
+          <div class="row col-sm-12">
+            <div class="col-sm-6 col-md-4" *ngIf="sharedService.isAdmin()">
+              <label class="col-form-label">Empresa</label>
+              <ng-select [ngClass]="'ng-select'" [options]="listaEmpresas" #empresa="ngModel" name="empresa"
+                [(ngModel)]="empresaId" [validForm]="{form: empresa, isSubmit: isSubmit}" required>
+              </ng-select>
+            </div>
+            <div class="col-sm-6">
+              <label class="col-form-label">Nome</label>
+              <input type="text" class="form-control" #nome="ngModel" name="nome" [(ngModel)]="condominio.nome"
+                [validForm]="{form: nome, isSubmit: isSubmit}" required minlength="5" maxlength="30">
+            </div>
+            <div class="col-sm-12 col-md-2">
+              <br><br>
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="ativo" #ativo="ngModel" name="ativo"
+                  [(ngModel)]="condominio.ativo" [validForm]="{form: ativo, isSubmit: isSubmit}" required>
+                <label class="custom-control-label" for="ativo">Ativo</label>
+              </div>
             </div>
           </div>
           <div class="col-sm-3 col-md-2">
