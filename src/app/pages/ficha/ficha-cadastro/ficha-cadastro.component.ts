@@ -257,6 +257,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   resetMoradorForm() {
     this.formularioMorador.reset();
     this.formularioMorador.get('tipoDocumento').setValue('0');
+    this.formularioMorador.get('ativo').setValue(true);
   }
 
   getDocumentosPorApartamento() {
