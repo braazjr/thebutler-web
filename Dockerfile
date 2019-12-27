@@ -1,17 +1,14 @@
-FROM node:10-alpine
+FROM node:10-alpine AS builder
 
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH
-
 COPY package.json /app/package.json
 RUN npm install
-RUN npm install -g @angular/cli@7.3.9
 
 COPY . /app
 
 RUN npm run build:develop
 
-EXPOSE 3000
+FROM nginx:alpine
 
-CMD ["ng", "server", "--configuration=develop"]
+COPY --from=builder /app/dist/* /usr/share/nginx/html/
