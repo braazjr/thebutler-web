@@ -14,4 +14,4 @@ RUN npm run build:develop
 
 EXPOSE 3000
 
-CMD ["ng", "server", "--prod"]
+CMD ["ng", "server", "--configuration=develop"]
