@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlSpring: 'https://butler-api-dev.herokuapp.com'
+  urlSpring: 'http://butler-api-dev.us-east-1.elasticbeanstalk.com'
 };
 
 /*

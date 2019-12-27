@@ -10,7 +10,7 @@ RUN npm install -g @angular/cli@7.3.9
 
 COPY . /app
 
-RUN npm run build:prod
+RUN npm run build:develop
 
 EXPOSE 4200
 
