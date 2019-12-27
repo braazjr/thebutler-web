@@ -12,6 +12,6 @@ COPY . /app
 
 RUN npm run build:develop
 
-EXPOSE 4200
+EXPOSE 3000
 
 CMD ["npm", "run", "start"]
