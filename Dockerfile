@@ -2,7 +2,7 @@ FROM node:10-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json /app/
+COPY package*.json /app
 RUN npm install
 
 COPY . /app
@@ -10,13 +10,14 @@ RUN npm run build:develop
 
 FROM nginx:alpine
 
-RUN rm -rf /usr/share/nginx/html/*
+# RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=builder /app/dist/* /usr/share/nginx/html/
-RUN chmod 777 -R /usr/share/nginx/html
+RUN mkdir /usr/share/nginx/html/butler-web
+COPY --from=builder /app/dist/* /usr/share/nginx/html/butler-web
+# RUN chmod 777 -R /usr/share/nginx/html
 
-COPY --from=builder /app/custom-nginx-file.conf /etc/nginx/conf.d/default.conf
+# COPY --from=builder /app/custom-nginx-file.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 8080
+EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
