@@ -24,7 +24,7 @@ deploy-production:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   before_script:
-    - python3 -m pip install awsebcli
+    - python3 -m pip install awscli
     - mkdir ~/.aws/
     - touch ~/.aws/credentials
     - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
