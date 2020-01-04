@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlSpring: 'http://butler-api-dev.us-east-1.elasticbeanstalk.com'
+  urlSpring: 'https://butler-api-dev.us-east-1.elasticbeanstalk.com'
 };
 
 /*

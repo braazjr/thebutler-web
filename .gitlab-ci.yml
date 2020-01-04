@@ -12,39 +12,25 @@ node-build:
   before_script:
     - npm install
     - npm install -g @angular/cli@8
-  script: "ng build --aot"
+  script: "npm run build:prod"
   only:
     - develop
     - master
-  
-deploy-develop:
-  stage: deploy
-  variables:
-    HEROKU_API_KEY: $HEROKU_PRODUCTION_API_KEY
-  before_script:
-    - echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
-    - wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
-    - apt-get update
-    - apt-get install -y heroku-toolbelt
-    - gem install dpl
-  script:
-    - dpl --provider=heroku --app=butler-web-dev --api-key=$HEROKU_API_KEY
-    #- heroku run rake db:migrate --exit-code --app api-butler
-  only:
-    - develop
 
 deploy-production:
+  image: python:3.6.3
   stage: deploy
   variables:
-    HEROKU_API_KEY: $HEROKU_PRODUCTION_API_KEY
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   before_script:
-    - echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
-    - wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
-    - apt-get update
-    - apt-get install -y heroku-toolbelt
-    - gem install dpl
+    - python3 -m pip install awsebcli
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+    - touch ~/.aws/config
+    - printf "[profile eb-cli]\nregion=us-east-1\noutput=json" >> ~/.aws/config
   script:
-    - dpl --provider=heroku --app=butler-web-prod --api-key=$HEROKU_API_KEY
-    #- heroku run rake db:migrate --exit-code --app api-butler
+    - aws s3 sync dist/ s3://butler-web/${CI_COMMIT_REF_NAME} --exclude ".DS_Store/*" --cache-control "max-age=120000" --delete --acl "public-read"
   only:
     - master
