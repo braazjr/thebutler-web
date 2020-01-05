@@ -13,6 +13,8 @@ node-build:
     - npm install
     - npm install -g @angular/cli@8
   script: "npm run build:prod"
+  artifacts:
+    - dist/
   only:
     - develop
     - master
