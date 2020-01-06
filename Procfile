@@ -1,0 +1,1 @@
+web: npm install && npm run build:develop && npm start
