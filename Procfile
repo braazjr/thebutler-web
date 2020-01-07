@@ -1,1 +1,0 @@
-web: npm run build:develop && npm start
