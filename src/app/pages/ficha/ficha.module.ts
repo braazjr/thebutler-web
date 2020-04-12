@@ -16,6 +16,7 @@ import { DataTablesService } from '../../services/data-tables.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { SharedTheButlerModule } from 'src/app/shared/shared-the-butler.module';
 import { FileUploadModule } from '@iplab/ngx-file-upload';
+import { FichaListaComponent } from './ficha-lista/ficha-lista.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
     // FileUploadModule
     FileUploadModule
   ],
-  declarations: [FichaCadastroComponent],
+  declarations: [FichaCadastroComponent, FichaListaComponent],
   providers: [
     BlocoService,
     ApartamentoService,

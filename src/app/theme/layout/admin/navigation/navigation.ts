@@ -154,6 +154,14 @@ const NavigationItems = [
         ]
       },
       {
+        id: 'ficha-lista',
+        title: 'Fichas',
+        type: 'item',
+        icon: 'fa fa-address-card',
+        url: '/ficha',
+        breadcrumbs: false
+      },
+      {
         id: 'controle-acesso',
         title: 'Controle de acesso',
         type: 'collapse',
