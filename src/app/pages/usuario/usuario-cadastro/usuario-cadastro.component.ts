@@ -71,7 +71,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
       .subscribe(response => {
         this.permissoes = response as any[];
         this.listaPermissoes = (response as any[]).map(perm => {
-          if (this.usuario.id && this.usuario.permissoes.map(permissao => permissao.codigo).includes(perm.codigo)) {
+          if (this.usuario.id && this.usuario.permissoes.map(permissao => permissao).includes(perm.codigo)) {
             this.permissaoIds.push(perm.codigo.toString());
           }
 
@@ -95,7 +95,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     }
 
     this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
-    this.usuario.login = this.usuario.login.toLowerCase();
+    this.usuario.email = this.usuario.email.toLowerCase();
 
     if (!this.usuario.id) {
       this.defaultService.salvar('usuarios', this.usuario)

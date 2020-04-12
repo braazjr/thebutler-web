@@ -22,7 +22,7 @@ export class AuthService {
   login(usuario: String, senha: String): Observable<void> {
     const hds = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic YW5ndWxhcjpAbmd1bEByMA=='
+      'Authorization': 'Basic dGhlYnV0bGVyX2FuZ3VsYXI6dGhlYnV0bGVyX2FuZ3VsYXI='
     });
 
     const body = `username=${usuario}&password=${senha}&grant_type=password`;
