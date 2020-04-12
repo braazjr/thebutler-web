@@ -12,6 +12,8 @@ import { WebCamComponent } from 'ack-angular-webcam';
 import { ToastService } from '../../../services/toast.service';
 import { ApartamentoService } from '../../../services/apartamento.service';
 import { SharedService } from 'src/app/shared/shared.service';
+import { Ficha } from 'src/app/models/ficha-model';
+import { FichaService } from 'src/app/services/ficha.service';
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
@@ -24,7 +26,7 @@ import * as lodash from 'lodash';
 })
 export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
-  apartamento: Apartamento = new Apartamento();
+  ficha: Ficha = new Ficha();
   documentos: any[] = [];
   listaMoradores: Morador[] = [];
 
@@ -63,12 +65,22 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     private toastService: ToastService,
     private documentoService: DocumentoService,
     private apartamentoService: ApartamentoService,
+    private fichaService: FichaService
   ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      if (params['id'] !== undefined) {
-        this.apartamento.id = params['id'];
+      const context = this.route.snapshot.data['context']
+
+      if (context == 'ficha') {
+        this.fichaService.getFullFicha(params['id'])
+          .subscribe(ficha => {
+            this.ficha = ficha as Ficha; 
+            this.carregaFicha();
+          })
+      } else if (context && params['id']) {
+        this.ficha
+        this.ficha.apartamento.id = params['id']
         this.getById();
       }
     });
@@ -116,19 +128,19 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
-    this.defaultService.getById('apartamentos', this.apartamento.id)
+    this.defaultService.getById('apartamentos', this.ficha.apartamento.id)
       .subscribe(response => {
-        this.apartamento = response as Apartamento;
+        this.ficha.apartamento = response as Apartamento;
         this.formulario.patchValue(response);
         this.carregaFicha();
       });
   }
 
   carregaFicha() {
-    const responsavel = this.apartamento.moradores.filter((morador) => morador.tipoMorador)[0];
+    const responsavel = this.ficha.moradores.filter((morador) => morador.tipoMorador)[0];
     if (responsavel) {
       this.formulario.get('responsavel').patchValue(responsavel);
-      this.listaMoradores = this.apartamento.moradores.filter((morador) => morador.id != responsavel.id);
+      this.listaMoradores = this.ficha.moradores.filter((morador) => morador.id != responsavel.id);
     }
   }
 
@@ -231,7 +243,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       return;
     } else {
       let apartamento: Apartamento;
-      apartamento = lodash.clone(this.apartamento);
+      apartamento = lodash.clone(this.ficha.apartamento);
       apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value;
       apartamento.observacao = this.formulario.get('observacao').value;
       apartamento.usuario = this.sharedService.getUsuarioLogged();
@@ -247,7 +259,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
           this.getById();
           this.toastService.addToast(
             'success',
-            `Atualização da ficha do apartamento ${this.apartamento.numero}`,
+            `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,
             `Ficha atualizada com sucesso!`
           );
         });
@@ -261,7 +273,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getDocumentosPorApartamento() {
-    this.documentoService.getDocumentosPorApartamento(this.apartamento.id)
+    this.documentoService.getDocumentosPorApartamento(this.ficha.apartamento.id)
       .subscribe(response => {
         this.documentos = response as any[];
       });
@@ -286,9 +298,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getFicha() {
-    this.apartamentoService.getFicha(this.apartamento.id)
+    this.apartamentoService.getFicha(this.ficha.apartamento.id)
       .subscribe((response) => {
-        this.saveFile(response['body'], `Ficha-Apartamento-${this.apartamento.numero}-${this.apartamento.bloco.nome}-${this.apartamento.bloco.condominio.nome}`);
+        this.saveFile(response['body'], `Ficha-Apartamento-${this.ficha.apartamento.numero}-${this.ficha.apartamento.bloco.nome}-${this.ficha.apartamento.bloco.condominio.nome}`);
       });
   }
 
@@ -319,7 +331,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   importarFotos() {
-    this.documentoService.uploadDocumentos(this.apartamento.id, this.documentosForm.value.files[0])
+    this.documentoService.uploadDocumentos(this.ficha.apartamento.id, this.documentosForm.value.files[0])
       .subscribe(() => {
       });
   }
