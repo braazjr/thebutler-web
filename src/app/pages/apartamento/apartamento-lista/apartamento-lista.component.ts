@@ -6,6 +6,8 @@ import { ToastService } from '../../../services/toast.service';
 import { IOption } from 'ng-select';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
+import { FichaService } from 'src/app/services/ficha.service';
+import { Ficha } from 'src/app/models/ficha-model';
 
 import Swal from 'sweetalert2';
 import * as lodash from 'lodash';
@@ -51,10 +53,14 @@ export class ApartamentoListaComponent implements OnInit {
     }
   ];
 
+  apartamentoTemp: Apartamento;
+  fichas: any[] = [];
+
   constructor(
     private defaultService: DefaultService,
     private apartamentoService: ApartamentoService,
     private toastService: ToastService,
+    private fichaService: FichaService
   ) {
     this.listaData = {
       size: 10,
@@ -150,5 +156,32 @@ export class ApartamentoListaComponent implements OnInit {
     };
 
     this.setPage({ offset: 0 });
+  }
+
+  modalFichasPorApartamentoShow(modal, apartamentoId) {
+    this.fichaService.getFichaPorApartamento(apartamentoId)
+      .subscribe(fichas => {
+        this.fichas = fichas as any[];
+        modal.show();
+      })
+  }
+
+  excluirFicha(ficha: Ficha) {
+    Swal.fire({
+      title: 'Exclusão de ficha',
+      text: `Deseja excluir a ficha: ${ficha.id}?`,
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Não',
+      confirmButtonText: 'Sim'
+    }).then((result) => {
+      if (result.value) {
+        this.defaultService.excluir('fichas', ficha.id)
+          .subscribe(() => {
+            this.toastService.addToast('success', 'Exclusão de Ficha!', `Ficha excluída com sucesso!`);
+            this.setPage({ offset: 0 });
+          });
+      }
+    })
   }
 }
