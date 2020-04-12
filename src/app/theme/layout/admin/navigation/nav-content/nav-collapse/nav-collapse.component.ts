@@ -69,6 +69,7 @@ export class NavCollapseComponent implements OnInit {
     parent.classList.toggle('pcoded-trigger');
   }
 
+  // verifica perfis para o menu
   filterForRoles(children) {
     return children.filter(child => !child.profiles || (child.profiles.length > 0 && this.sharedService.checkRole(child.profiles)));
   }
