@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FichaCadastroComponent } from './ficha-cadastro/ficha-cadastro.component';
+import { FichaListaComponent } from './ficha-lista/ficha-lista.component';
 
 const routes: Routes = [
   {
@@ -11,9 +12,19 @@ const routes: Routes = [
     },
     children: [
       {
+        path: '',
+        component: FichaListaComponent
+      },
+      {
+        path: 'apartamento/:id',
+        component: FichaCadastroComponent,
+        data: { context: 'apartamento' }
+      },
+      {
         path: ':id',
-        component: FichaCadastroComponent
-      }
+        component: FichaCadastroComponent,
+        data: { context: 'ficha' }
+      },
     ]
   }
 ];
