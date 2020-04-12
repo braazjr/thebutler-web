@@ -29,7 +29,7 @@ export class ApartamentoCadastroComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
-    private router: Router,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -106,14 +106,17 @@ export class ApartamentoCadastroComponent implements OnInit {
   temPacoteParaCadastro() {
     if (this.sharedService.isAdmin() || this.apartamento.id) {
       return true;
-    } else if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig) {
-      const totalElements = localStorage.getItem('apartamento.totalElements');
+    } else if (this.sharedService.getUsuarioLogged().empresa) {
+      this.defaultService.getById('empresas', this.sharedService.getUsuarioLogged().empresa.id)
+        .subscribe(empresa => {
+          const totalElements = localStorage.getItem('apartamento.totalElements');
 
-      if (totalElements) {
-        return this.sharedService.getUsuarioLogged().empresa.empresaConfig.qtyApartamentos > Number(totalElements);
-      } else {
-        this.router.navigate([`/apartamento`]);
-      }
+          if (totalElements) {
+            return (empresa as any).empresaConfig.qtyApartamentos > Number(totalElements);
+          } else {
+            this.router.navigate([`/apartamento`]);
+          }
+        })
     }
   }
 }
