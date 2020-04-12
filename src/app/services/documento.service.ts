@@ -3,21 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { SharedService } from '../shared/shared.service';
+import { HttpUtil } from '../utils/http.util';
 
 @Injectable()
 export class DocumentoService {
 
   constructor(
     private http: HttpClient,
-    private sharedService: SharedService
+    private httpUtil: HttpUtil
   ) { }
 
   getDocumentosPorApartamento(id) {
     return this.http.get(`${environment.urlSpring}/public/documento/apartamento/${id}`, { withCredentials: true })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Carregando documentos!`);
+          this.httpUtil.showErrors(error, `Carregando documentos!`);
           return Observable.throw(error);
         })
       );
@@ -27,7 +27,7 @@ export class DocumentoService {
     return this.http.delete(`${environment.urlSpring}/public/documento/${id}`, { withCredentials: true })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Excluindo documento!`);
+          this.httpUtil.showErrors(error, `Excluindo documento!`);
           return Observable.throw(error);
         })
       );
@@ -40,7 +40,7 @@ export class DocumentoService {
     return this.http.post(`${environment.urlSpring}/public/documento/upload-documento/${idApartamento}`, files, { withCredentials: true, reportProgress: true })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Upload de documento!`);
+          this.httpUtil.showErrors(error, `Upload de documento!`);
           return Observable.throw(error);
         })
       );
