@@ -4,13 +4,14 @@ import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { SharedService } from '../shared/shared.service';
 import { Observable } from 'rxjs';
+import { HttpUtil } from '../utils/http.util';
 
 @Injectable()
 export class ApartamentoService {
 
   constructor(
     private http: HttpClient,
-    private sharedService: SharedService
+    private httpUtil: HttpUtil
   ) { }
 
   getApartamentosPorBloco(idBloco) {
@@ -38,7 +39,7 @@ export class ApartamentoService {
     return this.http.get(`${environment.urlSpring}/apartamentos/${idApartamento}/ficha`, { withCredentials: true, observe: 'response', responseType: 'blob' })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Carregando PDF ficha!`);
+          this.httpUtil.showErrors(error, `Carregando PDF ficha!`);
           return Observable.throw(error);
         })
       );
@@ -52,7 +53,7 @@ export class ApartamentoService {
   }
 
   private catchErrorCustom(error) {
-    this.sharedService.showErrors(error, `Carregando apartamentos!`);
+    this.httpUtil.showErrors(error, `Carregando apartamentos!`);
     return Observable.throw(error);
   }
 }
