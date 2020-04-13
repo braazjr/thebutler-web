@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { ToastService } from '../services/toast.service';
-import { DefaultService } from '../services/default.service';
 
 import * as lodash from 'lodash';
 
@@ -12,10 +10,7 @@ export class SharedService {
 
   jwtHelper: JwtHelperService = new JwtHelperService();
 
-  constructor(
-    private toastService: ToastService,
-    private defaultService: DefaultService
-  ) { }
+  constructor() { }
 
   isAdmin() {
     if (localStorage.getItem('token') !== null) {
@@ -26,14 +21,7 @@ export class SharedService {
 
   getUsuarioLogged() {
     if (localStorage.getItem('token') !== null) {
-      const usuario = this.jwtHelper.decodeToken(localStorage.getItem('token')).usuario;
-      // this.defaultService.getById('empresas', usuario.empresa.id)
-      //   .subscribe(data => console.log(data))
-      // if (usuario.empresa) {
-      //   usuario.empresa.dataHoraCadastro = undefined;
-      //   usuario.empresa.dataHoraModificacao = undefined;
-      // }
-      return usuario;
+      return this.jwtHelper.decodeToken(localStorage.getItem('token')).usuario;
     }
   }
 

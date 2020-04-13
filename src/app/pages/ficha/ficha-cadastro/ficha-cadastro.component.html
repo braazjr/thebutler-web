@@ -15,7 +15,7 @@
               <label class="badge badge-light m-t-10 pointer" (click)="modalDocumentos.show()">
                 Documentos
               </label>
-              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/apartamento/lista']">Fichas</label>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/ficha']">Fichas</label>
               <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
             </div>
           </nav>
@@ -352,7 +352,7 @@
   </div>
 </app-ui-modal>
 
-<app-ui-modal #modalDocumentos [dialogClass]="'modal-lg'">
+<app-ui-modal #modalDocumentos [dialogClass]="'modal-xl'">
   <div class="app-modal-header">
     <h4 class="modal-title">Documentos da ficha {{ ficha.id }}</h4>
     <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); documentosForm.reset()">
