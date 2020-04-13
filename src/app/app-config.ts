@@ -8,7 +8,7 @@ export class GradientConfig {
     // header-green, header-yellow, header-orchidgreen, header-indigogreen, header-darkgreen, header-darkblue
     rtlLayout: false,
     navFixedLayout: true,
-    headerFixedLayout: true,
+    headerFixedLayout: false,
     boxLayout: false,
   };
 }

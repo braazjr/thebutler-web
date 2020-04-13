@@ -23,7 +23,7 @@ export class EmpresaGuard implements CanActivate {
 
     console.info(`-- profiles permitidos ${profiles}`)
     if (!this.sharedService.checkRole(profiles)) {
-      console.log('-- acesso negado')
+      console.info('-- acesso negado')
       this.router.navigate(['/access-denied']);
     }
 
