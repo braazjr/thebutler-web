@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -22,9 +22,9 @@ export class DocumentoService {
         })
       );
   }
-
-  excluirDocumento(id) {
-    return this.http.delete(`${environment.urlSpring}/public/documento/${id}`, { withCredentials: true })
+  i
+  excluirDocumento(idFicha, idDocumento) {
+    return this.http.delete(`${environment.urlSpring}/fichas/${idFicha}/documento/${idDocumento}`, { withCredentials: true })
       .pipe(
         catchError(error => {
           this.httpUtil.showErrors(error, `Excluindo documento!`);
@@ -33,11 +33,11 @@ export class DocumentoService {
       );
   }
 
-  uploadDocumentos(idApartamento, files) {
+  uploadDocumentos(idFicha, file) {
     let formdata: FormData = new FormData();
-    formdata.append('file', files);
+    formdata.append('file', file);
 
-    return this.http.post(`${environment.urlSpring}/public/documento/upload-documento/${idApartamento}`, files, { withCredentials: true, reportProgress: true })
+    return this.http.post(`${environment.urlSpring}/fichas/${idFicha}/documento/upload-documento`, formdata, { withCredentials: true, reportProgress: true })
       .pipe(
         catchError(error => {
           this.httpUtil.showErrors(error, `Upload de documento!`);
