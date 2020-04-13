@@ -67,7 +67,6 @@ export class FichaListaComponent implements OnInit {
   getFichas() {
     this.fichaService.get(this.listaData)
       .subscribe(data => {
-        console.log(data)
         this.listaData.page = data['number'];
         this.listaData.size = data['size'];
         this.listaData.totalElements = data['totalElements'];

@@ -6,4 +6,5 @@ export class Ficha {
     id: String
     apartamento: Apartamento = new Apartamento()
     moradores: Morador[] = []
+    documentos: any[] = []
 }

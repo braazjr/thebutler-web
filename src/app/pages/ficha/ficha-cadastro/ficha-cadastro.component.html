@@ -12,11 +12,10 @@
               <span class="m-r-15">Ações: </span>
 
               <label class="badge badge-light m-t-10 pointer" (click)="getFicha()">Download Ficha</label>
-              <label class="badge badge-light m-t-10 pointer"
-                (click)="getDocumentosPorApartamento(); modalDocumentos.show()">
+              <label class="badge badge-light m-t-10 pointer" (click)="modalDocumentos.show()">
                 Documentos
               </label>
-              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/apartamento/lista']">Lista</label>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/apartamento/lista']">Fichas</label>
               <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
             </div>
           </nav>
@@ -29,7 +28,8 @@
           <div class="form-group row">
             <div class="col-sm-6 col-md-4">
               <label class="col-form-label">Condomínio</label>
-              <input type="text" class="form-control" #condominio [value]="ficha.apartamento.bloco.condominio.nome" disabled>
+              <input type="text" class="form-control" #condominio [value]="ficha.apartamento.bloco.condominio.nome"
+                disabled>
             </div>
             <div class="col-sm-3">
               <label class="col-form-label">Bloco</label>
@@ -352,9 +352,9 @@
   </div>
 </app-ui-modal>
 
-<app-ui-modal #modalDocumentos>
+<app-ui-modal #modalDocumentos [dialogClass]="'modal-lg'">
   <div class="app-modal-header">
-    <h4 class="modal-title">Documentos do apartamento {{ ficha.apartamento.numero }}</h4>
+    <h4 class="modal-title">Documentos da ficha {{ ficha.id }}</h4>
     <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); documentosForm.reset()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -371,7 +371,7 @@
         </ng-template>
       </file-upload>
     </form>
-    <div class="table-responsive" *ngIf="documentos.length !== 0">
+    <div class="table-responsive" *ngIf="ficha.documentos && ficha.documentos.length !== 0">
       <table class="table table-inverse">
         <thead>
           <tr>
@@ -380,8 +380,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let doc of documentos">
-            <th scope="row"><a [href]="doc.path" target="_blank">{{ doc.nome }}</a></th>
+          <tr *ngFor="let doc of ficha.documentos">
+            <th scope="row"><a [href]="doc.url" target="_blank">{{ doc.nome }}</a></th>
             <td><label class="badge badge-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
           </tr>
         </tbody>
