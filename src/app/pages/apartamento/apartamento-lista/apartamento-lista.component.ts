@@ -28,8 +28,7 @@ export class ApartamentoListaComponent implements OnInit {
 
     idCondominio?: string,
     idBloco?: string,
-    numero?: string,
-    comMoradores?: string
+    numero?: string
   };
 
   listaApartamentos: Apartamento[] = [];
@@ -37,21 +36,6 @@ export class ApartamentoListaComponent implements OnInit {
 
   listaCondominios: Array<IOption> = [];
   listaBlocos: Array<IOption> = [];
-
-  filtroComMoradores: Array<IOption> = [
-    {
-      value: '0',
-      label: 'Ambos'
-    },
-    {
-      value: 'true',
-      label: 'Com moradores'
-    },
-    {
-      value: 'false',
-      label: 'Sem moradores'
-    }
-  ];
 
   apartamentoTemp: Apartamento;
   fichas: any[] = [];
@@ -69,8 +53,7 @@ export class ApartamentoListaComponent implements OnInit {
       page: 0,
       sort: 'numero,asc',
       idCondominio: '0',
-      idBloco: '0',
-      comMoradores: '0'
+      idBloco: '0'
     };
   }
 
@@ -93,8 +76,6 @@ export class ApartamentoListaComponent implements OnInit {
 
   getApartamentos() {
     const listaData = lodash.clone(this.listaData);
-    if (listaData.comMoradores == '0')
-      delete listaData.comMoradores;
 
     this.apartamentoService.getApartamentos(listaData)
       .subscribe(data => {
@@ -151,8 +132,7 @@ export class ApartamentoListaComponent implements OnInit {
       page: 0,
       sort: 'numero,asc',
       idCondominio: '0',
-      idBloco: '0',
-      comMoradores: '0'
+      idBloco: '0'
     };
 
     this.setPage({ offset: 0 });

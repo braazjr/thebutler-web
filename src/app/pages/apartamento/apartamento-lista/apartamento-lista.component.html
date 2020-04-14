@@ -33,11 +33,6 @@
                 <label class="col-form-label">Número</label>
                 <input type="number" class="form-control" [(ngModel)]="listaData .numero">
               </div>
-              <div class="col-sm-2">
-                <label class="col-form-label">Com moradores</label>
-                <ng-select [ngClass]="'ng-select'" [options]="filtroComMoradores" [(ngModel)]="listaData.comMoradores">
-                </ng-select>
-              </div>
               <div class="col-sm-3 m-t-35">
                 <button class="btn btn-primary btn-round m-r-5" (click)="getApartamentos()">
                   Pesquisar
