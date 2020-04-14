@@ -36,12 +36,12 @@ export class FichaService {
   }
 
   get(pageable) {
-  return this.http.get(`${environment.urlSpring}/fichas`, {params: pageable })
-    .pipe(
-      catchError(error => {
-        this.httpUtil.showErrors(error, `Carregando fichas!`);
-        return Observable.throw(error);
-      })
-    );
+    return this.http.get(`${environment.urlSpring}/fichas`, { params: pageable })
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Carregando fichas!`);
+          return Observable.throw(error);
+        })
+      );
   }
 }

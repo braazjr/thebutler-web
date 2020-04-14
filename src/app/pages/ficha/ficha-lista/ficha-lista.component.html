@@ -6,19 +6,22 @@
                     <div class="col-sm-12 filter-bar">
                         <nav class="navbar navbar-light bg-faded m-b-30 p-10">
                             Fichas
-                            <!-- <div class="nav-item nav-grid">
-                  <span class="m-r-15">Ações: </span>
-  
-                  <label class="badge badge-light m-t-10 pointer" [routerLink]="['/apartamento/cadastro']">Novo</label>
-                </div> -->
+                            <div class="nav-item nav-grid">
+                                <label class="badge badge-light m-t-10 pointer" (click)="isCollapsed = !isCollapsed"
+                                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">Filtros</label>
+                            </div>
                         </nav>
                     </div>
                 </div>
 
                 <!-- filtros -->
-                <div class="row">
+                <app-card id="collapseExample" [ngbCollapse]="!isCollapsed">
                     <div class="col-sm-12">
                         <div class="form-group row">
+                            <div class="col-sm-3">
+                                <label class="col-form-label">Código</label>
+                                <input type="number" class="form-control" [(ngModel)]="listaData.codigo">
+                            </div>
                             <div class="col-sm-3">
                                 <label class="col-form-label">Condominio</label>
                                 <ng-select [ngClass]="'ng-select'" [options]="listaCondominios"
@@ -31,20 +34,40 @@
                                     [(ngModel)]="listaData.idBloco">
                                 </ng-select>
                             </div>
-                            <div class="col-sm-1">
-                                <label class="col-form-label">Número</label>
-                                <input type="number" class="form-control" [(ngModel)]="listaData.numero">
-                            </div>
                             <div class="col-sm-2">
-                                <label class="col-form-label">Dt Início</label>
-                                <input type="date" class="form-control" [(ngModel)]="listaData.dataInicio">
+                                <label class="col-form-label">Apartamento</label>
+                                <input type="number" class="form-control" [(ngModel)]="listaData.numeroApartamento">
                             </div>
-                            <div class="col-sm-2">
-                                <label class="col-form-label">Dt Fim</label>
-                                <input type="date" class="form-control" [(ngModel)]="listaData.dataFim">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p style="margin-bottom: 0.5rem;">Período Data Início</p>
+                                <div class="row border-input">
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">De</label>
+                                        <input type="date" class="form-control" [(ngModel)]="listaData.dataInicioDe">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Até</label>
+                                        <input type="date" class="form-control" [(ngModel)]="listaData.dataInicioPara">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-2 m-t-35">
-                                <button class="btn btn-primary btn-round m-r-5" (click)="getApartamentos()">
+                            <div class="col-sm-4">
+                                <p style="margin-bottom: 0.5rem;">Período Data Fim</p>
+                                <div class="row border-input">
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">De</label>
+                                        <input type="date" class="form-control" [(ngModel)]="listaData.dataFimDe">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Até</label>
+                                        <input type="date" class="form-control" [(ngModel)]="listaData.dataFimPara">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" style="align-self: flex-end; text-align: end;">
+                                <button class="btn btn-primary btn-round m-r-5" (click)="getFichas()">
                                     Pesquisar
                                 </button>
                                 <button class="btn btn-primary btn-round" (click)="limparPesquisa()">
@@ -53,30 +76,38 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </app-card>
                 <br>
                 <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
                     [rowHeight]="'auto'" [externalPaging]="true" [rows]="fichas"
                     [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
                     [limit]="listaData ? listaData.size : 10" (page)='setPage($event)' (sort)="onSort($event)">
+                    <ngx-datatable-column prop="id" name="Código" [flexGrow]="2">
+                        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.id }}</ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column prop="apartamento.bloco.condominio.nome" name="Condomínio" [flexGrow]="2">
                         <ng-template let-row="row" ngx-datatable-cell-template>
-                            {{ row.apartamento.bloco.condominio.nome }}</ng-template>
+                            {{ row.apartamento.bloco.condominio.nome }}
+                        </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column prop="apartamento.bloco.nome" name="Bloco" [flexGrow]="1">
-                        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.apartamento.bloco.nome }}
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.apartamento.bloco.nome }}
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column prop="apartamento.numero" name="Apartamento" [flexGrow]="1" [sortable]="true">
-                        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.apartamento.numero }}
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.apartamento.numero }}
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column prop="dataInicio" name="Dt Início" [flexGrow]="1" [sortable]="true">
-                        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.dataInicio | date:'dd/MM/yyyy' }}
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.dataInicio | date:'dd/MM/yyyy' }}
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column prop="dataFim" name="Dt Fim" [flexGrow]="1" [sortable]="true">
-                        <ng-template let-row="row" ngx-datatable-cell-template>{{ row.dataFim | date:'dd/MM/yyyy' }}
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.dataFim | date:'dd/MM/yyyy' }}
                         </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column prop="id" name="Opções" [flexGrow]="1" [sortable]="false">

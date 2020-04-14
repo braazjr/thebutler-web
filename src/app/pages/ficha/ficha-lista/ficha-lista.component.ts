@@ -26,9 +26,12 @@ export class FichaListaComponent implements OnInit {
 
     idCondominio?: string,
     idBloco?: string,
-    numero?: string,
-    dataInicio?: string,
-    dataFim?: string
+    numeroApartamento?: string,
+    codigo?: string,
+    dataInicioDe?: string,
+    dataInicioPara?: string,
+    dataFimDe?: string,
+    dataFimPara?: string
   };
 
   listaCondominios: Array<IOption> = [];
@@ -47,8 +50,12 @@ export class FichaListaComponent implements OnInit {
       sort: 'dataInicio',
       idCondominio: '0',
       idBloco: '0',
-      dataInicio: '',
-      dataFim: ''
+      numeroApartamento: '',
+      codigo: '',
+      dataInicioDe: '',
+      dataInicioPara: '',
+      dataFimDe: '',
+      dataFimPara: ''
     };
   }
 
@@ -72,6 +79,7 @@ export class FichaListaComponent implements OnInit {
         this.listaData.totalElements = data['totalElements'];
         this.listaData.totalPages = data['totalPages'];
         this.fichas = data['content'] as any[];
+        console.log(this.fichas)
       })
   }
 
@@ -108,5 +116,25 @@ export class FichaListaComponent implements OnInit {
           });
       }
     })
+  }
+
+  limparPesquisa() {
+    this.listaData = {
+      size: 10,
+      totalElements: 0,
+      totalPages: 0,
+      page: 0,
+      sort: 'dataInicio',
+      idCondominio: '0',
+      idBloco: '0',
+      numeroApartamento: '',
+      codigo: '',
+      dataInicioDe: '',
+      dataInicioPara: '',
+      dataFimDe: '',
+      dataFimPara: ''
+    };
+
+    this.setPage({ offset: 0 });
   }
 }
