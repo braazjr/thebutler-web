@@ -56,3 +56,10 @@ ng-select.is-invalid, ng-select.ng-invalid {
     background-color: $primary-color;
     color: #fff;
 }
+
+.border-input {
+    margin: 0px;
+    border: 1px solid $gray-400 !important;
+    border-radius: 5px;
+    padding-bottom: 5px;
+}
