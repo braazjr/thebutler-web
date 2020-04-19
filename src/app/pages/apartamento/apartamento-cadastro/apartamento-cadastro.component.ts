@@ -80,8 +80,7 @@ export class ApartamentoCadastroComponent implements OnInit {
     if (this.formulario.invalid) {
       Swal.fire('Cadastro de apartamento', 'Não é possível salvar o apartamento!<br>Existem campos inválidos', 'error');
     } else {
-      this.apartamento.usuario = this.sharedService.getUsuarioLogged();
-      this.apartamento.bloco.id = this.formulario.get('blocoId').value;
+      this.apartamento['idBloco'] = this.formulario.get('blocoId').value;
       this.apartamento.numero = this.formulario.get('numero').value;
       this.apartamento.ativo = this.formulario.get('ativo').value;
 
@@ -90,14 +89,14 @@ export class ApartamentoCadastroComponent implements OnInit {
           .subscribe(response => {
             this.apartamento = response as Apartamento;
             this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
-            this.router.navigate([`/ficha/${this.apartamento.id}`]);
+            // this.router.navigate([`/ficha/${this.apartamento.id}`]);
           })
       } else {
         this.defaultService.atualizar('apartamentos', this.apartamento)
           .subscribe(response => {
             this.apartamento = response as Apartamento;
             this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
-            this.router.navigate([`/ficha/${this.apartamento.id}`]);
+            // this.router.navigate([`/ficha/${this.apartamento.id}`]);
           })
       }
     }
