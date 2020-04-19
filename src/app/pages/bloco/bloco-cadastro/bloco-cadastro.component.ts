@@ -74,8 +74,7 @@ export class BlocoCadastroComponent implements OnInit {
       this.isSubmit = true;
       this.toastService.addToast('error', 'Cadastro Bloco!', 'O nome ou número deve ser preenchido!');
     } else {
-      this.bloco.usuario = this.sharedService.getUsuarioLogged();
-      this.bloco.condominio.id = Number(this.condominioId);
+      this.bloco['idCondominio'] = this.condominioId;
 
       if (!this.bloco.id) {
         this.defaultService.salvar('blocos', this.bloco)
