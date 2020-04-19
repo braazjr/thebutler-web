@@ -15,22 +15,24 @@
           </div>
         </div>
 
-        <ngx-datatable #table class='data-table' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+        <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
           [rowHeight]="50" [rows]="listaUsuarios" [externalPaging]="true"
           [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
           [limit]="listaData ? listaData.size : 10" (page)='setPage($event)'>
-          <ngx-datatable-column name="Nome"></ngx-datatable-column>
-          <ngx-datatable-column name="Login"></ngx-datatable-column>
-          <ngx-datatable-column name="Permissões">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ listarPermissoes(row.permissoes) }}</ng-template>
+          <ngx-datatable-column name="Nome" [flexGrow]="3"></ngx-datatable-column>
+          <ngx-datatable-column prop="email" name="E-mail" [flexGrow]="3"></ngx-datatable-column>
+          <ngx-datatable-column name="Permissões" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-info" *ngFor="let permissao of row.permissoes">{{permissao | uppercase}}</label>
+            </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Ativo">
+          <ngx-datatable-column name="Ativo" [flexGrow]="1">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <label class="badge badge-success" *ngIf="row.ativo">Ativo</label>
               <label class="badge badge-danger" *ngIf="!row.ativo">Inativo</label>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column prop="id" name="Opções">
+          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="1">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <label class="badge badge-warning pointer m-r-5" [routerLink]="['/usuario/cadastro', row.id]">
                 Ver/Editar
