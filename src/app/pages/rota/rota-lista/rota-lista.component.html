@@ -15,16 +15,6 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-sm-12">
-            <label class="dt-cust-search f-right">
-              <div class="form-group">
-                <label>Pesquisar: </label>
-                <input type='text' class="form-control input-sm m-l-10" (keyup)='updateFilter($event)' />
-              </div>
-            </label>
-          </div>
-        </div>
         <ngx-datatable #table class='data-table' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
           [rowHeight]="50" [rows]="listaRotasTemp" [limit]="10">
           <ngx-datatable-column name="Nome"></ngx-datatable-column>

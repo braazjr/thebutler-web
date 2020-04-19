@@ -14,7 +14,7 @@ export class DefaultService {
   ) { }
 
   get(model) {
-    return this.http.get(`${environment.urlSpring}/${model}/`, { withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/${model}`, { withCredentials: true });
   }
 
   getById(model, id) {

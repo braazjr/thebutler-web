@@ -51,8 +51,6 @@ export class RotaCadastroComponent implements OnInit {
       this.isSubmit = true;
       return;
     } else {
-      this.rota.usuario = this.sharedService.getUsuarioLogged();
-
       if (!this.rota.id) {
         this.defaultService.salvar('rotas', this.rota)
           .subscribe(response => {
