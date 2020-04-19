@@ -300,7 +300,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getFichaFile() {
-    this.apartamentoService.getFicha(this.ficha.apartamento.id)
+    this.fichaService.getFichaPdf(this.ficha.id)
       .subscribe((response) => {
         this.saveFile(response['body'], `Ficha-Apartamento-${this.ficha.apartamento.numero}-${this.ficha.apartamento.bloco.nome}-${this.ficha.apartamento.bloco.condominio.nome}`);
       });

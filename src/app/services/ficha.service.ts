@@ -44,4 +44,14 @@ export class FichaService {
         })
       );
   }
+
+  getFichaPdf(id) {
+    return this.http.get(`${environment.urlSpring}/fichas/${id}/download-pdf`, { withCredentials: true, observe: 'response', responseType: 'blob' })
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Carregando PDF ficha!`);
+          return Observable.throw(error);
+        })
+      );
+  }
 }
