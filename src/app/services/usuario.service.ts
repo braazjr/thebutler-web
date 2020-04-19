@@ -13,7 +13,7 @@ export class UsuarioService {
     private httpUtil: HttpUtil
   ) { }
 
-  getUsuarioPorEmpresa(pageable, ) {
+  getUsuarios(pageable) {
     return this.http.get(`${environment.urlSpring}/usuarios`, { withCredentials: true, params: pageable })
       .pipe(
         catchError(error => {

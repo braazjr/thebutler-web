@@ -7,10 +7,6 @@ export class Usuario {
     nome: String;
     senha: String;
     ativo: Boolean= true;
-    permissoes: Permissao[]
+    permissoes: String[] = []
     empresa: EmpresaSub
-}
-
-export enum Permissao {
-    ADMIN, OPERADOR
 }
