@@ -14,8 +14,8 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="form-group row">
-              <div class="col-sm-3">
-                <label class="col-form-label">Condominio</label>
+              <!-- <div class="col-sm-3">
+                <label class="col-form-label">Rotas</label>
                 <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="listaData.idCondominio">
                 </ng-select>
               </div>
@@ -23,17 +23,31 @@
                 <label class="col-form-label">Bloco</label>
                 <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" [(ngModel)]="listaData.idBloco">
                 </ng-select>
+              </div> -->
+              <div class="col-sm-3">
+                <label class="col-form-label">Motorista</label>
+                <ng-select [ngClass]="'ng-select'" [options]="listaMotoristas" [(ngModel)]="listaData.motoristaId">
+                </ng-select>
+              </div>
+              <div class="col-sm-3">
+                <label class="col-form-label">Rota</label>
+                <ng-select [ngClass]="'ng-select'" [options]="listaRotas" [(ngModel)]="listaData.rotaId">
+                </ng-select>
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-sm-6">
-                <label class="col-form-label">Nome</label>
-                <input type="text" class="form-control" [(ngModel)]="listaData.nomeMorador">
-              </div>
               <div class="col-sm-3">
-                <label class="col-form-label">Documento</label>
-                <input type="text" class="form-control" [(ngModel)]="listaData.documentoMorador">
+                <label class="col-form-label">Nome Morador</label>
+                <input type="text" class="form-control" [(ngModel)]="listaData.moradorNome">
               </div>
+              <div class="col-sm-6">
+                <label class="col-form-label">E-mail Morador</label>
+                <input type="text" class="form-control" [(ngModel)]="listaData.moradorEmail">
+              </div>
+              <!-- <div class="col-sm-3">
+                <label class="col-form-label">E-mail morador</label>
+                <input type="text" class="form-control" [(ngModel)]="listaData.documentoMorador">
+              </div> -->
               <!-- <div class="col-sm-3">
                 <label class="col-form-label">Numero Apart.</label>
                 <input type="number" class="form-control" [(ngModel)]="listaData.numeroApartamento">
@@ -44,7 +58,7 @@
                 </ng-select>
               </div> -->
               <div class="col-sm-9 col-md-3">
-                <button class="btn btn-primary btn-round btn-sm m-t-35" (click)="getViagens()">
+                <button class="btn btn-primary btn-round btn-sm m-t-35 m-r-5" (click)="getViagens()">
                   Pesquisar
                 </button>
                 <button class="btn btn-warning btn-round btn-sm m-t-35" (click)="limparPesquisa()">
@@ -95,7 +109,7 @@
             </ng-template>
           </ngx-datatable-row-detail>
 
-          <ngx-datatable-column prop="id" name="ID" [flexGrow]="1">
+          <ngx-datatable-column prop="id" name="ID" [flexGrow]="2">
             <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.id }}</strong></ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="dataHoraInicio" name="Data/Hora Início" [flexGrow]="2">
@@ -111,9 +125,9 @@
           <ngx-datatable-column prop="rota.nome" name="Rota" [flexGrow]="3">
             <ng-template let-row="row" ngx-datatable-cell-template>{{ row.rota.nome }}</ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column [flexGrow]="2" [sortable]="false">
+          <ngx-datatable-column [flexGrow]="1" [sortable]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-              <label class="badge badge-primary pointer" (click)="toggleExpandRow(row)">Ver moradores ({{ row.moradores.length }})</label>
+              <label class="badge badge-primary pointer" (click)="toggleExpandRow(row)">{{ row.moradores.length }} Morador(es)</label>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-footer>
