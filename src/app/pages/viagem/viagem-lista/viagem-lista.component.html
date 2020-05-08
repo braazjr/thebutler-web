@@ -67,8 +67,8 @@
               <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
                 [rowHeight]="'auto'" [rows]="rowChild.moradores">
 
-                <ngx-datatable-column prop="id" name="ID" [flexGrow]="1">
-                  <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.id }}</strong></ng-template>
+                <ngx-datatable-column prop="morador.id" name="ID" [flexGrow]="1">
+                  <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.morador.id }}</strong></ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column prop="horario" name="Horário" [flexGrow]="1">
                   <ng-template let-row="row" ngx-datatable-cell-template>{{ row.horario }}</ng-template>
@@ -105,15 +105,15 @@
           <ngx-datatable-column prop="dataHoraFim" name="Data/Hora Fim" [flexGrow]="2">
             <ng-template let-row="row" ngx-datatable-cell-template>{{ row.dataHoraFim }}</ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column prop="motorista.login" name="Motorista" [flexGrow]="2">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.motorista.login }}</ng-template>
+          <ngx-datatable-column prop="motorista.email" name="Motorista" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.motorista.email }}</ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="rota.nome" name="Rota" [flexGrow]="3">
             <ng-template let-row="row" ngx-datatable-cell-template>{{ row.rota.nome }}</ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column [flexGrow]="2" [sortable]="false">
             <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
-              <label class="badge badge-primary pointer" (click)="toggleExpandRow(row)">Ver moradores</label>
+              <label class="badge badge-primary pointer" (click)="toggleExpandRow(row)">Ver moradores ({{ row.moradores.length }})</label>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-footer>
