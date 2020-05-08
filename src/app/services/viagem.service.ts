@@ -13,8 +13,8 @@ export class ViagemService {
     private httpUtil: HttpUtil
   ) { }
 
-  getViagens(pageable) {
-    return this.http.get(`${environment.urlSpring}/viagens`, { withCredentials: true, params: pageable })
+  getViagens(listaData) {
+    return this.http.get(`${environment.urlSpring}/viagens`, { withCredentials: true, params: listaData })
       .pipe(
         catchError(error => {
           this.httpUtil.showErrors(error, `Carregando viagens!`);

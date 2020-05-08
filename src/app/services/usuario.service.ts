@@ -32,4 +32,14 @@ export class UsuarioService {
         })
       );
   }
+
+  getMotoristas() {
+    return this.http.get(`${environment.urlSpring}/usuarios/motoristas`)
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Carregando motoristas!`);
+          return Observable.throw(error);
+        })
+      );
+  }
 }
