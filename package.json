@@ -1,6 +1,7 @@
 {
   "name": "the-butler",
   "version": "1.0.0",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
@@ -10,7 +11,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "heroku-postbuild": "npm run build:develop"
+    "heroku-postbuild": "npm run build:develop",
+    "start:electron": "electron ."
   },
   "private": true,
   "dependencies": {
@@ -89,11 +91,13 @@
     "@angular/compiler-cli": "~8.2.4",
     "@angular/language-service": "~8.2.4",
     "@types/datatables.net": "^1.10.17",
-    "@types/node": "~8.9.4",
+    "@types/electron": "^1.6.10",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/jquery": "^3.3.30",
+    "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
+    "electron": "^8.2.5",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
