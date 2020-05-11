@@ -36,6 +36,7 @@ export class FichaListaComponent implements OnInit {
 
   listaCondominios: Array<IOption> = [];
   listaBlocos: Array<IOption> = [];
+  isCollapsed: boolean = false;
 
   constructor(
     private fichaService: FichaService,
@@ -136,5 +137,10 @@ export class FichaListaComponent implements OnInit {
     };
 
     this.setPage({ offset: 0 });
+  }
+
+  onSort(event) {
+    this.listaData.sort = event.column.prop + ',' + event.newValue;
+    this.getFichas();
   }
 }
