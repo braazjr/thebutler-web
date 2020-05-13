@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron')
-const url = require("url");
-const path = require("path");
+const url = require('url');
+const path = require('path');
 
 let mainWindow
 
@@ -10,18 +10,19 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        icon: path.join(__dirname, `dist/assets/images/logo.png`)
     })
 
     mainWindow.loadURL(
         url.format({
             pathname: path.join(__dirname, `/dist/index.html`),
-            protocol: "file:",
+            protocol: 'file:',
             slashes: true
         })
     );
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
     mainWindow.on('closed', function () {
         mainWindow = null
@@ -29,7 +30,7 @@ function createWindow() {
 }
 
 app.on('ready', createWindow)
-
+    
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit()
 })
