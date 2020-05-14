@@ -17,6 +17,10 @@
               </label>
               <label class="badge badge-light m-t-10 pointer" [routerLink]="['/ficha']">Fichas</label>
               <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
+              <label class="badge badge-light m-t-10 pointer" *ngIf="temCracha()"
+                (click)="exibirListaParaCracha(modalListaCrachas)">
+                Imprimir crachás
+              </label>
             </div>
           </nav>
         </div>
@@ -392,5 +396,48 @@
     <button type="button" class="btn btn-default waves-effect"
       (click)="modalDocumentos.hide(); documentosForm.reset()">Fechar</button>
     <button type="button" class="btn btn-default waves-effect" (click)="importarFotos()">Importar fotos</button>
+  </div>
+</app-ui-modal>
+
+
+
+<app-ui-modal #modalListaCrachas [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Lista de impressão</h4>
+    <button type="button" class="close basic-close" (click)="modalListaCrachas.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="table-responsive" *ngIf="ficha.moradores && ficha.moradores.length !== 0">
+      <table class="table table-inverse">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Documento</th>
+            <th>Imprimir?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let morador of ficha.moradores">
+            <!-- <th scope="row"><a [href]="doc.url" target="_blank">{{ doc.nome }}</a></th> -->
+            <td>{{ morador.nome }}</td>
+            <td>{{ morador.documento }}</td>
+            <td>
+              <label class="badge pointer"
+                [ngClass]="{'badge-danger': !morador.imprimir, 'badge-success': morador.imprimir}"
+                (click)="morador.imprimir = !morador.imprimir">
+                {{ !morador.imprimir ? 'Não' : 'Sim'  }}
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="modalListaCrachas.hide()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect" (click)="imprimirCrachas(modalListaCrachas)">Imprimir</button>
   </div>
 </app-ui-modal>

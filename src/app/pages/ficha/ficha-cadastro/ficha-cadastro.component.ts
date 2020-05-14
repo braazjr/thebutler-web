@@ -10,14 +10,16 @@ import { TipoDocumentoService } from '../../../services/tipo-documento.service';
 import { TipoMoradorService } from '../../../services/tipo-morador.service';
 import { WebCamComponent } from 'ack-angular-webcam';
 import { ToastService } from '../../../services/toast.service';
-import { ApartamentoService } from '../../../services/apartamento.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { Ficha } from 'src/app/models/ficha-model';
 import { FichaService } from 'src/app/services/ficha.service';
+import { IpcRenderer } from 'electron'
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
 import * as lodash from 'lodash';
+
+declare var window: any;
 
 @Component({
   selector: 'app-ficha-cadastro',
@@ -54,6 +56,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     files: new FormControl(null)
   });
 
+  private ipcRenderer: IpcRenderer | undefined
+
   constructor(
     private route: ActivatedRoute,
     private defaultService: DefaultService,
@@ -64,9 +68,18 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     private sharedService: SharedService,
     private toastService: ToastService,
     private documentoService: DocumentoService,
-    private apartamentoService: ApartamentoService,
     private fichaService: FichaService
-  ) { }
+  ) {
+    if (window.require) {
+      try {
+        this.ipcRenderer = window.require('electron').ipcRenderer;
+      } catch (e) {
+        throw e;
+      }
+    } else {
+      console.warn('Electron\'s IPC was not loaded');
+    }
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -135,7 +148,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   getFicha(id) {
     this.fichaService.getFullFicha(id)
       .subscribe(ficha => {
-        this.ficha = ficha as Ficha; 
+        this.ficha = ficha as Ficha;
         this.carregaFicha();
       })
   }
@@ -342,5 +355,47 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         );
         this.getFicha(this.ficha.id)
       });
+  }
+
+  temCracha() {
+    return true
+    const usuario = this.sharedService.getUsuarioLogged()
+    const empresaFicha = this.ficha.apartamento.bloco.condominio.empresa
+    return (usuario.empresa && usuario.empresa.empresaConfig && usuario.empresa.empresaConfig.temCracha)
+      || (empresaFicha.empresaConfig && empresaFicha.empresaConfig.temCracha)
+  }
+
+  exibirListaParaCracha(modal) {
+    if (!this.ficha.id) {
+      Swal.fire({
+        type: 'error',
+        title: 'Impressão de crachás',
+        text: 'É necessário salvar a ficha para impressão dos crachás'
+      })
+      return;
+    }
+
+    modal.show()
+  }
+
+  imprimirCrachas(modal) {
+    const result = this.ficha.moradores
+      .map(morador =>
+        `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64 : ''};${morador.nome};${morador.telefone ? morador.telefone : ''}`
+      )
+
+    console.log(result)
+
+    if (!this.ipcRenderer) {
+      return;
+    }
+
+    this.ipcRenderer.send('imprimir-crachas', result)
+
+    this.ipcRenderer.on('imprimir-crachas-replay', (event, args) => {
+      console.log(args)
+      modal.hide();
+      this.toastService.addToast('success', 'Impressão de crachás', 'Crachás impressos com sucesso!');
+    })
   }
 }
