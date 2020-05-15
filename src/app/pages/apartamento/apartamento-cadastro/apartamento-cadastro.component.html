@@ -30,6 +30,12 @@
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numero')}">Número</label>
             <input type="number" class="form-control" #numero formControlName="numero">
           </div>
+          <div class="col-sm-3">
+            <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('numeroQuartos')}">
+              Nº Quartos
+            </label>
+            <input type="number" class="form-control" #numeroQuartos formControlName="numeroQuartos">
+          </div>
           <div class="col-sm-2">
             <br><br>
             <div class="custom-control custom-switch">

@@ -44,7 +44,8 @@ export class ApartamentoCadastroComponent implements OnInit {
     this.formulario = this.formBuilder.group({
       blocoId: ['0', [Validators.required, Validators.min(1)]],
       ativo: [true, [Validators.required]],
-      numero: ['', [Validators.required, Validators.min(1)]]
+      numero: ['', [Validators.required, Validators.min(1)]],
+      numeroQuartos: ['', [Validators.required, Validators.min(1)]]
     });
 
     this.carregarBlocos();
@@ -83,6 +84,7 @@ export class ApartamentoCadastroComponent implements OnInit {
       this.apartamento['idBloco'] = this.formulario.get('blocoId').value;
       this.apartamento.numero = this.formulario.get('numero').value;
       this.apartamento.ativo = this.formulario.get('ativo').value;
+      this.apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value
 
       if (!this.apartamento.id) {
         this.defaultService.salvar('apartamentos', this.apartamento)
