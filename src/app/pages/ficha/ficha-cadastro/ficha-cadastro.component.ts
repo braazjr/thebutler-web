@@ -17,7 +17,7 @@ import { IpcRenderer } from 'electron'
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
-import * as lodash from 'lodash';
+import * as moment from 'moment'
 
 declare var window: any;
 
@@ -88,14 +88,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       if (context == 'ficha') {
         this.getFicha(params['id'])
       } else if (context && params['id']) {
-        this.ficha
         this.ficha.apartamento.id = params['id']
         this.getById();
       }
     });
 
     this.formulario = this.formBuilder.group({
-      numeroQuartos: ['', [Validators.required, Validators.minLength(2)]],
       responsavel: this.formBuilder.group({
         id: [{ value: '', disabled: true }],
         nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
@@ -148,6 +146,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   getFicha(id) {
     this.fichaService.getFullFicha(id)
       .subscribe(ficha => {
+        console.log(ficha)
         this.ficha = ficha as Ficha;
         this.carregaFicha();
       })
@@ -259,19 +258,18 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.isSubmit = true;
       return;
     } else {
-      let apartamento: Apartamento;
-      apartamento = lodash.clone(this.ficha.apartamento);
-      apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value;
-      apartamento.observacao = this.formulario.get('observacao').value;
-      apartamento.usuario = this.sharedService.getUsuarioLogged();
-      apartamento.moradores = [];
-      apartamento.moradores = this.listaMoradores;
-      apartamento.moradores.push(this.formulario.getRawValue().responsavel);
-      apartamento.moradores.forEach(morador => {
-        morador.usuario = this.sharedService.getUsuarioLogged();
-      });
+      let fichaDto = {}
+      fichaDto['id'] = this.ficha.id
+      fichaDto['idApartamento'] = this.ficha.apartamento.id
+      fichaDto['moradores'] = this.listaMoradores
+      fichaDto['dataInicio'] = moment().format('DD/MM/YYYY')
 
-      this.defaultService.atualizar('apartamentos', apartamento)
+      fichaDto['moradores'].forEach(morador => {
+        if (morador.usuario)
+          delete morador.usuario
+      })
+
+      this.defaultService.salvar('fichas', fichaDto)
         .subscribe(() => {
           this.getById();
           this.toastService.addToast(
@@ -379,12 +377,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   imprimirCrachas(modal) {
-    const result = this.ficha.moradores
+    let result = this.ficha.moradores
       .map(morador =>
-        `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64 : ''};${morador.nome};${morador.telefone ? morador.telefone : ''}`
+        `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64.substring(23) : ''};${morador.nome};${morador.telefone ? morador.telefone : ''};${this.ficha.apartamento.bloco.condominio.nome}`
       )
 
-    console.log(result)
+    result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
 
     if (!this.ipcRenderer) {
       return;
@@ -393,7 +391,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     this.ipcRenderer.send('imprimir-crachas', result)
 
     this.ipcRenderer.on('imprimir-crachas-replay', (event, args) => {
-      console.log(args)
       modal.hide();
       this.toastService.addToast('success', 'Impressão de crachás', 'Crachás impressos com sucesso!');
     })

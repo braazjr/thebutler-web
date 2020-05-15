@@ -41,8 +41,8 @@
             </div>
             <div class="col-sm-3">
               <label class="col-form-label">Nº Quartos</label>
-              <input type="number" class="form-control" formControlName="numeroQuartos"
-                [validForm]="{form: formulario.get('numeroQuartos'), isSubmit: isSubmit}">
+              <input type="number" class="form-control" #numeroQuartos [value]="ficha.apartamento.numeroQuartos"
+                disabled>
             </div>
             <div class="col-sm-12">
               <label class="col-form-label">Observação</label>
@@ -436,8 +436,8 @@
     </div>
   </div>
   <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="modalListaCrachas.hide()">Fechar</button>
     <button type="button" class="btn btn-default waves-effect"
-      (click)="modalListaCrachas.hide()">Fechar</button>
-    <button type="button" class="btn btn-default waves-effect" (click)="imprimirCrachas(modalListaCrachas)">Imprimir</button>
+      (click)="imprimirCrachas(modalListaCrachas)">Imprimir</button>
   </div>
 </app-ui-modal>

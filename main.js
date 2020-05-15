@@ -41,6 +41,8 @@ app.on('activate', function () {
     if (mainWindow === null) createWindow()
 })
 
+// IMPRESSÃO DE CRACHÁS
+
 ipcMain.on('imprimir-crachas', (event, args) => {
     console.log(args)
 
