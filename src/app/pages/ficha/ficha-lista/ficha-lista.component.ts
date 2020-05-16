@@ -80,7 +80,6 @@ export class FichaListaComponent implements OnInit {
         this.listaData.totalElements = data['totalElements'];
         this.listaData.totalPages = data['totalPages'];
         this.fichas = data['content'] as any[];
-        console.log(this.fichas)
       })
   }
 

@@ -13,13 +13,11 @@ import { ToastService } from '../../../services/toast.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { Ficha } from 'src/app/models/ficha-model';
 import { FichaService } from 'src/app/services/ficha.service';
-import { IpcRenderer } from 'electron'
+import { ElectronService } from 'src/app/services/electron.service';
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
 import * as moment from 'moment'
-
-declare var window: any;
 
 @Component({
   selector: 'app-ficha-cadastro',
@@ -56,8 +54,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     files: new FormControl(null)
   });
 
-  private ipcRenderer: IpcRenderer | undefined
-
   constructor(
     private route: ActivatedRoute,
     private defaultService: DefaultService,
@@ -68,18 +64,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     private sharedService: SharedService,
     private toastService: ToastService,
     private documentoService: DocumentoService,
-    private fichaService: FichaService
-  ) {
-    if (window.require) {
-      try {
-        this.ipcRenderer = window.require('electron').ipcRenderer;
-      } catch (e) {
-        throw e;
-      }
-    } else {
-      console.warn('Electron\'s IPC was not loaded');
-    }
-  }
+    private fichaService: FichaService,
+    private electronService: ElectronService
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -146,7 +133,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   getFicha(id) {
     this.fichaService.getFullFicha(id)
       .subscribe(ficha => {
-        console.log(ficha)
         this.ficha = ficha as Ficha;
         this.carregaFicha();
       })
@@ -356,7 +342,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   temCracha() {
-    return true
     const usuario = this.sharedService.getUsuarioLogged()
     const empresaFicha = this.ficha.apartamento.bloco.condominio.empresa
     return (usuario.empresa && usuario.empresa.empresaConfig && usuario.empresa.empresaConfig.temCracha)
@@ -384,13 +369,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
     result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
 
-    if (!this.ipcRenderer) {
-      return;
-    }
+    this.electronService.sendIpc('imprimir-crachas', result)
 
-    this.ipcRenderer.send('imprimir-crachas', result)
-
-    this.ipcRenderer.on('imprimir-crachas-replay', (event, args) => {
+    this.electronService.ipcRenderer.on('imprimir-crachas-replay', (event, args) => {
       modal.hide();
       this.toastService.addToast('success', 'Impressão de crachás', 'Crachás impressos com sucesso!');
     })
