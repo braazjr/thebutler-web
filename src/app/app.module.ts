@@ -32,6 +32,7 @@ import { AuthService } from './services/auth.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedTheButlerModule } from './shared/shared-the-butler.module';
 import { ModalAlterarSenhaComponent } from './shared/components/modal-alterar-senha/modal-alterar-senha.component';
+import { ModalBravasoftConfigurationComponent } from './shared/components/modal-bravasoft-configuration/modal-bravasoft-configuration.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,9 @@ import { ModalAlterarSenhaComponent } from './shared/components/modal-alterar-se
     AuthService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalAlterarSenhaComponent]
+  entryComponents: [
+    ModalAlterarSenhaComponent,
+    ModalBravasoftConfigurationComponent
+  ]
 })
 export class AppModule { }

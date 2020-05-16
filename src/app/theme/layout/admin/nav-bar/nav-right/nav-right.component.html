@@ -62,7 +62,7 @@
     <div class="dropdown drp-user" ngbDropdown placement="auto">
       <a href="javascript:" ngbDropdownToggle data-toggle="dropdown">
         <!-- <img src="assets/images/user/avatar-1.jpg" class="img-radius wid-40" alt="User-Profile-Image"> -->
-        <i class="fa fa-user wid-40"></i>
+        <i class="fa fa-user-cog" style="font-size: 22px; padding-top: 22px;"></i>
       </a>
       <div class="dropdown-menu dropdown-menu-right profile-notification" ngbDropdownMenu>
         <div class="pro-head">
@@ -74,6 +74,7 @@
           </a> -->
         </div>
         <ul class="pro-body">
+          <li (click)="modalBravaSoft.show()"><a href="javascript:" class="dropdown-item"><i class="fa fa-print"></i> Configurações do BravaSoft</a></li>
           <li (click)="modalRedefinirSenha.show()"><a href="javascript:" class="dropdown-item"><i class="fa fa-key"></i> Alterar senha</a></li>
           <li (click)="logout()"><a href="javascript:" class="dropdown-item"><i class="fa fa-lock"></i> Sair/Logout</a></li>
         </ul>
@@ -99,3 +100,4 @@
 </section> -->
 
 <modal-alterar-senha #modalRedefinirSenha [usuario]="usuario"></modal-alterar-senha>
+<modal-bravasoft-configuration #modalBravaSoft></modal-bravasoft-configuration>
