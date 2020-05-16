@@ -13,7 +13,7 @@ export class HttpUtil {
         if (error.error) {
             if (Array.isArray(error.error)) {
                 error.error.forEach(element => {
-                    console.log(titulo, element.mensagemUsuario)
+                    console.info(titulo, element.mensagemUsuario)
                     this.toastService.addToast('error', titulo, element.mensagemUsuario);
                 });
             } else {
