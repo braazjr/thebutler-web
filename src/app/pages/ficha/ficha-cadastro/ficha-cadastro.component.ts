@@ -65,7 +65,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     private toastService: ToastService,
     private documentoService: DocumentoService,
     private fichaService: FichaService,
-    private electronService: ElectronService
+    public electronService: ElectronService
   ) { }
 
   ngOnInit() {

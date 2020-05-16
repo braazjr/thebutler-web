@@ -74,7 +74,7 @@
           </a> -->
         </div>
         <ul class="pro-body">
-          <li (click)="modalBravaSoft.show()"><a href="javascript:" class="dropdown-item"><i class="fa fa-print"></i> Configurações do BravaSoft</a></li>
+          <li (click)="modalBravaSoft.show()" *ngIf="electronService.ipcRenderer"><a href="javascript:" class="dropdown-item"><i class="fa fa-print"></i> Configurações do BravaSoft</a></li>
           <li (click)="modalRedefinirSenha.show()"><a href="javascript:" class="dropdown-item"><i class="fa fa-key"></i> Alterar senha</a></li>
           <li (click)="logout()"><a href="javascript:" class="dropdown-item"><i class="fa fa-lock"></i> Sair/Logout</a></li>
         </ul>

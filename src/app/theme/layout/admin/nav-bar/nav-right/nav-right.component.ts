@@ -5,6 +5,7 @@ import { GradientConfig } from '../../../../../app-config';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/models/usuario-model';
 import { SharedService } from 'src/app/shared/shared.service';
+import { ElectronService } from 'src/app/services/electron.service';
 
 @Component({
   selector: 'app-nav-right',
@@ -42,7 +43,8 @@ export class NavRightComponent implements OnInit, DoCheck {
 
   constructor(
     private authService: AuthService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    public electronService: ElectronService
   ) {
     this.visibleUserList = false;
     this.chatMessage = false;

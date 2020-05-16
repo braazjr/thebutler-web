@@ -17,7 +17,7 @@
               </label>
               <label class="badge badge-light m-t-10 pointer" [routerLink]="['/ficha']">Fichas</label>
               <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
-              <label class="badge badge-light m-t-10 pointer" *ngIf="temCracha()"
+              <label class="badge badge-light m-t-10 pointer"  *ngIf="electronService.ipcRenderer && temCracha()"
                 (click)="exibirListaParaCracha(modalListaCrachas)">
                 Imprimir crachás
               </label>
