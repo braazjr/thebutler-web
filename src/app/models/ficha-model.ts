@@ -3,7 +3,7 @@ import { Morador } from './morador-model';
 
 export class Ficha {
 
-    id: String
+    id: string
     apartamento: Apartamento = new Apartamento()
     moradores: Morador[] = []
     documentos: any[] = []

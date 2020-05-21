@@ -54,4 +54,14 @@ export class FichaService {
         })
       );
   }
+
+  removeMorador(id: string, moradorId: string) {
+    return this.http.patch(`${environment.urlSpring}/fichas/${id}/remove-morador/${moradorId}`, {})
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Removendo morador!`);
+          return Observable.throw(error);
+        })
+      );
+  }
 }

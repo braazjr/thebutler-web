@@ -177,8 +177,15 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        const moradorParaRemover = this.listaMoradores.findIndex(mora => mora.documento === morador.documento || mora.id === morador.id);
-        this.listaMoradores.splice(moradorParaRemover, 1);
+        this.fichaService.removeMorador(this.ficha.id, morador.id)
+          .subscribe(() => {
+            this.toastService.addToast(
+              'success',
+              'Removendo morador',
+              'Morador removido com sucesso!'
+            )
+            this.getFicha(this.ficha.id)
+          })
       }
     });
   }
