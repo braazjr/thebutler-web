@@ -1,6 +1,6 @@
 import { DocumentoService } from './../../../services/documento.service';
 import { Component, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Apartamento } from '../../../models/apartamento-model';
 import { DefaultService } from '../../../services/default.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -65,7 +65,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     private toastService: ToastService,
     private documentoService: DocumentoService,
     private fichaService: FichaService,
-    public electronService: ElectronService
+    public electronService: ElectronService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -83,9 +84,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     this.formulario = this.formBuilder.group({
       responsavel: this.formBuilder.group({
         id: [{ value: '', disabled: true }],
-        nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+        nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
         ativo: [true, [Validators.required]],
-        celular: ['', [Validators.pattern(this.celularRegex)]],
+        celular: ['', [Validators.required, Validators.pattern(this.celularRegex)]],
         telefone: ['', [Validators.pattern(this.telefoneRegex)]],
         placaCarro: [''],
         tipoMorador: ['0', [Validators.required, Validators.min(1)]],
@@ -100,10 +101,10 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     });
 
     this.formularioMorador = this.formBuilder.group({
-      id: [{ value: '', disabled: true }],
-      nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+      id: [{ value: null, disabled: true }],
+      nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
       ativo: [true, [Validators.required]],
-      celular: ['', [Validators.pattern(this.celularRegex)]],
+      celular: ['', [Validators.required, Validators.pattern(this.celularRegex)]],
       parentesco: ['', [Validators.required]],
       tipoDocumento: ['0'],
       documento: ['', [Validators.required]],
@@ -176,7 +177,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        const moradorParaRemover = this.listaMoradores.findIndex(mora => mora.documento === morador.documento);
+        const moradorParaRemover = this.listaMoradores.findIndex(mora => mora.documento === morador.documento || mora.id === morador.id);
         this.listaMoradores.splice(moradorParaRemover, 1);
       }
     });
@@ -247,7 +248,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       let fichaDto = {}
       fichaDto['id'] = this.ficha.id
       fichaDto['idApartamento'] = this.ficha.apartamento.id
-      fichaDto['moradores'] = this.listaMoradores
+      fichaDto['moradores'] = [this.formulario.getRawValue().responsavel]
+      if (this.listaMoradores.length > 0)
+        this.listaMoradores.forEach(morador => fichaDto['moradores'].push(morador))
       fichaDto['dataInicio'] = moment().format('DD/MM/YYYY')
 
       fichaDto['moradores'].forEach(morador => {
@@ -256,8 +259,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       })
 
       this.defaultService.salvar('fichas', fichaDto)
-        .subscribe(() => {
-          this.getById();
+        .subscribe((ficha) => {
+          if (!this.ficha.id) {
+            this.router.navigate([`/ficha/${ficha['id']}`], { replaceUrl: true });
+          } else {
+            this.getFicha(ficha['id'])
+          }
           this.toastService.addToast(
             'success',
             `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,

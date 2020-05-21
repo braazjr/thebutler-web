@@ -95,8 +95,8 @@
     </button>
   </div>
   <div class="app-modal-body">
-    <ngx-datatable #tableFichas class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'"
-      [rows]="fichas">
+    <ngx-datatable #tableFichas class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
+      [rowHeight]="'auto'" [rows]="fichas">
       <ngx-datatable-column prop="id" name="ID" [flexGrow]="2">
         <ng-template let-row="row" ngx-datatable-cell-template>{{ row.id }}</ng-template>
       </ngx-datatable-column>
@@ -115,6 +115,8 @@
     </ngx-datatable>
   </div>
   <div class="app-modal-footer">
+    <a [href]="'/ficha/apartamento/' + apartamentoTemp?.id" class="btn btn-default waves-effect"
+      (click)="modalFichasPorApartamento.hide()">Nova Ficha</a>
     <button type="button" class="btn btn-default waves-effect"
       (click)="modalFichasPorApartamento.hide()">Fechar</button>
   </div>
