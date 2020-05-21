@@ -42,7 +42,7 @@ ng-select.is-invalid, ng-select.ng-invalid {
 }
 
 .swal2-container .swal2-modal {
-    border: 2px solid $header-dark-background !important;
+    box-shadow: 0 0 25px -5px $header-dark-background;
     border-radius: 15px;
 
     .swal2-styled.swal2-confirm {
