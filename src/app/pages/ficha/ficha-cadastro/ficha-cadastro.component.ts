@@ -343,7 +343,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     form.get('fotoUrl').setValue(undefined);
   }
 
-  importarFotos() {
+  importarDocumentos() {
     this.documentoService.uploadDocumentos(this.ficha.id, this.documentosForm.value.files[0])
       .subscribe(() => {
         this.toastService.addToast(
@@ -351,7 +351,18 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
           `Importação de documento`,
           `Documento importado com sucesso!`
         );
-        this.getFicha(this.ficha.id)
+      }, () => {
+        Swal.fire({
+          type: 'error',
+          title: 'Importação de documento',
+          text: 'Ocorreu um erro ao importar o(s) documento(s)'
+        })
+      }, () => {
+        this.documentoService.getDocumentosPorFicha(this.ficha.id)
+          .subscribe(documentos => {
+            console.log(documentos)
+            this.ficha.documentos = documentos as any[]
+          })
       });
   }
 
