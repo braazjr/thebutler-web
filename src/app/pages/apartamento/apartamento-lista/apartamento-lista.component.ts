@@ -6,6 +6,8 @@ import { ToastService } from '../../../services/toast.service';
 import { IOption } from 'ng-select';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
+import { FichaService } from 'src/app/services/ficha.service';
+import { Ficha } from 'src/app/models/ficha-model';
 
 import Swal from 'sweetalert2';
 import * as lodash from 'lodash';
@@ -26,8 +28,7 @@ export class ApartamentoListaComponent implements OnInit {
 
     idCondominio?: string,
     idBloco?: string,
-    numero?: string,
-    comMoradores?: string
+    numero?: string
   };
 
   listaApartamentos: Apartamento[] = [];
@@ -36,25 +37,14 @@ export class ApartamentoListaComponent implements OnInit {
   listaCondominios: Array<IOption> = [];
   listaBlocos: Array<IOption> = [];
 
-  filtroComMoradores: Array<IOption> = [
-    {
-      value: '0',
-      label: 'Ambos'
-    },
-    {
-      value: 'true',
-      label: 'Com moradores'
-    },
-    {
-      value: 'false',
-      label: 'Sem moradores'
-    }
-  ];
+  apartamentoTemp: Apartamento;
+  fichas: any[] = [];
 
   constructor(
     private defaultService: DefaultService,
     private apartamentoService: ApartamentoService,
     private toastService: ToastService,
+    private fichaService: FichaService
   ) {
     this.listaData = {
       size: 10,
@@ -63,8 +53,7 @@ export class ApartamentoListaComponent implements OnInit {
       page: 0,
       sort: 'numero,asc',
       idCondominio: '0',
-      idBloco: '0',
-      comMoradores: '0'
+      idBloco: '0'
     };
   }
 
@@ -87,8 +76,6 @@ export class ApartamentoListaComponent implements OnInit {
 
   getApartamentos() {
     const listaData = lodash.clone(this.listaData);
-    if (listaData.comMoradores == '0')
-      delete listaData.comMoradores;
 
     this.apartamentoService.getApartamentos(listaData)
       .subscribe(data => {
@@ -145,10 +132,36 @@ export class ApartamentoListaComponent implements OnInit {
       page: 0,
       sort: 'numero,asc',
       idCondominio: '0',
-      idBloco: '0',
-      comMoradores: '0'
+      idBloco: '0'
     };
 
     this.setPage({ offset: 0 });
+  }
+
+  modalFichasPorApartamentoShow(modal, apartamentoId) {
+    this.fichaService.getFichaPorApartamento(apartamentoId)
+      .subscribe(fichas => {
+        this.fichas = fichas as any[];
+        modal.show();
+      })
+  }
+
+  excluirFicha(ficha: Ficha) {
+    Swal.fire({
+      title: 'Exclusão de ficha',
+      text: `Deseja excluir a ficha: ${ficha.id}?`,
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Não',
+      confirmButtonText: 'Sim'
+    }).then((result) => {
+      if (result.value) {
+        this.defaultService.excluir('fichas', ficha.id)
+          .subscribe(() => {
+            this.toastService.addToast('success', 'Exclusão de Ficha!', `Ficha excluída com sucesso!`);
+            this.setPage({ offset: 0 });
+          });
+      }
+    })
   }
 }

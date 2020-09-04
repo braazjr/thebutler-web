@@ -17,8 +17,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   usuario: Usuario = new Usuario();
   listaPermissoes: Array<IOption> = [];
   listaEmpresas: Array<IOption> = [];
-  permissoes: any[] = [];
-  permissaoIds: any[] = [];
+  permissoes: String[] = [];
   empresaId: string = '0';
 
   isSubmit: boolean = false;
@@ -69,14 +68,8 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   carregarPermissoes() {
     this.defaultService.get('permissoes')
       .subscribe(response => {
-        this.permissoes = response as any[];
-        this.listaPermissoes = (response as any[]).map(perm => {
-          if (this.usuario.id && this.usuario.permissoes.map(permissao => permissao.codigo).includes(perm.codigo)) {
-            this.permissaoIds.push(perm.codigo.toString());
-          }
-
-          return ({ value: perm.codigo.toString(), label: perm.descricao });
-        });
+        this.permissoes = response as String[];
+        this.listaPermissoes = (this.permissoes as any[]).map(perm => ({ value: perm.toString(), label: perm }))
       });
   }
 
@@ -89,13 +82,12 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   salvar(form) {
-    if (form.invalid) {
+    if (form.invalid || (!this.usuario.permissoes || this.usuario.permissoes.length == 0)) {
       this.isSubmit = true;
       return;
     }
 
-    this.usuario.permissoes = this.permissoes.filter(permissao => this.permissaoIds.includes(permissao.codigo.toString()));
-    this.usuario.login = this.usuario.login.toLowerCase();
+    this.usuario.email = this.usuario.email.toLowerCase();
 
     if (!this.usuario.id) {
       this.defaultService.salvar('usuarios', this.usuario)
@@ -110,5 +102,10 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
           this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.nome} atualizado com sucesso!`);
         });
     }
+  }
+
+  getShortName() {
+    const usuarioSplit = (this.usuario.nome || '').split(' ');
+    return `${usuarioSplit[0]} ${usuarioSplit[usuarioSplit.length - 1]}`
   }
 }

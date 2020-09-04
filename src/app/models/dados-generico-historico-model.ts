@@ -2,7 +2,7 @@ import { Usuario } from "./usuario-model";
 
 export class DadosGenericoHistoricoModel {
 
-    id: number;
+    id: string;
     dataHoraCadastro: Date;
     dataHoraModificacao: Date;
     usuario: Usuario;

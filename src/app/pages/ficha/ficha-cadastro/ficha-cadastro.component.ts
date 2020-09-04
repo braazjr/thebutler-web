@@ -1,6 +1,6 @@
 import { DocumentoService } from './../../../services/documento.service';
 import { Component, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Apartamento } from '../../../models/apartamento-model';
 import { DefaultService } from '../../../services/default.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -10,12 +10,14 @@ import { TipoDocumentoService } from '../../../services/tipo-documento.service';
 import { TipoMoradorService } from '../../../services/tipo-morador.service';
 import { WebCamComponent } from 'ack-angular-webcam';
 import { ToastService } from '../../../services/toast.service';
-import { ApartamentoService } from '../../../services/apartamento.service';
 import { SharedService } from 'src/app/shared/shared.service';
+import { Ficha } from 'src/app/models/ficha-model';
+import { FichaService } from 'src/app/services/ficha.service';
+import { ElectronService } from 'src/app/services/electron.service';
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
-import * as lodash from 'lodash';
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-ficha-cadastro',
@@ -24,7 +26,7 @@ import * as lodash from 'lodash';
 })
 export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
-  apartamento: Apartamento = new Apartamento();
+  ficha: Ficha = new Ficha();
   documentos: any[] = [];
   listaMoradores: Morador[] = [];
 
@@ -62,24 +64,29 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     private sharedService: SharedService,
     private toastService: ToastService,
     private documentoService: DocumentoService,
-    private apartamentoService: ApartamentoService,
+    private fichaService: FichaService,
+    public electronService: ElectronService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      if (params['id'] !== undefined) {
-        this.apartamento.id = params['id'];
+      const context = this.route.snapshot.data['context']
+
+      if (context == 'ficha') {
+        this.getFicha(params['id'])
+      } else if (context && params['id']) {
+        this.ficha.apartamento.id = params['id']
         this.getById();
       }
     });
 
     this.formulario = this.formBuilder.group({
-      numeroQuartos: ['', [Validators.required, Validators.minLength(2)]],
       responsavel: this.formBuilder.group({
         id: [{ value: '', disabled: true }],
-        nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+        nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
         ativo: [true, [Validators.required]],
-        celular: ['', [Validators.pattern(this.celularRegex)]],
+        celular: ['', [Validators.required, Validators.pattern(this.celularRegex)]],
         telefone: ['', [Validators.pattern(this.telefoneRegex)]],
         placaCarro: [''],
         tipoMorador: ['0', [Validators.required, Validators.min(1)]],
@@ -94,10 +101,10 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     });
 
     this.formularioMorador = this.formBuilder.group({
-      id: [{ value: '', disabled: true }],
-      nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+      id: [{ value: null, disabled: true }],
+      nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
       ativo: [true, [Validators.required]],
-      celular: ['', [Validators.pattern(this.celularRegex)]],
+      celular: ['', [Validators.required, Validators.pattern(this.celularRegex)]],
       parentesco: ['', [Validators.required]],
       tipoDocumento: ['0'],
       documento: ['', [Validators.required]],
@@ -116,19 +123,27 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getById() {
-    this.defaultService.getById('apartamentos', this.apartamento.id)
+    this.defaultService.getById('apartamentos', this.ficha.apartamento.id)
       .subscribe(response => {
-        this.apartamento = response as Apartamento;
+        this.ficha.apartamento = response as Apartamento;
         this.formulario.patchValue(response);
         this.carregaFicha();
       });
   }
 
+  getFicha(id) {
+    this.fichaService.getFullFicha(id)
+      .subscribe(ficha => {
+        this.ficha = ficha as Ficha;
+        this.carregaFicha();
+      })
+  }
+
   carregaFicha() {
-    const responsavel = this.apartamento.moradores.filter((morador) => morador.tipoMorador)[0];
+    const responsavel = this.ficha.moradores.filter((morador) => morador.tipoMorador)[0];
     if (responsavel) {
       this.formulario.get('responsavel').patchValue(responsavel);
-      this.listaMoradores = this.apartamento.moradores.filter((morador) => morador.id != responsavel.id);
+      this.listaMoradores = this.ficha.moradores.filter((morador) => morador.id != responsavel.id);
     }
   }
 
@@ -162,8 +177,15 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        const moradorParaRemover = this.listaMoradores.findIndex(mora => mora.documento === morador.documento);
-        this.listaMoradores.splice(moradorParaRemover, 1);
+        this.fichaService.removeMorador(this.ficha.id, morador.id)
+          .subscribe(() => {
+            this.toastService.addToast(
+              'success',
+              'Removendo morador',
+              'Morador removido com sucesso!'
+            )
+            this.getFicha(this.ficha.id)
+          })
       }
     });
   }
@@ -230,24 +252,29 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.isSubmit = true;
       return;
     } else {
-      let apartamento: Apartamento;
-      apartamento = lodash.clone(this.apartamento);
-      apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value;
-      apartamento.observacao = this.formulario.get('observacao').value;
-      apartamento.usuario = this.sharedService.getUsuarioLogged();
-      apartamento.moradores = [];
-      apartamento.moradores = this.listaMoradores;
-      apartamento.moradores.push(this.formulario.getRawValue().responsavel);
-      apartamento.moradores.forEach(morador => {
-        morador.usuario = this.sharedService.getUsuarioLogged();
-      });
+      let fichaDto = {}
+      fichaDto['id'] = this.ficha.id
+      fichaDto['idApartamento'] = this.ficha.apartamento.id
+      fichaDto['moradores'] = [this.formulario.getRawValue().responsavel]
+      if (this.listaMoradores.length > 0)
+        this.listaMoradores.forEach(morador => fichaDto['moradores'].push(morador))
+      fichaDto['dataInicio'] = moment().format('DD/MM/YYYY')
 
-      this.defaultService.atualizar('apartamentos', apartamento)
-        .subscribe(() => {
-          this.getById();
+      fichaDto['moradores'].forEach(morador => {
+        if (morador.usuario)
+          delete morador.usuario
+      })
+
+      this.defaultService.salvar('fichas', fichaDto)
+        .subscribe((ficha) => {
+          if (!this.ficha.id) {
+            this.router.navigate([`/ficha/${ficha['id']}`], { replaceUrl: true });
+          } else {
+            this.getFicha(ficha['id'])
+          }
           this.toastService.addToast(
             'success',
-            `Atualização da ficha do apartamento ${this.apartamento.numero}`,
+            `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,
             `Ficha atualizada com sucesso!`
           );
         });
@@ -260,13 +287,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     this.formularioMorador.get('ativo').setValue(true);
   }
 
-  getDocumentosPorApartamento() {
-    this.documentoService.getDocumentosPorApartamento(this.apartamento.id)
-      .subscribe(response => {
-        this.documentos = response as any[];
-      });
-  }
-
   excluirDocumento(documento) {
     Swal.fire({
       title: 'Exclusão de documento',
@@ -277,18 +297,23 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       confirmButtonText: 'Sim'
     }).then((result) => {
       if (result.value) {
-        this.documentoService.excluirDocumento(documento.id)
+        this.documentoService.excluirDocumento(this.ficha.id, documento.id)
           .subscribe(() => {
-            this.getDocumentosPorApartamento();
+            this.toastService.addToast(
+              'success',
+              `Exclusão de documento`,
+              `Documento excluído com sucesso!`
+            );
+            this.getFicha(this.ficha.id)
           });
       }
     });
   }
 
-  getFicha() {
-    this.apartamentoService.getFicha(this.apartamento.id)
+  getFichaFile() {
+    this.fichaService.getFichaPdf(this.ficha.id)
       .subscribe((response) => {
-        this.saveFile(response['body'], `Ficha-Apartamento-${this.apartamento.numero}-${this.apartamento.bloco.nome}-${this.apartamento.bloco.condominio.nome}`);
+        this.saveFile(response['body'], `Ficha-Apartamento-${this.ficha.apartamento.numero}-${this.ficha.apartamento.bloco.nome}-${this.ficha.apartamento.bloco.condominio.nome}`);
       });
   }
 
@@ -318,9 +343,62 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     form.get('fotoUrl').setValue(undefined);
   }
 
-  importarFotos() {
-    this.documentoService.uploadDocumentos(this.apartamento.id, this.documentosForm.value.files[0])
+  importarDocumentos() {
+    this.documentoService.uploadDocumentos(this.ficha.id, this.documentosForm.value.files[0])
       .subscribe(() => {
+        this.toastService.addToast(
+          'success',
+          `Importação de documento`,
+          `Documento importado com sucesso!`
+        );
+      }, () => {
+        Swal.fire({
+          type: 'error',
+          title: 'Importação de documento',
+          text: 'Ocorreu um erro ao importar o(s) documento(s)'
+        })
+      }, () => {
+        this.documentoService.getDocumentosPorFicha(this.ficha.id)
+          .subscribe(documentos => {
+            console.log(documentos)
+            this.ficha.documentos = documentos as any[]
+          })
       });
+  }
+
+  temCracha() {
+    const usuario = this.sharedService.getUsuarioLogged()
+    const empresaFicha = this.ficha.apartamento.bloco.condominio.empresa
+    return (usuario.empresa && usuario.empresa.empresaConfig && usuario.empresa.empresaConfig.temCracha)
+      || (empresaFicha.empresaConfig && empresaFicha.empresaConfig.temCracha)
+  }
+
+  exibirListaParaCracha(modal) {
+    if (!this.ficha.id) {
+      Swal.fire({
+        type: 'error',
+        title: 'Impressão de crachás',
+        text: 'É necessário salvar a ficha para impressão dos crachás'
+      })
+      return;
+    }
+
+    modal.show()
+  }
+
+  imprimirCrachas(modal) {
+    let result = this.ficha.moradores
+      .map(morador =>
+        `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64.substring(23) : ''};${morador.nome};${morador.telefone ? morador.telefone : ''};${this.ficha.apartamento.bloco.condominio.nome}`
+      )
+
+    result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
+
+    this.electronService.sendIpc('imprimir-crachas', result)
+
+    this.electronService.ipcRenderer.on('imprimir-crachas-replay', (event, args) => {
+      modal.hide();
+      this.toastService.addToast('success', 'Impressão de crachás', 'Crachás impressos com sucesso!');
+    })
   }
 }

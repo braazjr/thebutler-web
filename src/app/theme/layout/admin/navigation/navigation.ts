@@ -29,7 +29,7 @@ export interface Navigation extends NavigationItem {
 const NavigationItems = [
   {
     id: 'navigation',
-    title: 'Navigation',
+    title: '',
     type: 'group',
     icon: 'feather icon-monitor',
     children: [
@@ -152,6 +152,14 @@ const NavigationItems = [
             ]
           }
         ]
+      },
+      {
+        id: 'ficha-lista',
+        title: 'Fichas',
+        type: 'item',
+        icon: 'fa fa-address-card',
+        url: '/ficha',
+        breadcrumbs: false
       },
       {
         id: 'controle-acesso',

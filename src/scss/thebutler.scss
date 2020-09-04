@@ -1,6 +1,7 @@
 .filter-bar > .navbar {
     background-color: $header-dark-background !important;
     color: $header-dark-text-color;
+    border-radius: 5px;
 
     button {
         color: $header-dark-text-color;
@@ -34,14 +35,31 @@ ng-select.is-invalid, ng-select.ng-invalid {
         background-color: $secondary-color !important;
         color: $header-dark-text-color;
     }
+
+    &.data-table {
+        border-radius: 5px;
+    }
 }
 
 .swal2-container .swal2-modal {
-    border: 2px solid $header-dark-background !important;
+    box-shadow: 0 0 25px -5px $header-dark-background;
+    border-radius: 15px;
 
     .swal2-styled.swal2-confirm {
         border-left-color: $header-dark-background !important;
         border-right-color: $header-dark-background !important;
         background-color: $header-dark-background !important;
     }
+}
+
+.input-group-text {
+    background-color: $primary-color;
+    color: #fff;
+}
+
+.border-input {
+    margin: 0px;
+    border: 1px solid $gray-400 !important;
+    border-radius: 5px;
+    padding-bottom: 5px;
 }

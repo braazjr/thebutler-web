@@ -1,0 +1,33 @@
+<app-ui-modal #modalBravaSoft>
+    <div class="app-modal-header">
+        <h4 class="modal-title">Configurações para uso do BravaSoft</h4>
+        <button type="button" class="close basic-close" (click)="modalBravaSoft.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form autocomplete="off" (ngSubmit)="salvar(bravaSoftForm, modalBravaSoft)" #bravaSoftForm="ngForm">
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label class="col-form-label">Caminho do BS Print</label>
+                    <input type="text" class="form-control" #bsPrintPath="ngModel"
+                        [(ngModel)]="configuration.bsPrintPath" name="bsPrintPath" required
+                        [validForm]="{form: bsPrintPath, isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-12">
+                    <label class="col-form-label">Caminho do Projeto BravaSoft</label>
+                    <input type="text" class="form-control" #projectPath="ngModel"
+                        [(ngModel)]="configuration.projectPath" name="projectPath" required
+                        [validForm]="{form: projectPath, isSubmit: isSubmit}">
+                </div>
+            </div>
+        </form>
+
+        <app-alert [type]="alert.type" *ngIf="alert.message">Configurações atualizadas com sucesso!</app-alert>
+    </div>
+
+    <div class="app-modal-footer">
+        <button type="button" class="btn btn-default waves-effect" (click)="modalBravaSoft.hide()">Fechar</button>
+        <button type="button" class="btn btn-primary waves-effect" (click)="salvar(bravaSoftForm, modalBravaSoft)">Salvar</button>
+    </div>
+</app-ui-modal>

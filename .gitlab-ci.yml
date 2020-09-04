@@ -9,10 +9,12 @@ cache:
 node-build:
   image: node:10
   stage: build
+  variables:
+    BUILD_ENV: $BUILD_ENV
   before_script:
     - npm install
     - npm install -g @angular/cli@8
-  script: "npm run build:prod"
+  script: "npm run build:$BUILD_ENV"
   artifacts:
     paths:
       - dist/
@@ -24,6 +26,7 @@ deploy-develop:
   stage: deploy
   variables:
     HEROKU_API_KEY: $HEROKU_PRODUCTION_API_KEY
+    HEROKU_APP: $HEROKU_APP
   before_script:
     - echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
     - wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
@@ -31,7 +34,7 @@ deploy-develop:
     - apt-get install -y heroku-toolbelt
     - gem install dpl
   script:
-    - dpl --provider=heroku --app=butler-web-dev --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_API_KEY
   only:
     - develop
 

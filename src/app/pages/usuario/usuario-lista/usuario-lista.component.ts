@@ -42,7 +42,7 @@ export class UsuarioListaComponent implements OnInit {
   setPage(pageInfo) {
     this.listaData.page = pageInfo.offset;
 
-    this.usuarioService.getUsuarioPorEmpresa(this.listaData)
+    this.usuarioService.getUsuarios(this.listaData)
       .subscribe(data => {
         this.listaData = {
           page: data['number'],

@@ -51,21 +51,11 @@ export class RotaCadastroComponent implements OnInit {
       this.isSubmit = true;
       return;
     } else {
-      this.rota.usuario = this.sharedService.getUsuarioLogged();
-
-      if (!this.rota.id) {
-        this.defaultService.salvar('rotas', this.rota)
-          .subscribe(response => {
-            this.rota = response as Rota;
-            this.toastService.addToast('success', 'Cadastro Rota!', `Rota ${this.rota.nome} salvo com sucesso!`);
-          });
-      } else {
-        this.defaultService.atualizar('rotas', this.rota)
-          .subscribe(response => {
-            this.rota = response as Rota;
-            this.toastService.addToast('success', 'Atualização Rota!', `Rota ${this.rota.nome} atualizado com sucesso!`);
-          });
-      }
+      this.defaultService.salvar('rotas', this.rota)
+        .subscribe(response => {
+          this.rota = response as Rota;
+          this.toastService.addToast('success', 'Cadastro Rota!', `Rota ${this.rota.nome} salvo com sucesso!`);
+        });
     }
   }
 }

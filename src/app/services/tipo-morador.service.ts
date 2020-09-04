@@ -3,21 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { SharedService } from '../shared/shared.service';
+import { HttpUtil } from '../utils/http.util';
 
 @Injectable()
 export class TipoMoradorService {
 
   constructor(
     private http: HttpClient,
-    private sharedService: SharedService
+    private httpUtil: HttpUtil
   ) { }
 
   getTiposMorador() {
-    return this.http.get(`${environment.urlSpring}/tipo-moradores`, { withCredentials: true })
+    return this.http.get(`${environment.urlSpring}/tipos-moradores`, { withCredentials: true })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Carregando tipos de morador!`);
+          this.httpUtil.showErrors(error, `Carregando tipos de morador!`);
           return Observable.throw(error);
         })
       );

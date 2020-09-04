@@ -2,26 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
-import { SharedService } from '../shared/shared.service';
 import { Observable } from 'rxjs';
+import { HttpUtil } from '../utils/http.util';
 
 @Injectable()
 export class DefaultService {
 
   constructor(
     private http: HttpClient,
-    private sharedService: SharedService
+    private httpUtil: HttpUtil
   ) { }
 
   get(model) {
-    return this.http.get(`${environment.urlSpring}/${model}/`, { withCredentials: true });
+    return this.http.get(`${environment.urlSpring}/${model}`, { withCredentials: true });
   }
 
   getById(model, id) {
     return this.http.get(`${environment.urlSpring}/${model}/${id}`, { withCredentials: true })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Carregando ${model}!`);
+          this.httpUtil.showErrors(error, `Carregando ${model}!`);
           return Observable.throw(error);
         })
       );
@@ -31,7 +31,7 @@ export class DefaultService {
     return this.http.post(`${environment.urlSpring}/${model}`, entity, { withCredentials: true })
     .pipe(
       catchError(error => {
-        this.sharedService.showErrors(error, `Salvando ${model}!`);
+        this.httpUtil.showErrors(error, `Salvando ${model}!`);
         return Observable.throw(error);
       })
     );
@@ -41,7 +41,7 @@ export class DefaultService {
     return this.http.put(`${environment.urlSpring}/${model}/${entity.id}`, entity, { withCredentials: true })
     .pipe(
       catchError(error => {
-        this.sharedService.showErrors(error, `Atualizando ${model}!`);
+        this.httpUtil.showErrors(error, `Atualizando ${model}!`);
         return Observable.throw(error);
       })
     );
@@ -51,7 +51,7 @@ export class DefaultService {
     return this.http.delete(`${environment.urlSpring}/${model}/${id}`, { withCredentials: true })
     .pipe(
       catchError(error => {
-        this.sharedService.showErrors(error, `Excluindo ${model}!`);
+        this.httpUtil.showErrors(error, `Excluindo ${model}!`);
         return Observable.throw(error);
       })
     );
@@ -61,7 +61,7 @@ export class DefaultService {
     return this.http.get(`https://viacep.com.br/ws/${cep}/json/`)
     .pipe(
       catchError(error => {
-        this.sharedService.showErrors(error, `Consultando endereço!`);
+        this.httpUtil.showErrors(error, `Consultando endereço!`);
         return Observable.throw(error);
       })
     );
@@ -71,7 +71,7 @@ export class DefaultService {
     return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { withCredentials: true })
     .pipe(
       catchError(error => {
-        this.sharedService.showErrors(error, `Carregando dashboard!`);
+        this.httpUtil.showErrors(error, `Carregando dashboard!`);
         return Observable.throw(error);
       })
     );
@@ -81,7 +81,7 @@ export class DefaultService {
     return this.http.get(`${environment.urlSpring}/dashboards/${dash}`, { withCredentials: true })
     .pipe(
       catchError(error => {
-        this.sharedService.showErrors(error, `Carregando dashboard!`);
+        this.httpUtil.showErrors(error, `Carregando dashboard!`);
         return Observable.throw(error);
       })
     );

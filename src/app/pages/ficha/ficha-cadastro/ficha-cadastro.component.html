@@ -7,17 +7,20 @@
       <div class="row">
         <div class="col-sm-12 filter-bar">
           <nav class="navbar navbar-light bg-faded m-b-30 p-10">
-            {{ 'Ficha cadastral do apartamento ' + apartamento.numero }}
+            {{ 'Ficha cadastral do apartamento ' + ficha.apartamento.numero }}
             <div class="nav-item nav-grid">
               <span class="m-r-15">Ações: </span>
 
-              <label class="badge badge-light m-t-10 pointer" (click)="getFicha()">Download Ficha</label>
-              <label class="badge badge-light m-t-10 pointer"
-                (click)="getDocumentosPorApartamento(); modalDocumentos.show()">
+              <label class="badge badge-light m-t-10 pointer" (click)="getFichaFile()">Download Ficha</label>
+              <label class="badge badge-light m-t-10 pointer" (click)="modalDocumentos.show()">
                 Documentos
               </label>
-              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/apartamento/lista']">Lista</label>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/ficha']">Fichas</label>
               <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
+              <label class="badge badge-light m-t-10 pointer"  *ngIf="electronService.ipcRenderer && temCracha()"
+                (click)="exibirListaParaCracha(modalListaCrachas)">
+                Imprimir crachás
+              </label>
             </div>
           </nav>
         </div>
@@ -29,16 +32,17 @@
           <div class="form-group row">
             <div class="col-sm-6 col-md-4">
               <label class="col-form-label">Condomínio</label>
-              <input type="text" class="form-control" #condominio [value]="apartamento.bloco.condominio.nome" disabled>
+              <input type="text" class="form-control" #condominio [value]="ficha.apartamento.bloco.condominio.nome"
+                disabled>
             </div>
             <div class="col-sm-3">
               <label class="col-form-label">Bloco</label>
-              <input type="text" class="form-control" #bloco [value]="apartamento.bloco.nome" disabled>
+              <input type="text" class="form-control" #bloco [value]="ficha.apartamento.bloco.nome" disabled>
             </div>
             <div class="col-sm-3">
               <label class="col-form-label">Nº Quartos</label>
-              <input type="number" class="form-control" formControlName="numeroQuartos"
-                [validForm]="{form: formulario.get('numeroQuartos'), isSubmit: isSubmit}">
+              <input type="number" class="form-control" #numeroQuartos [value]="ficha.apartamento.numeroQuartos"
+                disabled>
             </div>
             <div class="col-sm-12">
               <label class="col-form-label">Observação</label>
@@ -77,7 +81,7 @@
             </div>
             <div class="col-sm-9 col-md-10" formGroupName="responsavel">
               <div class="form-group row">
-                <div class="col-sm-3 col-md-2">
+                <div class="col-sm-3 col-md-3">
                   <label class="col-form-label">Código</label>
                   <input type="text" class="form-control" formControlName="id">
                 </div>
@@ -87,7 +91,7 @@
                     [validForm]="{form: getFieldResponsavelForm('tipoMorador'), isSubmit: isSubmit}">
                   </ng-select>
                 </div>
-                <div class="col-sm-12 col-md-7">
+                <div class="col-sm-12 col-md-6">
                   <label class="col-form-label">Nome</label>
                   <input type="text" class="form-control" formControlName="nome"
                     [validForm]="{form: getFieldResponsavelForm('nome'), isSubmit: isSubmit}">
@@ -208,7 +212,7 @@
                         </div>
                         <div class="col-sm-12 col-md-7">
                           <label class="col-form-label">E-mail</label>
-                          <input type="email" class="form-control" formControName="email">
+                          <input type="email" class="form-control" formControlName="email">
                         </div>
                         <div class="col-sm-3 col-md-1">
                           <br><br>
@@ -219,19 +223,21 @@
                             <label class="custom-control-label" for="ativoMorador">Ativo</label>
                           </div>
                         </div>
-                        <div class="col-sm-9 col-md-4">
-                          <button class="btn btn-primary btn-round btn-sm m-t-35" (click)="incluiMorador()">
-                            Adicionar
-                          </button>
-                          <button class="btn btn-warning btn-round btn-sm m-t-35"
-                            (click)="resetMoradorForm(); isCollapsed = !isCollapsed">
-                            Cancelar
-                          </button>
-                        </div>
                         <div class="col-sm-12">
                           <label class="col-form-label">Observação</label>
                           <input type="text" class="form-control" formControlName="observacao"
                             [validForm]="{form: formularioMorador.get('observacao'), isSubmit: isSubmit}">
+                        </div>
+                        <div class="col-md-12">
+                          <div class="float-right">
+                            <button class="btn btn-primary btn-round btn-sm m-t-35 m-r-5" (click)="incluiMorador()">
+                              Adicionar
+                            </button>
+                            <button class="btn btn-warning btn-round btn-sm m-t-35"
+                              (click)="resetMoradorForm(); isCollapsed = !isCollapsed">
+                              Cancelar
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -352,9 +358,9 @@
   </div>
 </app-ui-modal>
 
-<app-ui-modal #modalDocumentos>
+<app-ui-modal #modalDocumentos [dialogClass]="'modal-xl'">
   <div class="app-modal-header">
-    <h4 class="modal-title">Documentos do apartamento {{ apartamento.numero }}</h4>
+    <h4 class="modal-title">Documentos da ficha {{ ficha.id }}</h4>
     <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); documentosForm.reset()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -371,7 +377,7 @@
         </ng-template>
       </file-upload>
     </form>
-    <div class="table-responsive" *ngIf="documentos.length !== 0">
+    <div class="table-responsive" *ngIf="ficha.documentos && ficha.documentos.length !== 0">
       <table class="table table-inverse">
         <thead>
           <tr>
@@ -380,8 +386,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let doc of documentos">
-            <th scope="row"><a [href]="doc.path" target="_blank">{{ doc.nome }}</a></th>
+          <tr *ngFor="let doc of ficha.documentos">
+            <th scope="row"><a [href]="doc.url" target="_blank">{{ doc.nome }}</a></th>
             <td><label class="badge badge-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
           </tr>
         </tbody>
@@ -391,6 +397,49 @@
   <div class="app-modal-footer">
     <button type="button" class="btn btn-default waves-effect"
       (click)="modalDocumentos.hide(); documentosForm.reset()">Fechar</button>
-    <button type="button" class="btn btn-default waves-effect" (click)="importarFotos()">Importar fotos</button>
+    <button type="button" class="btn btn-default waves-effect" (click)="importarDocumentos()">Importar documentos</button>
+  </div>
+</app-ui-modal>
+
+
+
+<app-ui-modal #modalListaCrachas [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Lista de impressão</h4>
+    <button type="button" class="close basic-close" (click)="modalListaCrachas.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="table-responsive" *ngIf="ficha.moradores && ficha.moradores.length !== 0">
+      <table class="table table-inverse">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Documento</th>
+            <th>Imprimir?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let morador of ficha.moradores">
+            <!-- <th scope="row"><a [href]="doc.url" target="_blank">{{ doc.nome }}</a></th> -->
+            <td>{{ morador.nome }}</td>
+            <td>{{ morador.documento }}</td>
+            <td>
+              <label class="badge pointer"
+                [ngClass]="{'badge-danger': !morador.imprimir, 'badge-success': morador.imprimir}"
+                (click)="morador.imprimir = !morador.imprimir">
+                {{ !morador.imprimir ? 'Não' : 'Sim'  }}
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="modalListaCrachas.hide()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="imprimirCrachas(modalListaCrachas)">Imprimir</button>
   </div>
 </app-ui-modal>

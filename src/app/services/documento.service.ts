@@ -1,46 +1,47 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { SharedService } from '../shared/shared.service';
+import { HttpUtil } from '../utils/http.util';
 
 @Injectable()
 export class DocumentoService {
 
   constructor(
     private http: HttpClient,
-    private sharedService: SharedService
+    private httpUtil: HttpUtil
   ) { }
 
-  getDocumentosPorApartamento(id) {
-    return this.http.get(`${environment.urlSpring}/public/documento/apartamento/${id}`, { withCredentials: true })
+  excluirDocumento(idFicha, idDocumento) {
+    return this.http.delete(`${environment.urlSpring}/fichas/${idFicha}/documento/${idDocumento}`, { withCredentials: true })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Carregando documentos!`);
+          this.httpUtil.showErrors(error, `Excluindo documento!`);
           return Observable.throw(error);
         })
       );
   }
 
-  excluirDocumento(id) {
-    return this.http.delete(`${environment.urlSpring}/public/documento/${id}`, { withCredentials: true })
-      .pipe(
-        catchError(error => {
-          this.sharedService.showErrors(error, `Excluindo documento!`);
-          return Observable.throw(error);
-        })
-      );
-  }
-
-  uploadDocumentos(idApartamento, files) {
+  uploadDocumentos(idFicha, file) {
     let formdata: FormData = new FormData();
-    formdata.append('file', files);
+    formdata.append('file', file);
 
-    return this.http.post(`${environment.urlSpring}/public/documento/upload-documento/${idApartamento}`, files, { withCredentials: true, reportProgress: true })
+    return this.http.post(`${environment.urlSpring}/fichas/${idFicha}/documento/upload-documento`, formdata,
+      { withCredentials: true, reportProgress: true, responseType: 'text' })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Upload de documento!`);
+          this.httpUtil.showErrors(error, `Upload de documento!`);
+          return Observable.throw(error);
+        })
+      );
+  }
+
+  getDocumentosPorFicha(fichaId) {
+    return this.http.get(`${environment.urlSpring}/fichas/${fichaId}/documentos`)
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Carregando documentos!`);
           return Observable.throw(error);
         })
       );

@@ -3,6 +3,7 @@ import { ViagemService } from '../../../services/viagem.service';
 import { DefaultService } from 'src/app/services/default.service';
 import { Condominio } from 'src/app/models/condominio-model';
 import { Bloco } from 'src/app/models/bloco-model';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 import * as lodash from 'lodash';
 
@@ -22,14 +23,18 @@ export class ViagemListaComponent implements OnInit {
 
     idCondominio?: string,
     idBloco?: string,
-    nomeMorador: string,
-    documentoMorador: string,
-    numeroApartamento: number
+    moradorNome: string,
+    moradorEmail: string,
+    numeroApartamento: number,
+    motoristaId?: string,
+    rotaId?: string
   };
 
   listaViagens: any[] = [];
   listaCondominios: any[] = [];
   listaBlocos: any[] = [];
+  listaMotoristas: any[] = [];
+  listaRotas: any[] = [];
 
   expanded: any = {};
   @ViewChild('table', undefined) table: any;
@@ -45,7 +50,8 @@ export class ViagemListaComponent implements OnInit {
 
   constructor(
     private viagemService: ViagemService,
-    private defaultService: DefaultService
+    private defaultService: DefaultService,
+    private usuarioService: UsuarioService
   ) {
     this.listaData = {
       size: 10,
@@ -55,9 +61,11 @@ export class ViagemListaComponent implements OnInit {
       sort: 'id,desc',
       idCondominio: '0',
       idBloco: '0',
-      nomeMorador: '',
-      documentoMorador: '',
-      numeroApartamento: null
+      moradorNome: '',
+      moradorEmail: '',
+      numeroApartamento: null,
+      motoristaId: '0',
+      rotaId: '0'
     };
   }
 
@@ -66,6 +74,8 @@ export class ViagemListaComponent implements OnInit {
 
     this.carregarCondominios();
     this.carregarBlocos();
+    this.carregarMotoristas();
+    this.carregarRotas();
   }
 
   setPage(pageInfo) {
@@ -122,11 +132,29 @@ export class ViagemListaComponent implements OnInit {
       sort: 'id,desc',
       idCondominio: '0',
       idBloco: '0',
-      nomeMorador: '',
-      documentoMorador: '',
-      numeroApartamento: null
+      moradorNome: '',
+      moradorEmail: '',
+      numeroApartamento: null,
+      motoristaId: '0',
+      rotaId: '0'
     };
 
     this.setPage({ offset: 0 });
+  }
+
+  carregarMotoristas() {
+    this.usuarioService.getMotoristas()
+    .subscribe(response => {
+      this.listaMotoristas = (response as any[]).map(motorista => ({ value: motorista.id.toString(), label: motorista.nome }));
+      this.listaMotoristas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+    })    
+  }
+
+  carregarRotas() {
+    this.defaultService.get('rotas')
+      .subscribe(response => {
+        this.listaRotas = (response as any[]).map(rota => ({ value: rota.id.toString(), label: rota.nome }));
+        this.listaRotas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      });
   }
 }

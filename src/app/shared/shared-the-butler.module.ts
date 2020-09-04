@@ -12,12 +12,13 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ValidFormDirectiveDirective } from './directives/valid-form-directive.directive';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalAlterarSenhaComponent } from './components/modal-alterar-senha/modal-alterar-senha.component';
-import { ModalModule } from '../theme/shared/components';
+import { ModalModule, AlertModule } from '../theme/shared/components';
 import { AuthInterceptorModule } from './seguranca/auth-interceptor/auth-interceptor.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ModalBravasoftConfigurationComponent } from './components/modal-bravasoft-configuration/modal-bravasoft-configuration.component';
 
 @NgModule({
-  declarations: [ValidFormDirectiveDirective, ModalAlterarSenhaComponent],
+  declarations: [ValidFormDirectiveDirective, ModalAlterarSenhaComponent, ModalBravasoftConfigurationComponent],
   imports: [
     CommonModule,
     NgxDatatableModule,
@@ -29,7 +30,8 @@ import { HttpClientModule } from '@angular/common/http';
     NgbCollapseModule,
     ModalModule,
     HttpClientModule,
-    AuthInterceptorModule
+    AuthInterceptorModule,
+    AlertModule
   ],
   providers: [
     DefaultService,
@@ -45,7 +47,8 @@ import { HttpClientModule } from '@angular/common/http';
     NgxSpinnerModule,
     ValidFormDirectiveDirective,
     NgbCollapseModule,
-    ModalAlterarSenhaComponent
+    ModalAlterarSenhaComponent,
+    ModalBravasoftConfigurationComponent
   ]
 })
 export class SharedTheButlerModule { }

@@ -3,21 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { SharedService } from '../shared/shared.service';
+import { HttpUtil } from '../utils/http.util';
 
 @Injectable()
 export class ViagemService {
 
   constructor(
     private http: HttpClient,
-    private sharedService: SharedService
+    private httpUtil: HttpUtil
   ) { }
 
-  getViagens(pageable) {
-    return this.http.get(`${environment.urlSpring}/viagens`, { withCredentials: true, params: pageable })
+  getViagens(listaData) {
+    return this.http.get(`${environment.urlSpring}/viagens`, { withCredentials: true, params: listaData })
       .pipe(
         catchError(error => {
-          this.sharedService.showErrors(error, `Carregando viagens!`);
+          this.httpUtil.showErrors(error, `Carregando viagens!`);
           return Observable.throw(error);
         })
       );

@@ -29,7 +29,7 @@ export class ApartamentoCadastroComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
-    private router: Router,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -44,7 +44,8 @@ export class ApartamentoCadastroComponent implements OnInit {
     this.formulario = this.formBuilder.group({
       blocoId: ['0', [Validators.required, Validators.min(1)]],
       ativo: [true, [Validators.required]],
-      numero: ['', [Validators.required, Validators.min(1)]]
+      numero: ['', [Validators.required, Validators.min(1)]],
+      numeroQuartos: ['', [Validators.required, Validators.min(1)]]
     });
 
     this.carregarBlocos();
@@ -80,24 +81,24 @@ export class ApartamentoCadastroComponent implements OnInit {
     if (this.formulario.invalid) {
       Swal.fire('Cadastro de apartamento', 'Não é possível salvar o apartamento!<br>Existem campos inválidos', 'error');
     } else {
-      this.apartamento.usuario = this.sharedService.getUsuarioLogged();
-      this.apartamento.bloco.id = this.formulario.get('blocoId').value;
+      this.apartamento['idBloco'] = this.formulario.get('blocoId').value;
       this.apartamento.numero = this.formulario.get('numero').value;
       this.apartamento.ativo = this.formulario.get('ativo').value;
+      this.apartamento.numeroQuartos = this.formulario.get('numeroQuartos').value
 
       if (!this.apartamento.id) {
         this.defaultService.salvar('apartamentos', this.apartamento)
           .subscribe(response => {
             this.apartamento = response as Apartamento;
             this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
-            this.router.navigate([`/ficha/${this.apartamento.id}`]);
+            // this.router.navigate([`/ficha/${this.apartamento.id}`]);
           })
       } else {
         this.defaultService.atualizar('apartamentos', this.apartamento)
           .subscribe(response => {
             this.apartamento = response as Apartamento;
             this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
-            this.router.navigate([`/ficha/${this.apartamento.id}`]);
+            // this.router.navigate([`/ficha/${this.apartamento.id}`]);
           })
       }
     }
@@ -106,14 +107,17 @@ export class ApartamentoCadastroComponent implements OnInit {
   temPacoteParaCadastro() {
     if (this.sharedService.isAdmin() || this.apartamento.id) {
       return true;
-    } else if (this.sharedService.getUsuarioLogged().empresa && this.sharedService.getUsuarioLogged().empresa.empresaConfig) {
-      const totalElements = localStorage.getItem('apartamento.totalElements');
+    } else if (this.sharedService.getUsuarioLogged().empresa) {
+      this.defaultService.getById('empresas', this.sharedService.getUsuarioLogged().empresa.id)
+        .subscribe(empresa => {
+          const totalElements = localStorage.getItem('apartamento.totalElements');
 
-      if (totalElements) {
-        return this.sharedService.getUsuarioLogged().empresa.empresaConfig.qtyApartamentos > Number(totalElements);
-      } else {
-        this.router.navigate([`/apartamento`]);
-      }
+          if (totalElements) {
+            return (empresa as any).empresaConfig.qtyApartamentos > Number(totalElements);
+          } else {
+            this.router.navigate([`/apartamento`]);
+          }
+        })
     }
   }
 }
