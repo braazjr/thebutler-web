@@ -1,5 +1,10 @@
 {
   "name": "the-butler",
+  "description": "Uma aplicação para controle de moradores de Associações e Condomínios",
+  "author": {
+    "name": "Elias Braz",
+    "email": "elias.brazjunior@gmail.com"
+  },
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
@@ -112,5 +117,14 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
+  },
+  "build": {
+    "appId": "br.com.onsmarttech.thebutler",
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "category": "Productivity"
+    }
   }
 }
