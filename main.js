@@ -1,10 +1,13 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron')
-const url = require('url');
-const path = require('path');
-const fs = require('fs');
+const url = require('url')
+const path = require('path')
+const fs = require('fs')
 const exec = require('child_process').exec
+const eSplashScreen = require('electron-splashscreen')
+const isDev = require('electron-is-dev')
 
 let mainWindow
+let splashScreen
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -13,7 +16,22 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        icon: path.join(__dirname, `dist/assets/images/logo.png`)
+        icon: path.join(__dirname, `dist/assets/images/logo-small.png`)
+    })
+
+    splashScreen = eSplashScreen.initSplashScreen({
+        mainWindow,
+        icon: path.join(__dirname, `dist/assets/images/logo-small.png`),
+        url: eSplashScreen.OfficeTemplate,
+        width: 600,
+        height: 350,
+        brand: 'On Smart Tech',
+        productName: 'The Butler',
+        logo: path.join(__dirname, `dist/assets/images/logo-small.png`),
+        website: 'www.onsmarttech.com.br',
+        text: 'Carregando ...',
+        color: '#49175c',
+        image: path.join(__dirname, `dist/assets/images/logo-small.png`)
     })
 
     mainWindow.loadURL(
@@ -22,7 +40,7 @@ function createWindow() {
             protocol: 'file:',
             slashes: true
         })
-    );
+    )
 
     // mainWindow.webContents.openDevTools()
     mainWindow.maximize()
@@ -30,6 +48,12 @@ function createWindow() {
     mainWindow.on('closed', function () {
         mainWindow = null
     })
+
+    mainWindow.once('ready-to-show', function () {
+        if (isDev) {
+            mainWindow.show();
+        }
+    });
 
     Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 }
@@ -59,6 +83,8 @@ if (!fs.existsSync(settings_file_path)) {
 
 const rawData = fs.readFileSync(settings_file_path)
 const settings = JSON.parse(rawData || '{}')
+
+ipcMain.on('ready', () => { splashScreen })
 
 ipcMain.on('configurations-save', (event, args) => {
     fs.writeFile(settings_file_path, JSON.stringify(args, null, 4), {}, (error) => {

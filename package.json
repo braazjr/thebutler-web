@@ -56,6 +56,8 @@
     "css-animator": "^2.3.1",
     "datatables.net": "^1.10.19",
     "datatables.net-dt": "^1.10.19",
+    "electron-is-dev": "^1.2.0",
+    "electron-splashscreen": "^1.0.0",
     "express": "^4.17.1",
     "famfamfam-flags": "^1.0.0",
     "file-saver": "^2.0.2",
