@@ -11,7 +11,7 @@
               <span class="m-r-15">Ações: </span>
 
               <label class="badge badge-light m-t-10 pointer" [routerLink]="['/apartamento/lista']">Lista</label>
-              <label class="badge badge-light m-t-10 pointer" (click)="salvar()" *ngIf="temPacoteParaCadastro()">
+              <label class="badge badge-light m-t-10 pointer" (click)="salvar()" *ngIf="podeCadastrar">
                 Salvar
               </label>
             </div>
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <form autocomplete="off" [formGroup]="formulario" *ngIf="temPacoteParaCadastro()">
+      <form autocomplete="off" [formGroup]="formulario" *ngIf="podeCadastrar">
         <div class="form-group row">
           <div class="col-sm-6 col-md-4">
             <label class="col-form-label" [ngClass]="{'form-control-danger' : !isValid('blocoId')}">Bloco</label>
@@ -48,7 +48,7 @@
         </div>
       </form>
 
-      <app-alert [type]="'danger'" *ngIf="!temPacoteParaCadastro()" class="m-10">
+      <app-alert [type]="'danger'" class="m-10" *ngIf="!podeCadastrar">
         Seu pacote de cadastros estourou! Entre em contato com o administrador do The Butler!
       </app-alert>
     </app-card>

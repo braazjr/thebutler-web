@@ -88,6 +88,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     }
 
     this.usuario.email = this.usuario.email.toLowerCase();
+    this.usuario['idEmpresa'] = this.empresaId;
 
     if (!this.usuario.id) {
       this.defaultService.salvar('usuarios', this.usuario)

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../../services/usuario.service';
 import { Usuario } from '../../../models/usuario-model';
-import { DefaultService } from 'src/app/services/default.service';
+import { DefaultService } from '../../../services/default.service';
+import { ToastService } from '../../../services/toast.service';
+import { SharedService } from '../../../shared/shared.service';
 
 import Swal from 'sweetalert2';
-import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-usuario-lista',
@@ -25,7 +26,8 @@ export class UsuarioListaComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private defaultService: DefaultService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private sharedService: SharedService
   ) {
     this.listaData = {
       size: 10,

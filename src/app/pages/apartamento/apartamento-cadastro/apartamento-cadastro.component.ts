@@ -22,6 +22,8 @@ export class ApartamentoCadastroComponent implements OnInit {
 
   formulario: FormGroup;
 
+  podeCadastrar = true;
+
   constructor(
     private route: ActivatedRoute,
     private defaultService: DefaultService,
@@ -36,6 +38,7 @@ export class ApartamentoCadastroComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params['id'] !== undefined) {
         this.getById(params['id']);
+        this.temPacoteParaCadastro(params['id'])
       } else {
         this.apartamento.ativo = true;
       }
@@ -104,19 +107,14 @@ export class ApartamentoCadastroComponent implements OnInit {
     }
   }
 
-  temPacoteParaCadastro() {
-    if (this.sharedService.isAdmin() || this.apartamento.id) {
-      return true;
+  temPacoteParaCadastro(apartamentoId) {
+    if (this.sharedService.isAdmin() || apartamentoId) {
     } else if (this.sharedService.getUsuarioLogged().empresa) {
+      this.podeCadastrar = true;
       this.defaultService.getById('empresas', this.sharedService.getUsuarioLogged().empresa.id)
         .subscribe(empresa => {
-          const totalElements = localStorage.getItem('apartamento.totalElements');
-
-          if (totalElements) {
-            return (empresa as any).empresaConfig.qtyApartamentos > Number(totalElements);
-          } else {
-            this.router.navigate([`/apartamento`]);
-          }
+          const { qtyApartamentos, apartamentosCadastrados } = (empresa as any).empresaConfig
+          this.podeCadastrar = Number(qtyApartamentos) > Number(apartamentosCadastrados)
         })
     }
   }

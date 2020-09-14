@@ -17,7 +17,7 @@
               </label>
               <label class="badge badge-light m-t-10 pointer" [routerLink]="['/ficha']">Fichas</label>
               <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
-              <label class="badge badge-light m-t-10 pointer"  *ngIf="electronService.ipcRenderer && temCracha()"
+              <label class="badge badge-light m-t-10 pointer" *ngIf="electronService.ipcRenderer && temCracha()"
                 (click)="exibirListaParaCracha(modalListaCrachas)">
                 Imprimir crachás
               </label>
@@ -58,8 +58,6 @@
             <div class="col-sm-3 col-md-2">
               <div class="row align-items-center m-b-10">
                 <div class="col-12 m-l-5">
-                  <img class="img-fluid" [src]="getValueResponsavelForm('fotoUrl')" alt="Foto não encontrada"
-                    *ngIf="!getValueResponsavelForm('foto64')">
                   <img class="img-fluid" [src]="getValueResponsavelForm('foto64')"
                     *ngIf="getValueResponsavelForm('foto64')">
                 </div>
@@ -160,8 +158,6 @@
                     <div class="col-sm-3 col-md-2">
                       <div class="row align-items-center m-b-10">
                         <div class="col-12 m-l-5">
-                          <img class="img-fluid" [src]="getValueMoradorForm('fotoUrl')" alt="Foto não encontrada"
-                            *ngIf="!getValueMoradorForm('foto64')">
                           <img class="img-fluid" [src]="getValueMoradorForm('foto64')"
                             *ngIf="getValueMoradorForm('foto64')">
                         </div>
@@ -350,7 +346,7 @@
     </button>
   </div>
   <div class="app-modal-body">
-    <img class="img-fluid" [src]="formFotoTemp.fotoUrl" *ngIf="formFotoTemp && formFotoTemp.fotoUrl">
+    <img class="img-fluid" [src]="formFotoTemp.foto64" *ngIf="formFotoTemp && formFotoTemp.foto64">
   </div>
   <div class="app-modal-footer">
     <button type="button" class="btn btn-default waves-effect"
@@ -367,7 +363,7 @@
   </div>
   <div class="app-modal-body">
     <form [formGroup]="documentosForm">
-      <file-upload formControlName="files">
+      <file-upload formControlName="files" fileslimit="1">
         <ng-template #placeholder>
           <span style="font-size: 3em">
             <i class="fa fa-print"></i>
@@ -382,12 +378,14 @@
         <thead>
           <tr>
             <th>#</th>
+            <th>Nome</th>
             <th>Excluir</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let doc of ficha.documentos">
             <th scope="row"><a [href]="doc.url" target="_blank">{{ doc.nome }}</a></th>
+            <td>{{ doc.originalName }}</td>
             <td><label class="badge badge-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
           </tr>
         </tbody>
@@ -397,7 +395,10 @@
   <div class="app-modal-footer">
     <button type="button" class="btn btn-default waves-effect"
       (click)="modalDocumentos.hide(); documentosForm.reset()">Fechar</button>
-    <button type="button" class="btn btn-default waves-effect" (click)="importarDocumentos()">Importar documentos</button>
+    <button type="button" class="btn btn-default waves-effect"
+      [disabled]="!documentosForm.value.files || documentosForm.value.files.length == 0" (click)="importarDocumentos()">
+      Importar documentos
+    </button>
   </div>
 </app-ui-modal>
 
