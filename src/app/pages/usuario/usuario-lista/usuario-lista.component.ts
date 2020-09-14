@@ -27,7 +27,7 @@ export class UsuarioListaComponent implements OnInit {
     private usuarioService: UsuarioService,
     private defaultService: DefaultService,
     private toastService: ToastService,
-    private sharedService: SharedService
+    public sharedService: SharedService
   ) {
     this.listaData = {
       size: 10,
