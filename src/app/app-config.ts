@@ -1,6 +1,6 @@
 export class GradientConfig {
   public static config = {
-    layout: 'vertical', // vertical, horizontal
+    layout: 'horizontal', // vertical, horizontal
     subLayout: '', // horizontal-2
     collapseMenu: false,
     layoutType: 'menu-dark', // menu-dark, menu-light, dark
