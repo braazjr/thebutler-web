@@ -88,7 +88,7 @@ export class CondominioCadastroComponent implements OnInit {
       this.isSubmit = true;
       return;
     } else {
-      this.condominio['idEmpresa'] = Number(this.empresaId);
+      this.condominio['empresaId'] = this.empresaId;
 
       if (!this.condominio.id) {
         this.defaultService.salvar('condominios', this.condominio)
