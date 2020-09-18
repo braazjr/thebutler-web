@@ -14,6 +14,7 @@ import { SharedService } from 'src/app/shared/shared.service';
 import { Ficha } from 'src/app/models/ficha-model';
 import { FichaService } from 'src/app/services/ficha.service';
 import { ElectronService } from 'src/app/services/electron.service';
+import { Empresa } from 'src/app/models/empresa-model';
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
@@ -29,6 +30,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   ficha: Ficha = new Ficha();
   documentos: any[] = [];
   listaMoradores: Morador[] = [];
+  empresaFicha: Empresa = new Empresa();
 
   listaTipoMoradores: Array<IOption> = [];
   listaTipoDocumentos: Array<IOption> = [];
@@ -116,6 +118,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
     this.getTipoMorador();
     this.getTipoDocumento();
+    this.getEmpresaFicha();
   }
 
   ngAfterViewChecked() {
@@ -160,6 +163,13 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       .subscribe(response => {
         this.listaTipoDocumentos = (response as any[]).map(tipo => ({ value: tipo.toString(), label: tipo.toString() }));
         this.listaTipoDocumentos.unshift({ value: '0', label: 'Selecione uma opção' })
+      });
+  }
+
+  getEmpresaFicha() {
+    this.defaultService.getById('empresas', this.sharedService.getUsuarioLogged().empresa.id)
+      .subscribe(empresa => {
+        this.empresaFicha = (empresa as Empresa)
       });
   }
 
@@ -368,9 +378,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   temCracha() {
     const usuario = this.sharedService.getUsuarioLogged()
-    const empresaFicha = this.ficha.apartamento.bloco.condominio.empresa
-    return (usuario.empresa && usuario.empresa.empresaConfig && usuario.empresa.empresaConfig.temCracha)
-      || (empresaFicha.empresaConfig && empresaFicha.empresaConfig.temCracha)
+    return (usuario.empresa && usuario.empresa.empresaConfig && usuario.empresa.empresaConfig.bravaSoftIntegration)
+      || (this.empresaFicha.empresaConfig && this.empresaFicha.empresaConfig.bravaSoftIntegration)
   }
 
   exibirListaParaCracha(modal) {

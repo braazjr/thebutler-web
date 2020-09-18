@@ -1,5 +1,5 @@
 export class EmpresaConfig {
 
     qtyApartamentos: number;
-    temCracha: boolean;
+    bravaSoftIntegration: boolean;
 }
