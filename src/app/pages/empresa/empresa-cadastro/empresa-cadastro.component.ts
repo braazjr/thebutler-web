@@ -61,7 +61,8 @@ export class EmpresaCadastroComponent implements OnInit {
       numero: ['', [Validators.min(1)]],
       empresaConfig: this.formBuilder.group({
         id: ['', []],
-        qtyApartamentos: ['', [Validators.required]]
+        qtyApartamentos: ['', [Validators.required]],
+        bravaSoftIntegration: [false, []]
       })
     });
   }

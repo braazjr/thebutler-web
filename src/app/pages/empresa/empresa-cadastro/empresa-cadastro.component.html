@@ -19,7 +19,7 @@
 
       <form autocomplete="off" [formGroup]="formulario">
         <div class="form-group row">
-          <div class="col-sm-4">
+          <div class="col-sm-2">
             <label class="col-form-label">Cnpj</label>
             <input type="text" class="form-control" formControlName="cnpj" [textMask]="{mask: cnpjMask}"
               [validForm]="{form: formulario.get('cnpj'), isSubmit: isSubmit}">
@@ -33,6 +33,15 @@
             <label class="col-form-label">Qtd. Cadastros</label>
             <input type="number" class="form-control" formControlName="qtyApartamentos"
               [validForm]="{form: formulario.get('empresaConfig.qtyApartamentos'), isSubmit: isSubmit}">
+          </div>
+          <div class="col-sm-12 col-md-2" formGroupName="empresaConfig">
+            <br><br>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="bravaSoftIntegration"
+                formControlName="bravaSoftIntegration"
+                [validForm]="{form: formulario.get('empresaConfig.bravaSoftIntegration'), isSubmit: isSubmit}">
+              <label class="custom-control-label" for="bravaSoftIntegration">Integração BravaSoft</label>
+            </div>
           </div>
           <div class="col-sm-12 col-md-2">
             <br><br>
