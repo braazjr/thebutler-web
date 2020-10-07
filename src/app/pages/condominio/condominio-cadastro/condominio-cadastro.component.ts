@@ -42,7 +42,9 @@ export class CondominioCadastroComponent implements OnInit {
       }
     });
 
-    this.carregarEmpresas();
+    if (this.sharedService.isAdmin()) {
+      this.carregarEmpresas();
+    }
   }
 
   ngAfterViewChecked() {
@@ -54,7 +56,10 @@ export class CondominioCadastroComponent implements OnInit {
       .subscribe(response => {
         this.condominio = response as Condominio;
         this.empresaId = this.condominio.empresa.id.toString();
-        this.carregarEmpresas();
+
+        if (this.sharedService.isAdmin()) {
+          this.carregarEmpresas();
+        }
       });
   }
 
