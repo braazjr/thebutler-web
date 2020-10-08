@@ -4,6 +4,7 @@ import { IOption } from 'ng-select';
 import { DefaultService } from '../../../services/default.service';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
+import { SharedService } from '../../../shared/shared.service';
 
 import * as lodash from 'lodash';
 
@@ -21,11 +22,11 @@ export class MoradorListaComponent implements OnInit {
     page: number,
     sort: string,
 
+    condominioId?: string,
+    blocoId?: string,
     nome?: string,
     documento?: string,
-    numeroApartamento?: number,
-    idBloco?: string,
-    idCondominio?: string,
+    apartamentoNumero?: string,
     ativo?: boolean
   };
   listaMoradores: any[] = [];
@@ -50,7 +51,8 @@ export class MoradorListaComponent implements OnInit {
 
   constructor(
     private moradorService: MoradorService,
-    private defaultService: DefaultService
+    private defaultService: DefaultService,
+    private sharedService: SharedService
   ) {
     this.listaData = {
       size: 10,
@@ -58,8 +60,8 @@ export class MoradorListaComponent implements OnInit {
       totalPages: 0,
       page: 0,
       sort: 'nomeMorador,asc',
-      idBloco: '0',
-      idCondominio: '0'
+      blocoId: '0',
+      condominioId: '0'
     };
   }
 
@@ -82,10 +84,8 @@ export class MoradorListaComponent implements OnInit {
 
   getMoradores() {
     const listaData = lodash.clone(this.listaData);
-    if (listaData.idBloco == '0') delete listaData.idBloco;
-    if (listaData.idCondominio === '0') delete listaData.idCondominio;
 
-    this.moradorService.getViewApartamentoMorador(listaData)
+    this.moradorService.getMoradores(listaData)
       .subscribe(data => {
         this.listaData.page = data['number'];
         this.listaData.size = data['size'];
@@ -98,7 +98,11 @@ export class MoradorListaComponent implements OnInit {
   carregarCondominios() {
     this.defaultService.get('condominios')
       .subscribe(response => {
-        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios = (response as Condominio[])
+          .map(cond => ({
+            value: cond.id.toString(),
+            label: this.sharedService.isAdmin() ? `${cond.empresa.nomeFantasia} - ${cond.nome}` : cond.nome
+          }));
         this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
   }

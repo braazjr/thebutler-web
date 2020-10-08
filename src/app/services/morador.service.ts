@@ -13,8 +13,8 @@ export class MoradorService {
     private httpUtil: HttpUtil
   ) { }
 
-  getViewApartamentoMorador(pageable) {
-    return this.http.get(`${environment.urlSpring}/view/moradores`, { withCredentials: true, params: pageable })
+  getMoradores(pageable: any) {
+    return this.http.get(`${environment.urlSpring}/moradores`, { withCredentials: true, params: pageable })
       .pipe(
         catchError(error => {
           this.httpUtil.showErrors(error, `Carregando moradores!`);

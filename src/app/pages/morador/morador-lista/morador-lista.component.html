@@ -16,12 +16,12 @@
             <div class="form-group row">
               <div class="col-sm-3">
                 <label class="col-form-label">Condominio</label>
-                <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="listaData.idCondominio">
+                <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" [(ngModel)]="listaData.condominioId">
                 </ng-select>
               </div>
               <div class="col-sm-3">
                 <label class="col-form-label">Bloco</label>
-                <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" [(ngModel)]="listaData.idBloco">
+                <ng-select [ngClass]="'ng-select'" [options]="listaBlocos" [(ngModel)]="listaData.blocoId">
                 </ng-select>
               </div>
               <div class="col-sm-6">
@@ -36,7 +36,7 @@
               </div>
               <div class="col-sm-3">
                 <label class="col-form-label">Numero Apart.</label>
-                <input type="number" class="form-control" [(ngModel)]="listaData.numeroApartamento">
+                <input type="number" class="form-control" [(ngModel)]="listaData.apartamentoNumero">
               </div>
               <div class="col-sm-2">
                 <button class="btn btn-primary btn-round btn-sm m-t-35" (click)="getMoradores()">
@@ -54,31 +54,25 @@
           [rowHeight]="'auto'" [externalPaging]="true" [rows]="listaMoradores"
           [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
           [limit]="listaData ? listaData.size : 10" (page)='setPage($event)' (sort)="onSort($event)">
-          <ngx-datatable-column prop="nomeMorador" name="Nome" [flexGrow]="3" [sortable]="true">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.nomeMorador }}</ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column prop="documentoMorador" name="Documento" [flexGrow]="2">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.documentoMorador }}</ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column prop="numeroApartamento" name="Apart." [flexGrow]="1">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.numeroApartamento }}</ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column prop="nomeBloco" name="Bloco" [flexGrow]="2">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.nomeBloco }}</ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column prop="nomeCondominio" name="Condomínio" [flexGrow]="2">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.nomeCondominio }}</ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column prop="ativoMorador" name="Ativo" [flexGrow]="1">
+          <ngx-datatable-column prop="nome" name="Nome" [flexGrow]="3" [sortable]="true"></ngx-datatable-column>
+          <ngx-datatable-column prop="documento" name="Documento" [flexGrow]="2"></ngx-datatable-column>
+          <ngx-datatable-column prop="apartamento.numero" name="Apart." [flexGrow]="1"></ngx-datatable-column>
+          <ngx-datatable-column name="Bloco" [flexGrow]="2">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <label class="badge badge-success" *ngIf="row.ativoMorador">Ativo</label>
-              <label class="badge badge-danger" *ngIf="!row.ativoMorador">Inativo</label>
+              {{ row.apartamento.bloco.nome || row.apartamento.bloco.numero }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="apartamento.bloco.condominio.nome" name="Condomínio" [flexGrow]="2">
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="ativo" name="Ativo" [flexGrow]="1">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-success" *ngIf="row.ativo">Ativo</label>
+              <label class="badge badge-danger" *ngIf="!row.ativo">Inativo</label>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="id" name="Opções" [flexGrow]="1" [sortable]="false">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <label [routerLink]="['/ficha',row.viewApartamentosMoradoresID.idApartamento]"
-                class="badge badge-primary pointer">Ficha</label>
+              <label [routerLink]="['/ficha',row.fichaId]" class="badge badge-primary pointer">Ficha</label>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-footer>
