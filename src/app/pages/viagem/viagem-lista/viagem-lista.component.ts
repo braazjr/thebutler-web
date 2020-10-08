@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ViagemService } from '../../../services/viagem.service';
-import { DefaultService } from 'src/app/services/default.service';
-import { Condominio } from 'src/app/models/condominio-model';
-import { Bloco } from 'src/app/models/bloco-model';
-import { UsuarioService } from 'src/app/services/usuario.service';
+import { DefaultService } from '../../../services/default.service';
+import { Condominio } from '../../../models/condominio-model';
+import { Bloco } from '../../../models/bloco-model';
+import { UsuarioService } from '../../../services/usuario.service';
+import { SharedService } from '../../../shared/shared.service';
 
 import * as lodash from 'lodash';
 
@@ -51,7 +52,8 @@ export class ViagemListaComponent implements OnInit {
   constructor(
     private viagemService: ViagemService,
     private defaultService: DefaultService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private sharedService: SharedService
   ) {
     this.listaData = {
       size: 10,
@@ -110,7 +112,11 @@ export class ViagemListaComponent implements OnInit {
   carregarCondominios() {
     this.defaultService.get('condominios')
       .subscribe(response => {
-        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios = (response as Condominio[])
+          .map(cond => ({
+            value: cond.id.toString(),
+            label: this.sharedService.isAdmin() ? `${cond.empresa.nomeFantasia} - ${cond.nome}` : cond.nome
+          }));
         this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
   }
@@ -144,10 +150,10 @@ export class ViagemListaComponent implements OnInit {
 
   carregarMotoristas() {
     this.usuarioService.getMotoristas()
-    .subscribe(response => {
-      this.listaMotoristas = (response as any[]).map(motorista => ({ value: motorista.id.toString(), label: motorista.nome }));
-      this.listaMotoristas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
-    })    
+      .subscribe(response => {
+        this.listaMotoristas = (response as any[]).map(motorista => ({ value: motorista.id.toString(), label: motorista.nome }));
+        this.listaMotoristas.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
+      })
   }
 
   carregarRotas() {
