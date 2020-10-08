@@ -28,7 +28,7 @@
         <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
           [rowHeight]="'auto'" [rows]="listaCondominiosTemp" [limit]="10" [offset]="offset">
           <ngx-datatable-column name="Nome" [flexGrow]="3"></ngx-datatable-column>
-          <ngx-datatable-column name="Empresa" [flexGrow]="3">
+          <ngx-datatable-column name="Empresa" [flexGrow]="3" *ngIf="sharedService.isAdmin()">
             <ng-template let-empresa="value" ngx-datatable-cell-template>
               {{ empresa.nomeFantasia }}
             </ng-template>

@@ -61,7 +61,11 @@ export class BlocoCadastroComponent implements OnInit {
   carregarCondominios() {
     this.defaultService.get('condominios')
       .subscribe(response => {
-        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios = (response as Condominio[])
+          .map(cond => ({
+            value: cond.id.toString(),
+            label: this.sharedService.isAdmin() ? `${cond.empresa.nomeFantasia} - ${cond.nome}` : cond.nome
+          }));
         this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Condominio } from '../../../models/condominio-model';
 import { DefaultService } from '../../../services/default.service';
+import { SharedService } from '../../../shared/shared.service';
 
 import Swal from 'sweetalert2';
 
@@ -18,7 +19,8 @@ export class CondominioListaComponent implements OnInit {
   offset = 0;
 
   constructor(
-    private defaultService: DefaultService
+    private defaultService: DefaultService,
+    public sharedService: SharedService
   ) { }
 
   ngOnInit() {

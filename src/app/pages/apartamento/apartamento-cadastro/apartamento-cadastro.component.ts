@@ -71,7 +71,11 @@ export class ApartamentoCadastroComponent implements OnInit {
   carregarBlocos() {
     this.defaultService.get('blocos')
       .subscribe(response => {
-        this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+        this.listaBlocos = (response as Bloco[])
+          .map(bloco => ({
+            value: bloco.id.toString(),
+            label: bloco.condominio.nome + ' - ' + (bloco.nome || bloco.numero)
+          }));
         this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
   }

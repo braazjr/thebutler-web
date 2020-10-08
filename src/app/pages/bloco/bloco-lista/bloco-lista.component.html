@@ -34,7 +34,7 @@
               {{ condominio.nome }}
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Empresa" [flexGrow]="2">
+          <ngx-datatable-column name="Empresa" [flexGrow]="2" *ngIf="sharedService.isAdmin()">
             <ng-template let-row="row" ngx-datatable-cell-template>
               {{row.condominio.empresa.nomeFantasia}}
             </ng-template>

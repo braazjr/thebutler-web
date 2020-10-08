@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { DefaultService } from 'src/app/services/default.service';
-import { FichaService } from 'src/app/services/ficha.service';
-import { Ficha } from 'src/app/models/ficha-model';
-import { ToastService } from 'src/app/services/toast.service';
-import Swal from 'sweetalert2';
+import { DefaultService } from '../../../services/default.service';
+import { FichaService } from '../../../services/ficha.service';
+import { Ficha } from '../../../models/ficha-model';
+import { ToastService } from '../../../services/toast.service';
 import { IOption } from 'ng-select';
-import { Condominio } from 'src/app/models/condominio-model';
-import { Bloco } from 'src/app/models/bloco-model';
+import { Condominio } from '../../../models/condominio-model';
+import { Bloco } from '../../../models/bloco-model';
+import { SharedService } from '../../../shared/shared.service';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ficha-lista',
@@ -41,7 +43,8 @@ export class FichaListaComponent implements OnInit {
   constructor(
     private fichaService: FichaService,
     private defaultService: DefaultService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private sharedService: SharedService
   ) {
     this.listaData = {
       size: 10,
@@ -86,7 +89,11 @@ export class FichaListaComponent implements OnInit {
   carregarCondominios() {
     this.defaultService.get('condominios')
       .subscribe(response => {
-        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios = (response as Condominio[])
+          .map(cond => ({
+            value: cond.id.toString(),
+            label: this.sharedService.isAdmin() ? `${cond.empresa.nomeFantasia} - ${cond.nome}` : cond.nome
+          }));
         this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
   }

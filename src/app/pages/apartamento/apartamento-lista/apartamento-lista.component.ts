@@ -7,7 +7,8 @@ import { IOption } from 'ng-select';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
 import { FichaService } from 'src/app/services/ficha.service';
-import { Ficha } from 'src/app/models/ficha-model';
+import { Ficha } from '../../../models/ficha-model';
+import { SharedService } from '../../../shared/shared.service';
 
 import Swal from 'sweetalert2';
 import * as lodash from 'lodash';
@@ -44,7 +45,8 @@ export class ApartamentoListaComponent implements OnInit {
     private defaultService: DefaultService,
     private apartamentoService: ApartamentoService,
     private toastService: ToastService,
-    private fichaService: FichaService
+    private fichaService: FichaService,
+    private sharedService: SharedService
   ) {
     this.listaData = {
       size: 10,
@@ -111,7 +113,11 @@ export class ApartamentoListaComponent implements OnInit {
   carregarCondominios() {
     this.defaultService.get('condominios')
       .subscribe(response => {
-        this.listaCondominios = (response as Condominio[]).map(cond => ({ value: cond.id.toString(), label: cond.empresa.nomeFantasia + ' - ' + cond.nome }));
+        this.listaCondominios = (response as Condominio[])
+          .map(cond => ({
+            value: cond.id.toString(),
+            label: this.sharedService.isAdmin() ? `${cond.empresa.nomeFantasia} - ${cond.nome}` : cond.nome
+          }));
         this.listaCondominios.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
   }
@@ -119,7 +125,7 @@ export class ApartamentoListaComponent implements OnInit {
   carregarBlocos() {
     this.defaultService.get('blocos')
       .subscribe(response => {
-        this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + bloco.nome }));
+        this.listaBlocos = (response as Bloco[]).map(bloco => ({ value: bloco.id.toString(), label: bloco.condominio.nome + ' - ' + (bloco.nome || bloco.numero) }));
         this.listaBlocos.unshift({ value: '0', label: 'Selecione uma opção', disabled: true });
       });
   }
