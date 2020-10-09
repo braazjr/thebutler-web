@@ -64,4 +64,14 @@ export class FichaService {
         })
       );
   }
+
+  addMorador(id: string, morador: any) {
+    return this.http.patch(`${environment.urlSpring}/fichas/${id}/add-morador`, morador)
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Salvando morador!`);
+          return Observable.throw(error);
+        })
+      );
+  }
 }

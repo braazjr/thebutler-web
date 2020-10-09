@@ -209,12 +209,16 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       if (this.formularioMorador.get('tipoDocumento').value != '0')
         morador.tipoDocumento = this.formularioMorador.get('tipoDocumento').value;
 
-      if (!this.formularioMorador.get('id').value) {
-        this.listaMoradores.push(morador);
-      } else {
-        this.listaMoradores = this.listaMoradores.filter(mora => mora.id != morador.id);
-        this.listaMoradores.push(morador);
-      }
+      this.fichaService.addMorador(this.ficha.id, morador)
+        .subscribe(() => {
+          this.toastService.addToast(
+            'success',
+            'Salvando morador',
+            'Morador salvo com sucesso!'
+          )
+          this.isCollapsed = false
+          this.getFicha(this.ficha.id)
+        })
 
       this.resetMoradorForm();
     }
@@ -370,7 +374,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       }, () => {
         this.documentoService.getDocumentosPorFicha(this.ficha.id)
           .subscribe(documentos => {
-            console.log(documentos)
             this.ficha.documentos = documentos as any[]
           })
       });
