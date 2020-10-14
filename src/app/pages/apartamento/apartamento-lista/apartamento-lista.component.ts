@@ -144,14 +144,6 @@ export class ApartamentoListaComponent implements OnInit {
     this.setPage({ offset: 0 });
   }
 
-  modalFichasPorApartamentoShow(modal, apartamentoId) {
-    this.fichaService.getFichaPorApartamento(apartamentoId)
-      .subscribe(fichas => {
-        this.fichas = fichas as any[];
-        modal.show();
-      })
-  }
-
   excluirFicha(ficha: Ficha) {
     Swal.fire({
       title: 'Exclusão de ficha',
