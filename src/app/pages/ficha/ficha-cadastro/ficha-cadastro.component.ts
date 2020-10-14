@@ -15,6 +15,7 @@ import { Ficha } from 'src/app/models/ficha-model';
 import { FichaService } from 'src/app/services/ficha.service';
 import { ElectronService } from 'src/app/services/electron.service';
 import { Empresa } from 'src/app/models/empresa-model';
+import { tap } from 'rxjs/operators';
 
 import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
@@ -119,6 +120,19 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       fotoUrl: [],
       observacao: ['', [Validators.maxLength(255)]]
     });
+
+    this.formularioMorador.get('tipoDocumento').valueChanges
+      .pipe(
+        tap(tipoDocumento => {
+          if (tipoDocumento == 'MENOR_IDADE') {
+            this.formularioMorador.get('documento').clearValidators();
+          } else {
+            this.formularioMorador.get('documento').setValidators(Validators.required);
+          }
+
+          this.formularioMorador.get('documento').updateValueAndValidity();
+        })
+      ).subscribe();
 
     this.getTipoMorador();
     this.getTipoDocumento();
