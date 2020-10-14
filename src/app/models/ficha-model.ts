@@ -7,4 +7,6 @@ export class Ficha {
     apartamento: Apartamento = new Apartamento()
     moradores: Morador[] = []
     documentos: any[] = []
+    dataInicio: any
+    dataFim: any
 }

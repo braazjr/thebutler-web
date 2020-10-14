@@ -17,6 +17,9 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { SharedTheButlerModule } from 'src/app/shared/shared-the-butler.module';
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { FichaListaComponent } from './ficha-lista/ficha-lista.component';
+import { NgbDateParserFormatter, NgbDatepickerI18n, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { CustomDatepickerI18n, I18n } from '../../utils/date/custom-datepicker-I18n';
+import { NgbDatePTParserFormatter } from '../../utils/date/ngb-date-pt-parser-formatter';
 
 @NgModule({
   imports: [
@@ -28,7 +31,8 @@ import { FichaListaComponent } from './ficha-lista/ficha-lista.component';
     WebCamModule,
     ImageCropperModule,
     // FileUploadModule
-    FileUploadModule
+    FileUploadModule,
+    NgbDatepickerModule
   ],
   declarations: [FichaCadastroComponent, FichaListaComponent],
   providers: [
@@ -38,7 +42,9 @@ import { FichaListaComponent } from './ficha-lista/ficha-lista.component';
     TipoMoradorService,
     ToastService,
     DocumentoService,
-    DataTablesService
+    DataTablesService,
+    [I18n, { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n }],
+    [{ provide: NgbDateParserFormatter, useClass: NgbDatePTParserFormatter }],
   ]
 })
 export class FichaModule { }

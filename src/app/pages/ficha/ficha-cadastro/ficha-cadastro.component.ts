@@ -41,8 +41,10 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   isSubmit: boolean = false;
   isSubmitMorador: boolean = false;
 
+  dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   telefoneMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   celularMask = ['(', /[1-9]/, /\d/, ')', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  dateRegex = /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
   telefoneRegex = /^\(\d{2}\)\d{4}-\d{4}$/;
   celularRegex = /^\(\d{2}\)\d{5}-\d{4}$/;
 
@@ -99,7 +101,9 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         fotoUrl: [],
         observacao: ['', [Validators.maxLength(255)]]
       }),
-      observacao: ['', [Validators.maxLength(255)]]
+      observacao: ['', [Validators.maxLength(255)]],
+      dataInicio: [''],
+      dataFim: ['']
     });
 
     this.formularioMorador = this.formBuilder.group({
@@ -144,6 +148,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   carregaFicha() {
     const responsavel = this.ficha.moradores.filter((morador) => morador.tipoMorador)[0];
+    this.formulario.get('dataInicio').setValue(moment(this.ficha.dataInicio).format('DD/MM/YYYY'));
+    this.formulario.get('dataFim').setValue(moment(this.ficha.dataFim).format('DD/MM/YYYY'));
     if (responsavel) {
       this.formulario.get('responsavel').patchValue(responsavel);
       this.listaMoradores = this.ficha.moradores.filter((morador) => morador.id != responsavel.id);
@@ -272,26 +278,32 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       fichaDto['moradores'] = [this.formulario.getRawValue().responsavel]
       if (this.listaMoradores.length > 0)
         this.listaMoradores.forEach(morador => fichaDto['moradores'].push(morador))
-      fichaDto['dataInicio'] = moment().format('DD/MM/YYYY')
+      // fichaDto['dataInicio'] = moment().format('DD/MM/YYYY')
+      console.log(this.formulario.get('dataInicio').value)
+      // console.log(moment(this.formulario.get('dataInicio').value, 'yyyy-MM-dd'))
+      console.log(moment(this.formulario.get('dataInicio').value, 'yyyy-MM-DD').toString())
+      // fichaDto['dataInicio'] =  moment(this.formulario.get('dataInicio').value, 'YYYY-MM-dd').format('yyyy/MM/dd') 
+      // fichaDto['dataFim'] = moment(this.formulario.get('dataFim').value, 'MM/dd/yyyy').format('yyyy/MM/dd')
 
       fichaDto['moradores'].forEach(morador => {
         if (morador.usuario)
           delete morador.usuario
       })
 
-      this.defaultService.salvar('fichas', fichaDto)
-        .subscribe((ficha) => {
-          if (!this.ficha.id) {
-            this.router.navigate([`/ficha/${ficha['id']}`], { replaceUrl: true });
-          } else {
-            this.getFicha(ficha['id'])
-          }
-          this.toastService.addToast(
-            'success',
-            `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,
-            `Ficha atualizada com sucesso!`
-          );
-        });
+      // console.log(fichaDto)
+      // this.defaultService.salvar('fichas', fichaDto)
+      //   .subscribe((ficha) => {
+      //     if (!this.ficha.id) {
+      //       this.router.navigate([`/ficha/${ficha['id']}`], { replaceUrl: true });
+      //     } else {
+      //       this.getFicha(ficha['id'])
+      //     }
+      //     this.toastService.addToast(
+      //       'success',
+      //       `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,
+      //       `Ficha atualizada com sucesso!`
+      //     );
+      //   });
     }
   }
 
