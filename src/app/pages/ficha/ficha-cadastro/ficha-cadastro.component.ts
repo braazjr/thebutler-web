@@ -278,33 +278,40 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       fichaDto['moradores'] = [this.formulario.getRawValue().responsavel]
       if (this.listaMoradores.length > 0)
         this.listaMoradores.forEach(morador => fichaDto['moradores'].push(morador))
-      // fichaDto['dataInicio'] = moment().format('DD/MM/YYYY')
-      console.log(this.formulario.get('dataInicio').value)
-      // console.log(moment(this.formulario.get('dataInicio').value, 'yyyy-MM-dd'))
-      console.log(moment(this.formulario.get('dataInicio').value, 'yyyy-MM-DD').toString())
-      // fichaDto['dataInicio'] =  moment(this.formulario.get('dataInicio').value, 'YYYY-MM-dd').format('yyyy/MM/dd') 
-      // fichaDto['dataFim'] = moment(this.formulario.get('dataFim').value, 'MM/dd/yyyy').format('yyyy/MM/dd')
+
+      fichaDto['dataInicio'] = moment(this.getDate(this.formulario.get('dataInicio').value)).format('YYYY-MM-DD');
+      fichaDto['dataFim'] = moment(this.getDate(this.formulario.get('dataFim').value)).format('YYYY-MM-DD');
 
       fichaDto['moradores'].forEach(morador => {
         if (morador.usuario)
           delete morador.usuario
       })
 
-      // console.log(fichaDto)
-      // this.defaultService.salvar('fichas', fichaDto)
-      //   .subscribe((ficha) => {
-      //     if (!this.ficha.id) {
-      //       this.router.navigate([`/ficha/${ficha['id']}`], { replaceUrl: true });
-      //     } else {
-      //       this.getFicha(ficha['id'])
-      //     }
-      //     this.toastService.addToast(
-      //       'success',
-      //       `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,
-      //       `Ficha atualizada com sucesso!`
-      //     );
-      //   });
+      console.log(fichaDto)
+      this.defaultService.salvar('fichas', fichaDto)
+        .subscribe((ficha) => {
+          if (!this.ficha.id) {
+            this.router.navigate([`/ficha/${ficha['id']}`], { replaceUrl: true });
+          } else {
+            this.getFicha(ficha['id'])
+          }
+          this.toastService.addToast(
+            'success',
+            `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,
+            `Ficha atualizada com sucesso!`
+          );
+        });
     }
+  }
+
+  private getDate(d: { year: number, month: number, day: number }) {
+    let data = new Date()
+    data.setFullYear(d.year, (d.month - 1), d.day);
+    data.setHours(0);
+    data.setMinutes(0);
+    data.setSeconds(0);
+    data.setMilliseconds(0);
+    return data;
   }
 
   resetMoradorForm() {
