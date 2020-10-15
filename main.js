@@ -30,7 +30,7 @@ function createWindow() {
         logo: path.join(__dirname, `dist/assets/images/logo-small.png`),
         website: 'www.onsmarttech.com.br',
         text: 'Carregando ...',
-        color: '#49175c',
+        color: '#343a40',
         image: path.join(__dirname, `dist/assets/images/logo-small.png`)
     })
 
