@@ -366,7 +366,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   saveFile(data: any, filename?: string) {
     const blob = new Blob([data], { type: 'application/pdf; charset=utf-8' });
-    fileSaver.saveAs(blob, filename);
+s    const fileURL = URL.createObjectURL(blob);
+    window.open(fileURL);
   }
 
   getFieldResponsavelForm(field) {
