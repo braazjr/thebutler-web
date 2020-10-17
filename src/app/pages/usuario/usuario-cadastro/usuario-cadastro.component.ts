@@ -2,9 +2,8 @@ import { Empresa } from './../../../models/empresa-model';
 import { Component, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { Usuario } from '../../../models/usuario-model';
 import { IOption } from 'ng-select';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
-import { ToastService } from '../../../services/toast.service';
 import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
@@ -26,8 +25,8 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
     private route: ActivatedRoute,
     private defaultService: DefaultService,
     private cdr: ChangeDetectorRef,
-    private toastService: ToastService,
-    public sharedService: SharedService
+    public sharedService: SharedService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -94,13 +93,13 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
       this.defaultService.salvar('usuarios', this.usuario)
         .subscribe(response => {
           this.usuario = response as Usuario;
-          this.toastService.addToast('success', 'Cadastro Usuário!', `Usuário ${this.usuario.nome} salvo com sucesso!`);
+          this.router.navigate(['/usuario/lista']);
         });
     } else {
       this.defaultService.atualizar('usuarios', this.usuario)
         .subscribe(response => {
           this.usuario = response as Usuario;
-          this.toastService.addToast('success', 'Atualização Usuário!', `Usuário ${this.usuario.nome} atualizado com sucesso!`);
+          this.router.navigate(['/usuario/lista']);
         });
     }
   }

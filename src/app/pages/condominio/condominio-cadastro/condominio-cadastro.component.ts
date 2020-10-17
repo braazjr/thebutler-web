@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Condominio } from '../../../models/condominio-model';
 import { IOption } from 'ng-select';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
-import { ToastService } from '../../../services/toast.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { Empresa } from 'src/app/models/empresa-model';
 
@@ -29,7 +28,7 @@ export class CondominioCadastroComponent implements OnInit {
     private defaultService: DefaultService,
     private cdr: ChangeDetectorRef,
     public sharedService: SharedService,
-    private toastService: ToastService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -99,13 +98,13 @@ export class CondominioCadastroComponent implements OnInit {
         this.defaultService.salvar('condominios', this.condominio)
           .subscribe(response => {
             this.condominio = response as Condominio;
-            this.toastService.addToast('success', 'Cadastro Condomínio!', `Condomínio ${this.condominio.nome} salvo com sucesso!`);
+            this.router.navigate(['/condominio/lista']);
           });
       } else {
         this.defaultService.atualizar('condominios', this.condominio)
           .subscribe(response => {
             this.condominio = response as Condominio;
-            this.toastService.addToast('success', 'Atualização Condomínio!', `Condomínio ${this.condominio.nome} atualizado com sucesso!`);
+            this.router.navigate(['/condominio/lista']);
           });
       }
     }

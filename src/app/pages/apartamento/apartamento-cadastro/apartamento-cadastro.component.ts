@@ -97,15 +97,13 @@ export class ApartamentoCadastroComponent implements OnInit {
         this.defaultService.salvar('apartamentos', this.apartamento)
           .subscribe(response => {
             this.apartamento = response as Apartamento;
-            this.toastService.addToast('success', 'Cadastro Apartamento!', `Apartamento ${this.apartamento.numero} salvo com sucesso!`);
-            // this.router.navigate([`/ficha/${this.apartamento.id}`]);
+            this.router.navigate(['/apartamento/lista']);
           })
       } else {
         this.defaultService.atualizar('apartamentos', this.apartamento)
           .subscribe(response => {
             this.apartamento = response as Apartamento;
-            this.toastService.addToast('success', 'Atualização Apartamento!', `Apartamento ${this.apartamento.numero} atualizado com sucesso!`);
-            // this.router.navigate([`/ficha/${this.apartamento.id}`]);
+            this.router.navigate(['/apartamento/lista']);;
           })
       }
     }

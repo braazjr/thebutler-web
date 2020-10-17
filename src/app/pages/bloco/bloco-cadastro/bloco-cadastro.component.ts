@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Bloco } from '../../../models/bloco-model';
 import { IOption } from 'ng-select';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DefaultService } from '../../../services/default.service';
 import { Condominio } from '../../../models/condominio-model';
 import { ToastService } from '../../../services/toast.service';
@@ -30,6 +30,7 @@ export class BlocoCadastroComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private toastService: ToastService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -61,6 +62,7 @@ export class BlocoCadastroComponent implements OnInit {
   carregarCondominios() {
     this.defaultService.get('condominios')
       .subscribe(response => {
+        console.log(response)
         this.listaCondominios = (response as Condominio[])
           .map(cond => ({
             value: cond.id.toString(),
@@ -84,13 +86,13 @@ export class BlocoCadastroComponent implements OnInit {
         this.defaultService.salvar('blocos', this.bloco)
           .subscribe(response => {
             this.bloco = response as Bloco;
-            this.toastService.addToast('success', 'Cadastro Bloco!', `Bloco ${this.bloco.nome} salvo com sucesso!`);
+            this.router.navigate(['/bloco/lista']);
           });
       } else {
         this.defaultService.atualizar('blocos', this.bloco)
           .subscribe(response => {
             this.bloco = response as Bloco;
-            this.toastService.addToast('success', 'Atualização Bloco!', `Bloco ${this.bloco.nome} atualizado com sucesso!`);
+            this.router.navigate(['/bloco/lista']);
           });
       }
     }

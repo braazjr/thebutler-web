@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Empresa } from '../../../models/empresa-model';
 import { DefaultService } from '../../../services/default.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ToastService } from '../../../services/toast.service';
 import { SharedService } from 'src/app/shared/shared.service';
 import { EmpresaConfig } from 'src/app/models/empresa-config';
 
@@ -32,8 +31,8 @@ export class EmpresaCadastroComponent implements OnInit {
     private defaultService: DefaultService,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private toastService: ToastService,
     private sharedService: SharedService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -116,13 +115,13 @@ export class EmpresaCadastroComponent implements OnInit {
         this.defaultService.salvar('empresas', this.empresa)
           .subscribe(response => {
             this.empresa = response as Empresa;
-            this.toastService.addToast('success', 'Cadastro Empresa!', `Empresa ${this.empresa.nomeFantasia} salva com sucesso!`);
+            this.router.navigate(['/empresa/lista']);
           });
       } else {
         this.defaultService.atualizar('empresas', this.empresa)
           .subscribe(response => {
             this.empresa = response as Empresa;
-            this.toastService.addToast('success', 'Atualização Empresa!', `Empresa ${this.empresa.nomeFantasia} atualizada com sucesso!`);
+            this.router.navigate(['/empresa/lista']);
           });
       }
     }
