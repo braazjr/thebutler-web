@@ -2,6 +2,7 @@
     background-color: $header-dark-background !important;
     color: $header-dark-text-color;
     border-radius: 5px;
+    margin-bottom: 15px !important;
 
     button {
         color: $header-dark-text-color;
@@ -62,4 +63,13 @@ ng-select.is-invalid, ng-select.ng-invalid {
     border: 1px solid $gray-400 !important;
     border-radius: 5px;
     padding-bottom: 5px;
+}
+
+.codigo-register {
+    margin-right: 10px !important;
+    margin-top: 10px !important;
+    color: $secondary-color !important;
+    opacity: 0.7;
+    align-self: flex-end; 
+    text-align: end;
 }

@@ -12,7 +12,7 @@
 
         <!-- filtros -->
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-12 p-l-30 p-r-30">
             <div class="form-group row">
               <div class="col-sm-3">
                 <label class="col-form-label">Condominio</label>
@@ -38,11 +38,11 @@
                 <label class="col-form-label">Numero Apart.</label>
                 <input type="number" class="form-control" [(ngModel)]="listaData.apartamentoNumero">
               </div>
-              <div class="col-sm-2">
-                <button class="btn btn-primary btn-round btn-sm m-t-35" (click)="getMoradores()">
+              <div class="col-sm-6" style="align-self: flex-end; text-align: end;">
+                <button class="btn btn-primary btn-round m-r-5" (click)="getMoradores()">
                   Pesquisar
                 </button>
-                <button class="btn btn-warning btn-round btn-sm m-t-35" (click)="limparPesquisa()">
+                <button class="btn btn-warning btn-round" (click)="limparPesquisa()">
                   Limpar
                 </button>
               </div>
@@ -59,7 +59,7 @@
           <ngx-datatable-column prop="apartamento.numero" name="Apart." [flexGrow]="1"></ngx-datatable-column>
           <ngx-datatable-column name="Bloco" [flexGrow]="2">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              {{ row.apartamento.bloco.nome || row.apartamento.bloco.numero }}
+              {{ row.apartamento?.bloco.nome || row.apartamento?.bloco.numero }}
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="apartamento.bloco.condominio.nome" name="Condomínio" [flexGrow]="2">

@@ -6,17 +6,13 @@
                     <div class="col-sm-12 filter-bar">
                         <nav class="navbar navbar-light bg-faded m-b-30 p-10">
                             Fichas
-                            <div class="nav-item nav-grid">
-                                <label class="badge badge-light m-t-10 pointer" (click)="isCollapsed = !isCollapsed"
-                                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">Filtros</label>
-                            </div>
                         </nav>
                     </div>
                 </div>
 
                 <!-- filtros -->
-                <app-card id="collapseExample" [ngbCollapse]="!isCollapsed">
-                    <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-12 p-l-30 p-r-30">
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <label class="col-form-label">Código</label>
@@ -70,13 +66,13 @@
                                 <button class="btn btn-primary btn-round m-r-5" (click)="getFichas()">
                                     Pesquisar
                                 </button>
-                                <button class="btn btn-primary btn-round" (click)="limparPesquisa()">
+                                <button class="btn btn-warning btn-round" (click)="limparPesquisa()">
                                     Limpar
                                 </button>
                             </div>
                         </div>
                     </div>
-                </app-card>
+                </div>
                 <br>
                 <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
                     [rowHeight]="'auto'" [externalPaging]="true" [rows]="fichas"
