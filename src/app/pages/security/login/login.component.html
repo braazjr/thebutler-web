@@ -1,52 +1,44 @@
 <ngx-spinner></ngx-spinner>
 
-<div class="auth-wrapper align-items-stretch"
-  style="background-image: url(assets/images/login-image-carbon.jpg); background-repeat: round;">
-  <div class="flex-grow-1">
-    <div class="h-100 d-md-flex align-items-center auth-side-img">
-      <div class="col-sm-10 auth-content w-auto">
-        <!-- <img src="assets/images/logo.png" alt="" class="img-fluid" width="10%"> -->
-        <!-- <h1 class="text-white my-4">Bem vindo ao The Butler!</h1>
-        <h4 class="text-white font-weight-normal">Seu futuro sempre ligado!</h4> -->
-      </div>
-    </div>
-    <div class="auth-side-form">
-      <div class=" auth-content">
-        <form #validationForm="ngForm" class="editForm" novalidate>
-          <div class="text-center">
-            <img src="assets/images/logo.png" alt="" class="img-fluid mb-4" width="30%">
-            <h3 class="mb-4 f-w-400">Entrar</h3>
+<div class="auth-wrapper">
+  <div class="auth-content">
+    <div class="card">
+      <div class="row align-items-center text-center">
+        <div class="col-md-12">
+          <div class="card-body">
+            <form #validationForm="ngForm" class="editForm" novalidate>
+              <img src="assets/images/logo.png" alt="" class="img-fluid mb-4">
+              <!-- <h4 class="mb-3 f-w-400">Signin</h4> -->
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                </div>
+                <input type="login" class="form-control" placeholder="E-mail" #login="ngModel" name="login"
+                  [(ngModel)]="form.login" required
+                  [ngClass]="{'is-invalid': !login.valid && (login.dirty || login.touched || isSubmit)}">
+              </div>
+              <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-key"></i></span>
+                </div>
+                <input type="password" class="form-control" placeholder="Senha" #senha="ngModel" name="senha"
+                  [(ngModel)]="form.senha" required
+                  [ngClass]="{'is-invalid': !senha.valid && (senha.dirty || senha.touched || isSubmit)}">
+              </div>
+              <div class="form-group text-left mt-2">
+                <div class="checkbox checkbox-primary d-inline">
+                  <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
+                  <label for="checkbox-fill-a1" class="cr"> Lembre-se</label>
+                </div>
+              </div>
+              <button class="btn btn-block btn-primary mb-4" (click)="entrar(validationForm)">Entrar</button>
+              <p class="mb-2 text-muted">Esqueceu a senha? <a [routerLink]="['/auth/reset-password']"
+                  class="f-w-400">Reset</a></p>
+              <p class="mb-0 text-muted">Não tem uma conta? <a [routerLink]="['/auth/signup']" class="f-w-400">Entre em
+                  contato</a></p>
+            </form>
           </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-            </div>
-            <input type="login" class="form-control" placeholder="Login" #login="ngModel" name="login"
-              [(ngModel)]="form.login" required
-              [ngClass]="{'is-invalid': !login.valid && (login.dirty || login.touched || isSubmit)}">
-          </div>
-          <div class="input-group mb-4">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-key"></i></span>
-            </div>
-            <input type="password" class="form-control" placeholder="Senha" #senha="ngModel" name="senha"
-              [(ngModel)]="form.senha" required
-              [ngClass]="{'is-invalid': !senha.valid && (senha.dirty || senha.touched || isSubmit)}">
-          </div>
-          <div class="form-group text-left mt-2">
-            <div class="checkbox checkbox-primary d-inline">
-              <input type="checkbox" name="checkbox-p-1" id="checkbox-p-1" checked="">
-              <label for="checkbox-p-1" class="cr">Lembre-me</label>
-            </div>
-          </div>
-          <button class="btn btn-block btn-primary mb-0" (click)="entrar(validationForm)">Entrar</button>
-          <app-alert [type]="'danger'" *ngIf="alerta" class="m-10">Login ou senha inválida!</app-alert>
-          <div class="text-center">
-            <div class="saprator my-4"><span>OU</span></div>
-            <p class="mb-2 text-muted">Esqueceu sua senha? <a [routerLink]="['/auth/reset-password-v2']"
-                class="f-w-400">Reset-a</a></p>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
