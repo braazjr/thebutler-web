@@ -11,9 +11,9 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class AuthService {
 
-  oauthTokenUrl = `${environment.urlSpring}/oauth/token`;
+  oauthTokenUrl = `${environment.urlAuthSpring}/oauth/token`;
   jwtPayload: any;
-  tokensRenokeUrl = `${environment.urlSpring}/tokens/revoke`;
+  tokensRenokeUrl = `${environment.urlAuthSpring}/tokens/revoke`;
   hds = new HttpHeaders({
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': 'Basic dGhlYnV0bGVyX2FuZ3VsYXI6dGhlYnV0bGVyX2FuZ3VsYXI='
