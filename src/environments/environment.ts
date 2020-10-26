@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlAuthSpring: 'http://localhost:8081',
+  urlAuthSpring: 'http://localhost:8081/oauth',
   urlSpring: 'http://localhost:8081/api'
 };
 

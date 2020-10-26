@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  urlSpring: 'https://api.thebutler.com.br'
+  urlAuthSpring: 'https://api.thebutler.com.br/oauth',
+  urlSpring: 'https://api.thebutler.com.br/api'
 };
