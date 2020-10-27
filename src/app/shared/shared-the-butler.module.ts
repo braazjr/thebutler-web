@@ -16,6 +16,7 @@ import { ModalModule, AlertModule } from '../theme/shared/components';
 import { AuthInterceptorModule } from './seguranca/auth-interceptor/auth-interceptor.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ModalBravasoftConfigurationComponent } from './components/modal-bravasoft-configuration/modal-bravasoft-configuration.component';
+import { HttpUtil } from '../utils/http.util';
 
 @NgModule({
   declarations: [ValidFormDirectiveDirective, ModalAlterarSenhaComponent, ModalBravasoftConfigurationComponent],
@@ -37,7 +38,8 @@ import { ModalBravasoftConfigurationComponent } from './components/modal-bravaso
     DefaultService,
     UsuarioService,
     SharedService,
-    ToastService
+    ToastService,
+    HttpUtil
   ],
   exports: [
     ToastyModule,

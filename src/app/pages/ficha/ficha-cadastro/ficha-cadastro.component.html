@@ -51,7 +51,8 @@
               <label class="col-form-label">Dt Início</label>
               <div class="input-group">
                 <input class="form-control" placeholder="dd/MM/aaaa" formControlName="dataInicio" ngbDatepicker
-                  #dataInicio="ngbDatepicker">
+                  #dataInicio="ngbDatepicker" [value]="ficha.dataInicio"
+                  [validForm]="{form: formulario.get('dataInicio'), isSubmit: isSubmit}">
                 <div class="input-group-append">
                   <span class="input-group-text" (click)="dataInicio.toggle()">
                     <i class="fa fa-calendar"></i>
@@ -63,7 +64,7 @@
               <label class="col-form-label">Dt Fim</label>
               <div class="input-group">
                 <input class="form-control" autocomplete="off" placeholder="dd/MM/aaaa" formControlName="dataFim"
-                  ngbDatepicker #dataFim="ngbDatepicker">
+                  ngbDatepicker #dataFim="ngbDatepicker" [value]="ficha.dataFim">
                 <div class="input-group-append">
                   <span class="input-group-text" (click)="dataFim.toggle()">
                     <i class="fa fa-calendar"></i>
@@ -170,7 +171,7 @@
           </div>
         </app-card>
 
-        <app-card>
+        <app-card *ngIf="ficha.id">
           <h5 class="card-title">Dados dos Moradores</h5>
           <form autocomplete="off" [formGroup]="formularioMorador">
 

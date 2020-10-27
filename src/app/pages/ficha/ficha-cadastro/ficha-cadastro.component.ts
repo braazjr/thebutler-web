@@ -17,7 +17,6 @@ import { ElectronService } from 'src/app/services/electron.service';
 import { Empresa } from 'src/app/models/empresa-model';
 import { tap } from 'rxjs/operators';
 
-import * as fileSaver from 'file-saver';
 import Swal from 'sweetalert2';
 import * as moment from 'moment'
 
@@ -103,8 +102,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         observacao: ['', [Validators.maxLength(255)]]
       }),
       observacao: ['', [Validators.maxLength(255)]],
-      dataInicio: [''],
-      dataFim: ['']
+      dataInicio: [],
+      dataFim: []
     });
 
     this.formularioMorador = this.formBuilder.group({
@@ -162,8 +161,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   carregaFicha() {
     const responsavel = this.ficha.moradores.filter((morador) => morador.tipoMorador)[0];
-    this.formulario.get('dataInicio').setValue(moment(this.ficha.dataInicio).format('DD/MM/YYYY'));
-    this.formulario.get('dataFim').setValue(moment(this.ficha.dataFim).format('DD/MM/YYYY'));
+    this.ficha.dataInicio = moment(this.ficha.dataInicio).format('DD/MM/YYYY');
+    this.ficha.dataFim = moment(this.ficha.dataFim).format('DD/MM/YYYY');
     if (responsavel) {
       this.formulario.get('responsavel').patchValue(responsavel);
       this.listaMoradores = this.ficha.moradores.filter((morador) => morador.id != responsavel.id);
@@ -199,8 +198,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   removerMorador(morador: Morador) {
     Swal.fire({
-      title: 'Remoção de morador',
-      text: `Morador já está cadastrado, deseja remove-lo?`,
+      title: 'Remoção de morador(a)',
+      text: `Deseja remover o(a) morador(a) ${morador.nome}?`,
       type: 'warning',
       showCancelButton: true,
       cancelButtonText: 'Não',
@@ -293,15 +292,14 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       if (this.listaMoradores.length > 0)
         this.listaMoradores.forEach(morador => fichaDto['moradores'].push(morador))
 
-      fichaDto['dataInicio'] = moment(this.getDate(this.formulario.get('dataInicio').value)).format('YYYY-MM-DD');
-      fichaDto['dataFim'] = moment(this.getDate(this.formulario.get('dataFim').value)).format('YYYY-MM-DD');
+      if (this.ficha.dataInicio) fichaDto['dataInicio'] = moment(this.getDate(this.formulario.get('dataInicio').value || this.ficha.dataInicio)).format('YYYY-MM-DD');
+      if (this.ficha.dataFim) fichaDto['dataFim'] = moment(this.getDate(this.formulario.get('dataFim').value || this.ficha.dataFim)).format('YYYY-MM-DD');
 
       fichaDto['moradores'].forEach(morador => {
         if (morador.usuario)
           delete morador.usuario
       })
 
-      console.log(fichaDto)
       this.defaultService.salvar('fichas', fichaDto)
         .subscribe((ficha) => {
           if (!this.ficha.id) {
@@ -318,14 +316,18 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  private getDate(d: { year: number, month: number, day: number }) {
-    let data = new Date()
-    data.setFullYear(d.year, (d.month - 1), d.day);
-    data.setHours(0);
-    data.setMinutes(0);
-    data.setSeconds(0);
-    data.setMilliseconds(0);
-    return data;
+  private getDate(d: { year: number, month: number, day: number } | string) {
+    if (d['year'] && d['month'] && d['day']) {
+      let data = new Date()
+      data.setFullYear(d['year'], (d['month'] - 1), d['day']);
+      data.setHours(0);
+      data.setMinutes(0);
+      data.setSeconds(0);
+      data.setMilliseconds(0);
+      return data;
+    } else {
+      return moment(d, 'DD/MM/YYYY').toDate()
+    }
   }
 
   resetMoradorForm() {
