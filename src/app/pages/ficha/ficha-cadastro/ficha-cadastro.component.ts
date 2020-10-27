@@ -292,8 +292,25 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       if (this.listaMoradores.length > 0)
         this.listaMoradores.forEach(morador => fichaDto['moradores'].push(morador))
 
-      if (this.ficha.dataInicio) fichaDto['dataInicio'] = moment(this.getDate(this.formulario.get('dataInicio').value || this.ficha.dataInicio)).format('YYYY-MM-DD');
-      if (this.ficha.dataFim) fichaDto['dataFim'] = moment(this.getDate(this.formulario.get('dataFim').value || this.ficha.dataFim)).format('YYYY-MM-DD');
+      let dataInicio = undefined
+      let dataFim = undefined
+      if (this.ficha.dataInicio) {
+        dataInicio = moment(this.getDate(this.formulario.get('dataInicio').value || this.ficha.dataInicio))
+        fichaDto['dataInicio'] = dataInicio.format('YYYY-MM-DD');
+      }
+      if (this.ficha.dataFim) {
+        dataFim = moment(this.getDate(this.formulario.get('dataFim').value || this.ficha.dataFim))
+        fichaDto['dataFim'] = dataFim.format('YYYY-MM-DD');
+      }
+
+      if (dataInicio && dataFim && dataInicio.isAfter(dataFim)) {
+        this.toastService.addToast(
+          'warning',
+          `Atualização da ficha do apartamento ${this.ficha.apartamento.numero}`,
+          `A data fim não pode ser anterior a data início da ficha!`
+        );
+        return;
+      }
 
       fichaDto['moradores'].forEach(morador => {
         if (morador.usuario)
