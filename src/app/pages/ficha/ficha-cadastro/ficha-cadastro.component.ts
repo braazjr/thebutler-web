@@ -161,8 +161,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   carregaFicha() {
     const responsavel = this.ficha.moradores.filter((morador) => morador.tipoMorador)[0];
-    this.ficha.dataInicio = moment(this.ficha.dataInicio).format('DD/MM/YYYY');
-    this.ficha.dataFim = moment(this.ficha.dataFim).format('DD/MM/YYYY');
+    if (this.ficha.dataInicio) this.ficha.dataInicio = moment(this.ficha.dataInicio).format('DD/MM/YYYY');
+    if (this.ficha.dataFim) this.ficha.dataFim = moment(this.ficha.dataFim).format('DD/MM/YYYY');
     if (responsavel) {
       this.formulario.get('responsavel').patchValue(responsavel);
       this.listaMoradores = this.ficha.moradores.filter((morador) => morador.id != responsavel.id);
