@@ -50,26 +50,15 @@
             <div class="col-sm-2">
               <label class="col-form-label">Dt Início</label>
               <div class="input-group">
-                <input class="form-control" placeholder="dd/MM/aaaa" formControlName="dataInicio" ngbDatepicker
-                  #dataInicio="ngbDatepicker" [value]="ficha.dataInicio"
+                <input type="date" class="form-control" placeholder="dd/MM/aaaa" formControlName="dataInicio"
                   [validForm]="{form: formulario.get('dataInicio'), isSubmit: isSubmit}">
-                <div class="input-group-append">
-                  <span class="input-group-text" (click)="dataInicio.toggle()">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                </div>
               </div>
             </div>
             <div class="col-sm-2">
               <label class="col-form-label">Dt Fim</label>
               <div class="input-group">
-                <input class="form-control" autocomplete="off" placeholder="dd/MM/aaaa" formControlName="dataFim"
-                  ngbDatepicker #dataFim="ngbDatepicker" [value]="ficha.dataFim">
-                <div class="input-group-append">
-                  <span class="input-group-text" (click)="dataFim.toggle()">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                </div>
+                <input type="date" class="form-control" autocomplete="off" placeholder="dd/MM/aaaa"
+                  formControlName="dataFim">
               </div>
             </div>
             <div class="col-sm-8">

@@ -161,8 +161,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   carregaFicha() {
     const responsavel = this.ficha.moradores.filter((morador) => morador.tipoMorador)[0];
-    if (this.ficha.dataInicio) this.ficha.dataInicio = moment(this.ficha.dataInicio).format('DD/MM/YYYY');
-    if (this.ficha.dataFim) this.ficha.dataFim = moment(this.ficha.dataFim).format('DD/MM/YYYY');
+    if (this.ficha.dataInicio) this.formulario.get('dataInicio').setValue(moment(this.ficha.dataInicio).format('YYYY-MM-DD'));
+    if (this.ficha.dataFim) this.formulario.get('dataFim').setValue(moment(this.ficha.dataFim).format('YYYY-MM-DD'));
     if (responsavel) {
       this.formulario.get('responsavel').patchValue(responsavel);
       this.listaMoradores = this.ficha.moradores.filter((morador) => morador.id != responsavel.id);
@@ -295,12 +295,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       let dataInicio = undefined
       let dataFim = undefined
       if (this.ficha.dataInicio) {
-        dataInicio = moment(this.getDate(this.formulario.get('dataInicio').value || this.ficha.dataInicio))
-        fichaDto['dataInicio'] = dataInicio.format('YYYY-MM-DD');
+        dataInicio = moment(this.formulario.get('dataInicio').value, 'YYYY-MM-DD')
+        fichaDto['dataInicio'] = this.formulario.get('dataInicio').value;
       }
       if (this.ficha.dataFim) {
-        dataFim = moment(this.getDate(this.formulario.get('dataFim').value || this.ficha.dataFim))
-        fichaDto['dataFim'] = dataFim.format('YYYY-MM-DD');
+        dataFim = moment(this.formulario.get('dataFim').value, 'YYYY-MM-DD')
+        fichaDto['dataFim'] = this.formulario.get('dataFim').value;
       }
 
       if (dataInicio && dataFim && dataInicio.isAfter(dataFim)) {
