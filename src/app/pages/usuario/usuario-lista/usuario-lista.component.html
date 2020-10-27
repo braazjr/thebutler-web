@@ -33,7 +33,7 @@
               <label class="badge badge-danger" *ngIf="!row.ativo">Inativo</label>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="1">
+          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="2">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <label class="badge badge-warning pointer m-r-5" [routerLink]="['/usuario/cadastro', row.id]">
                 Ver/Editar
