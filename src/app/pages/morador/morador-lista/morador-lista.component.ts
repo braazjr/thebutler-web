@@ -121,7 +121,9 @@ export class MoradorListaComponent implements OnInit {
       totalElements: 0,
       totalPages: 0,
       page: 0,
-      sort: 'nomeMorador,asc'
+      sort: 'nomeMorador,asc',
+      blocoId: '0',
+      condominioId: '0'
     };
 
     this.getMoradores();
