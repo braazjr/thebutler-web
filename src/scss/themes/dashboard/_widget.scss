@@ -1507,7 +1507,7 @@
                     }
 
                     &.bg-c-blue {
-                        box-shadow: 0 0 0 4px transparentize($primary-color, 0.5);
+                        box-shadow: 0 0 0 4px transparentize($blue, 0.5) !important;
                     }
 
                     &.bg-c-green {

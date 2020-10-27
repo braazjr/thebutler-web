@@ -39,7 +39,7 @@
                 <input type="number" class="form-control" [(ngModel)]="listaData.apartamentoNumero">
               </div>
               <div class="col-sm-6" style="align-self: flex-end; text-align: end;">
-                <button class="btn btn-primary btn-round m-r-5" (click)="getMoradores()">
+                <button class="btn btn-blue btn-round m-r-5" (click)="getMoradores()">
                   Pesquisar
                 </button>
                 <button class="btn btn-warning btn-round" (click)="limparPesquisa()">
@@ -72,7 +72,7 @@
           </ngx-datatable-column>
           <ngx-datatable-column prop="id" name="Opções" [flexGrow]="1" [sortable]="false">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <label [routerLink]="['/ficha',row.fichaId]" class="badge badge-primary pointer">Ficha</label>
+              <label [routerLink]="['/ficha',row.fichaId]" class="badge badge-warning pointer">Ficha</label>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-footer>

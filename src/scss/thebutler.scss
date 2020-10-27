@@ -9,7 +9,8 @@
     }
 }
 
-button, .pointer {
+button,
+.pointer {
     cursor: pointer !important;
 }
 
@@ -17,8 +18,9 @@ button, .pointer {
     margin-right: 10px !important;
 }
 
-ng-select.is-invalid, ng-select.ng-invalid {
-    border: 1px solid #FF5370 !important;
+ng-select.is-invalid,
+ng-select.ng-invalid {
+    border: 1px solid #ff5370 !important;
     border-radius: 4px;
 
     div {
@@ -70,6 +72,29 @@ ng-select.is-invalid, ng-select.ng-invalid {
     margin-top: 10px !important;
     color: $secondary-color !important;
     opacity: 0.7;
-    align-self: flex-end; 
+    align-self: flex-end;
     text-align: end;
+}
+
+.bg-c-blue {
+    background: linear-gradient(45deg, $blue, lighten($blue, 10%));
+}
+
+.text-c-blue {
+    color: $blue;
+}
+
+.b-c-blue {
+    border: 1px solid $blue;
+}
+
+.badge-blue {
+    background: $blue;
+    color: white;
+}
+
+.btn-blue {
+    background-color: $blue;
+    color: white;
+    border-color: $blue;
 }
