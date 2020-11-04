@@ -5,8 +5,12 @@ import { DefaultService } from '../../../services/default.service';
 import { Condominio } from '../../../models/condominio-model';
 import { Bloco } from '../../../models/bloco-model';
 import { SharedService } from '../../../shared/shared.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { Morador } from 'src/app/models/morador-model';
 
 import * as lodash from 'lodash';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-morador-lista',
@@ -52,7 +56,8 @@ export class MoradorListaComponent implements OnInit {
   constructor(
     private moradorService: MoradorService,
     private defaultService: DefaultService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private toastService: ToastService
   ) {
     this.listaData = {
       size: 10,
@@ -127,5 +132,24 @@ export class MoradorListaComponent implements OnInit {
     };
 
     this.getMoradores();
+  }
+
+  excluir(morador: Morador) {
+    Swal.fire({
+      title: 'Exclusão de morador',
+      text: `Deseja excluir o morador: ${morador.nome}?`,
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Não',
+      confirmButtonText: 'Sim'
+    }).then((result) => {
+      if (result.value) {
+        this.defaultService.excluir('moradores', morador.id)
+          .subscribe(() => {
+            this.toastService.addToast('success', 'Exclusão de Morador(a)!', `Morador(a) excluído com sucesso!`);
+            this.setPage({ offset: 0 });
+          });
+      }
+    })
   }
 }

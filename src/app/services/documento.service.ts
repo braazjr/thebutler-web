@@ -46,4 +46,38 @@ export class DocumentoService {
         })
       );
   }
+
+  uploadDocumentosOnMorador(moradorId, file) {
+    let formdata: FormData = new FormData();
+    formdata.append('file', file);
+
+    return this.http.post(`${environment.urlSpring}/moradores/${moradorId}/documento/upload-documento`, formdata,
+      { withCredentials: true, reportProgress: true, responseType: 'text' })
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Upload de documento!`);
+          return Observable.throw(error);
+        })
+      );
+  }
+
+  getDocumentosPorMorador(moradorId) {
+    return this.http.get(`${environment.urlSpring}/moradores/${moradorId}/documentos`)
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Carregando documentos!`);
+          return Observable.throw(error);
+        })
+      );
+  }
+
+  excluirDocumentoOnMorador(moradorId, idDocumento) {
+    return this.http.delete(`${environment.urlSpring}/moradores/${moradorId}/documento/${idDocumento}`, { withCredentials: true })
+      .pipe(
+        catchError(error => {
+          this.httpUtil.showErrors(error, `Excluindo documento!`);
+          return Observable.throw(error);
+        })
+      );
+  }
 }

@@ -6,6 +6,10 @@
           <div class="col-sm-12 filter-bar">
             <nav class="navbar navbar-light bg-faded m-b-30 p-10">
               Lista de Moradores
+              <div class="nav-item nav-grid">
+                <span class="m-r-15">Ações: </span>
+                <label class="badge badge-light m-t-10 pointer" [routerLink]="['/morador/cadastro']">Novo</label>
+              </div>
             </nav>
           </div>
         </div>
@@ -70,8 +74,11 @@
               <label class="badge badge-danger" *ngIf="!row.ativo">Inativo</label>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="1" [sortable]="false">
+          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="2" [sortable]="false">
             <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-warning pointer m-r-5"
+                [routerLink]="['/morador/cadastro', row.id]">Ver/Editar</label>
+              <label class="badge badge-danger pointer m-r-5" (click)="excluir(row)">Excluir</label>
               <label [routerLink]="['/ficha',row.fichaId]" class="badge badge-warning pointer">Ficha</label>
             </ng-template>
           </ngx-datatable-column>

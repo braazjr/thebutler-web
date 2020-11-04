@@ -1,0 +1,320 @@
+<ng2-toasty></ng2-toasty>
+
+<div class="row">
+  <div class="col-sm-12">
+    <app-card>
+      <!-- header -->
+      <div class="row">
+        <div class="col-sm-12 filter-bar">
+          <nav class="navbar navbar-light bg-faded p-10">
+            {{ !morador.id ? 'Cadastro de Morador' : ('Cadastro de Morador: ' + morador.nome) }}
+            <div class="nav-item nav-grid">
+              <span class="m-r-15">Ações: </span>
+
+              <label class="badge badge-light m-t-10 pointer" (click)="modalDocumentos.show()" *ngIf="morador.id">
+                Documentos
+              </label>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/morador/lista']">Lista</label>
+              <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
+              <label class="badge badge-light m-t-10 pointer" *ngIf="electronService.ipcRenderer && temCracha()"
+                (click)="exibirListaParaCracha(modalListaCrachas)">
+                Imprimir crachás
+              </label>
+            </div>
+          </nav>
+          <div class="codigo-register" *ngIf="morador.id">#{{morador.id}}</div>
+        </div>
+      </div>
+
+      <form autocomplete="off" [formGroup]="formulario">
+        <app-card>
+          <h5 class="card-title">Dados do Imóvel</h5>
+          <div class="form-group row">
+            <div class="col-sm-6 col-md-4">
+              <label class="col-form-label">Condomínio</label>
+              <ng-select [ngClass]="'ng-select'" [options]="listaCondominios" formControlName="condominio"
+                [validForm]="{form: getFieldForm('condominio'), isSubmit: isSubmit}">
+              </ng-select>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <label class="col-form-label">Bloco</label>
+              <ng-select [ngClass]="'ng-select'" [options]="listaBlocosFiltrados" formControlName="bloco"
+                [validForm]="{form: getFieldForm('bloco'), isSubmit: isSubmit}">
+              </ng-select>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <label class="col-form-label">Apartamento</label>
+              <ng-select [ngClass]="'ng-select'" [options]="listaApartamentosFiltrados" formControlName="apartamentoId"
+                [validForm]="{form: getFieldForm('apartamentoId'), isSubmit: isSubmit}">
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-2">
+              <label class="col-form-label">Dt Início</label>
+              <div class="input-group">
+                <input type="date" class="form-control" placeholder="dd/MM/aaaa" formControlName="dataInicio"
+                  [validForm]="{form: formulario.get('dataInicio'), isSubmit: isSubmit}">
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <label class="col-form-label">Dt Fim</label>
+              <div class="input-group">
+                <input type="date" class="form-control" autocomplete="off" placeholder="dd/MM/aaaa"
+                  formControlName="dataFim">
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <label class="col-form-label">Observação</label>
+              <input type="text" class="form-control" formControlName="observacao"
+                [validForm]="{form: formulario.get('observacao'), isSubmit: isSubmit}">
+            </div>
+          </div>
+        </app-card>
+
+        <app-card>
+          <h5 class="card-title">Dados do Responsável do Imóvel</h5>
+          <div class="form-group row">
+            <div class="col-sm-3 col-md-2">
+              <div class="row align-items-center m-b-10">
+                <div class="col-12 m-l-5">
+                  <img class="img-fluid" [src]="getFieldForm('foto64').value" *ngIf="getFieldForm('foto64').value">
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col-12">
+                  <a href="javascript:" class="btn btn-sm btn-primary" data-popup="lightbox"
+                    (click)="modalCamera.show()">
+                    <i class="fa fa-camera"></i></a>
+                  <a href="javascript:" class="btn btn-sm btn-primary m-l-5" (click)="removeFoto()"
+                    *ngIf="getFieldForm('foto64') || getFieldForm('fotoUrl')">
+                    <i class="fa fa-trash"></i></a>
+                  <a href="javascript:" class="btn btn-sm btn-primary m-l-5" (click)="modalImportaFoto.show()">
+                    <i class="fa fa-upload"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-9 col-md-10">
+              <div class="form-group row">
+                <div class="col-sm-3 col-md-3">
+                  <label class="col-form-label">Código</label>
+                  <input type="text" class="form-control" formControlName="id">
+                </div>
+                <div class="col-sm-7 col-md-3">
+                  <label class="col-form-label">Tipo Morador</label>
+                  <ng-select [ngClass]="'ng-select'" [options]="listaTipoMoradores" formControlName="tipoMorador"
+                    [validForm]="{form: getFieldForm('tipoMorador'), isSubmit: isSubmit}">
+                  </ng-select>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <label class="col-form-label">Nome</label>
+                  <input type="text" class="form-control" formControlName="nome"
+                    [validForm]="{form: getFieldForm('nome'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Telefone</label>
+                  <input type="text" class="form-control" formControlName="telefone" [textMask]="{mask: telefoneMask}"
+                    [validForm]="{form: getFieldForm('telefone'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Celular</label>
+                  <input type="text" class="form-control" formControlName="celular" [textMask]="{mask: celularMask}"
+                    [validForm]="{form: getFieldForm('celular'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Tipo Documento</label>
+                  <ng-select [ngClass]="'ng-select'" [options]="listaTipoDocumentos" formControlName="tipoDocumento"
+                    [validForm]="{form: getFieldForm('tipoDocumento'), isSubmit: isSubmit}">
+                  </ng-select>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Documento</label>
+                  <input type="text" class="form-control" formControlName="documento"
+                    [validForm]="{form: getFieldForm('documento'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <label class="col-form-label">E-mail</label>
+                  <input type="email" class="form-control" formControlName="email"
+                    [validForm]="{form: getFieldForm('email'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-4">
+                  <label class="col-form-label">Placa Carro</label>
+                  <input type="text" class="form-control" formControlName="placaCarro"
+                    [validForm]="{form: getFieldForm('placaCarro'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-2">
+                  <br><br>
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="ativo" formControlName="ativo"
+                      [validForm]="{form: getFieldForm('ativo'), isSubmit: isSubmit}">
+                    <label class="custom-control-label" for="ativo">Ativo</label>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <label class="col-form-label">Observação</label>
+                  <input type="text" class="form-control" formControlName="observacao"
+                    [validForm]="{form: getFieldForm('observacao'), isSubmit: isSubmit}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-card>
+      </form>
+    </app-card>
+  </div>
+</div>
+
+<app-ui-modal #modalCamera>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Capturar foto</h4>
+    <button type="button" class="close basic-close" (click)="modalCamera.hide(); image64Temp = undefined">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <ack-webcam #webcam [options]="options" [mime]="'image/jpeg'" (catch)="onCamError($event)" [hidden]="image64Temp">
+    </ack-webcam>
+    <image-cropper [imageBase64]="image64Temp" [aspectRatio]="3 / 4" format="jpeg"
+      (imageCropped)="croppedImage = $event" resizeToWidth="160" imageQuality="100" onlyScaleDown="true"
+      *ngIf="image64Temp"></image-cropper>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="generateBase64(webcam)"
+      *ngIf="!image64Temp">Capturar</button>
+    <button type="button" class="btn btn-default waves-effect" (click)="image64Temp = undefined" *ngIf="image64Temp">
+      Nova Foto
+    </button>
+    <button type="button" class="btn btn-primary waves-effect waves-light" (click)="confirmarModalFoto(modalCamera)"
+      *ngIf="image64Temp">Confirmar</button>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #modalImportaFoto>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Importar foto</h4>
+    <button type="button" class="close basic-close" (click)="modalImportaFoto.hide(); limparModalUploadFoto()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="form-group row">
+      <div class="col-sm-12">
+        <input type="file" class="form-control" (change)="fileChangeEvent($event)">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <image-cropper [imageChangedEvent]="imageChangedEvent" [aspectRatio]="3 / 4" format="jpeg"
+          (imageCropped)="croppedImage = $event" resizeToWidth="160" imageQuality="100" onlyScaleDown="true">
+        </image-cropper>
+      </div>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="confirmarModalFoto(modalImportaFoto); limparModalUploadFoto();">Confirmar</button>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #modalExibeFoto>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Exibir foto</h4>
+    <button type="button" class="close basic-close" (click)="modalExibeFoto.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <img class="img-fluid" [src]="formulario.get('foto64').value" *ngIf="formulario.get('foto64').value">
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="modalExibeFoto.hide()">Fechar</button>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #modalDocumentos [dialogClass]="'modal-xl'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Documentos do morador {{ morador.id }}</h4>
+    <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); documentosForm.reset()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form [formGroup]="documentosForm">
+      <file-upload formControlName="files" fileslimit="1">
+        <ng-template #placeholder>
+          <span style="font-size: 3em">
+            <i class="fa fa-print"></i>
+          </span>
+          <br>
+          <span>Arraste e solte arquivos ou Clique aqui</span>
+        </ng-template>
+      </file-upload>
+    </form>
+    <div class="table-responsive" *ngIf="morador.documentos && morador.documentos.length !== 0">
+      <table class="table table-inverse">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Excluir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of morador.documentos">
+            <th scope="row"><a [href]="doc.url" target="_blank">{{ doc.nome }}</a></th>
+            <td>{{ doc.originalName }}</td>
+            <td><label class="badge badge-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="modalDocumentos.hide(); documentosForm.reset()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect"
+      [disabled]="!documentosForm.value.files || documentosForm.value.files.length == 0" (click)="importarDocumentos()">
+      Importar documentos
+    </button>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #modalListaCrachas [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Lista de impressão</h4>
+    <button type="button" class="close basic-close" (click)="modalListaCrachas.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="table-responsive" *ngIf="morador.moradores && morador.moradores.length !== 0">
+      <table class="table table-inverse">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Documento</th>
+            <th>Imprimir?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let morador of morador.moradores">
+            <td>{{ morador.nome }}</td>
+            <td>{{ morador.documento }}</td>
+            <td>
+              <label class="badge pointer"
+                [ngClass]="{'badge-danger': !morador.imprimir, 'badge-success': morador.imprimir}"
+                (click)="morador.imprimir = !morador.imprimir">
+                {{ !morador.imprimir ? 'Não' : 'Sim'  }}
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="modalListaCrachas.hide()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="imprimirCrachas(modalListaCrachas)">Imprimir</button>
+  </div>
+</app-ui-modal>

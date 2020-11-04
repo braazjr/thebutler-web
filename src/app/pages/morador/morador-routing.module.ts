@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MoradorCadastroComponent } from './morador-cadastro/morador-cadastro.component';
 import { MoradorListaComponent } from './morador-lista/morador-lista.component';
 
 const routes: Routes = [
@@ -13,6 +14,14 @@ const routes: Routes = [
       {
         path: 'lista',
         component: MoradorListaComponent
+      },
+      {
+        path: 'cadastro',
+        component: MoradorCadastroComponent
+      },
+      {
+        path: 'cadastro/:id',
+        component: MoradorCadastroComponent
       }
     ]
   }

@@ -12,7 +12,7 @@
               <span class="m-r-15">Ações: </span>
 
               <label class="badge badge-light m-t-10 pointer" (click)="getFichaFile()">Download Ficha</label>
-              <label class="badge badge-light m-t-10 pointer" (click)="modalDocumentos.show()">
+              <label class="badge badge-light m-t-10 pointer" (click)="modalDocumentos.show()" *ngIf="ficha.id">
                 Documentos
               </label>
               <label class="badge badge-light m-t-10 pointer" [routerLink]="['/ficha']">Fichas</label>

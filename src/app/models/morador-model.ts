@@ -2,6 +2,7 @@ import { DadosGenericoHistoricoModel } from './dados-generico-historico-model';
 
 export class Morador extends DadosGenericoHistoricoModel {
 
+    id: string;
     documento: string;
     ativo: boolean;
     celular: string;
@@ -15,5 +16,8 @@ export class Morador extends DadosGenericoHistoricoModel {
     tipoMorador: string;
     foto64: string;
     fotoUrl: string;
+    apartamentoId?: any;
+    documentos?: any[];
+    apartamento?: any;
 
 }
