@@ -1,0 +1,419 @@
+<ng2-toasty></ng2-toasty>
+
+<div class="row">
+  <div class="col-sm-12">
+    <app-card>
+      <!-- header -->
+      <div class="row">
+        <div class="col-sm-12 filter-bar">
+          <nav class="navbar navbar-light bg-faded p-10">
+            {{ !passageiro.id ? 'Cadastro de Passageiro' : ('Cadastro de Passageiro: ' + passageiro.nome) }}
+            <div class="nav-item nav-grid">
+              <span class="m-r-15">Ações: </span>
+
+              <label class="badge badge-light m-t-10 pointer" (click)="modalDocumentos.show()" *ngIf="passageiro.id">
+                Documentos
+              </label>
+              <label class="badge badge-light m-t-10 pointer" [routerLink]="['/passageiro/lista']">Lista</label>
+              <label class="badge badge-light m-t-10 pointer" (click)="salvar()">Salvar</label>
+              <label class="badge badge-light m-t-10 pointer" *ngIf="electronService.ipcRenderer && temCracha()"
+                (click)="exibirListaParaCracha(modalListaCrachas)">
+                Imprimir crachás
+              </label>
+            </div>
+          </nav>
+          <div class="codigo-register" *ngIf="passageiro.id">#{{passageiro.id}}</div>
+        </div>
+      </div>
+
+      <form autocomplete="off" [formGroup]="formulario">
+        <app-card>
+          <h5 class="card-title">Dados do Imóvel</h5>
+          <div class="row">
+            <div class="col-sm-2">
+              <label class="col-form-label">Dt Início</label>
+              <div class="input-group">
+                <input type="date" class="form-control" placeholder="dd/MM/aaaa" formControlName="dataInicio"
+                  [validForm]="{form: formulario.get('dataInicio'), isSubmit: isSubmit}">
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <label class="col-form-label">Dt Fim</label>
+              <div class="input-group">
+                <input type="date" class="form-control" autocomplete="off" placeholder="dd/MM/aaaa"
+                  formControlName="dataFim">
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <label class="col-form-label">Observação</label>
+              <input type="text" class="form-control" formControlName="observacao"
+                [validForm]="{form: formulario.get('observacao'), isSubmit: isSubmit}">
+            </div>
+          </div>
+        </app-card>
+
+        <app-card>
+          <h5 class="card-title">Dados do Responsável</h5>
+          <div class="form-group row">
+            <div class="col-sm-3 col-md-2">
+              <div class="row align-items-center m-b-10">
+                <div class="col-12 m-l-5">
+                  <img class="img-fluid" [src]="getFieldForm('foto64').value" *ngIf="getFieldForm('foto64').value">
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col-12">
+                  <a href="javascript:" class="btn btn-sm btn-primary" data-popup="lightbox"
+                    (click)="modalCamera.show()">
+                    <i class="fa fa-camera"></i></a>
+                  <a href="javascript:" class="btn btn-sm btn-primary m-l-5" (click)="removeFoto()"
+                    *ngIf="getFieldForm('foto64') || getFieldForm('fotoUrl')">
+                    <i class="fa fa-trash"></i></a>
+                  <a href="javascript:" class="btn btn-sm btn-primary m-l-5" (click)="modalImportaFoto.show()">
+                    <i class="fa fa-upload"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-9 col-md-10">
+              <div class="form-group row">
+                <div class="col-sm-3 col-md-3">
+                  <label class="col-form-label">Código</label>
+                  <input type="text" class="form-control" formControlName="id">
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <label class="col-form-label">Nome</label>
+                  <input type="text" class="form-control" formControlName="nome"
+                    [validForm]="{form: getFieldForm('nome'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Telefone</label>
+                  <input type="text" class="form-control" formControlName="telefone" [textMask]="{mask: telefoneMask}"
+                    [validForm]="{form: getFieldForm('telefone'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Celular</label>
+                  <input type="text" class="form-control" formControlName="celular" [textMask]="{mask: celularMask}"
+                    [validForm]="{form: getFieldForm('celular'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Tipo Documento</label>
+                  <ng-select [ngClass]="'ng-select'" [options]="listaTipoDocumentos" formControlName="tipoDocumento"
+                    [validForm]="{form: getFieldForm('tipoDocumento'), isSubmit: isSubmit}">
+                  </ng-select>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Documento</label>
+                  <input type="text" class="form-control" formControlName="documento"
+                    [validForm]="{form: getFieldForm('documento'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <label class="col-form-label">E-mail</label>
+                  <input type="email" class="form-control" formControlName="email"
+                    [validForm]="{form: getFieldForm('email'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-2">
+                  <br><br>
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="ativo" formControlName="ativo"
+                      [validForm]="{form: getFieldForm('ativo'), isSubmit: isSubmit}">
+                    <label class="custom-control-label" for="ativo">Ativo</label>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <label class="col-form-label">Observação</label>
+                  <input type="text" class="form-control" formControlName="observacao"
+                    [validForm]="{form: getFieldForm('observacao'), isSubmit: isSubmit}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-card>
+
+        <app-card *ngIf="passageiro.id">
+          <h5 class="card-title">Dependentes</h5>
+          <form autocomplete="off" [formGroup]="formularioDependente">
+
+            <div class="row">
+              <div class="col-12">
+                <button class="btn btn-primary btn-round btn-sm m-b-35" (click)="isCollapsed = !isCollapsed"
+                  [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+                  Adicionar novo morador
+                </button>
+                <div id="collapseExample" [ngbCollapse]="!isCollapsed">
+                  <div class="form-group row">
+                    <div class="col-sm-3 col-md-2">
+                      <div class="row align-items-center m-b-10">
+                        <div class="col-12 m-l-5">
+                          <img class="img-fluid" [src]="getValueDependenteForm('foto64')"
+                            *ngIf="getValueDependenteForm('foto64')">
+                        </div>
+                      </div>
+                      <div class="row align-items-center">
+                        <div class="col-12">
+                          <a href="javascript:" class="btn btn-sm btn-primary" data-popup="lightbox"
+                            (click)="modalCamera.show(); formFotoTemp = formularioDependente">
+                            <i class="fa fa-camera"></i></a>
+                          <a href="javascript:" class="btn btn-sm btn-primary m-l-5"
+                            (click)="removeFoto(formularioDependente)" *ngIf="getValueDependenteForm('foto64')">
+                            <i class="fa fa-trash"></i></a>
+                          <a href="javascript:" class="btn btn-sm btn-primary m-l-5"
+                            (click)="modalImportaFoto.show(); formFotoTemp = formularioDependente">
+                            <i class="fa fa-upload"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-9 col-md-10">
+                      <div class="form-group row">
+                        <div class="col-sm-12 col-md-9">
+                          <label class="col-form-label">Nome</label>
+                          <input type="text" class="form-control" formControlName="nome"
+                            [validForm]="{form: formularioDependente.get('nome'), isSubmit: isSubmitDependente}">
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                          <label class="col-form-label">Celular</label>
+                          <input type="text" class="form-control" formControlName="celular"
+                            [textMask]="{mask: celularMask}"
+                            [validForm]="{form: formularioDependente.get('celular'), isSubmit: isSubmitDependente}">
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                          <label class="col-form-label">Tipo Documento</label>
+                          <ng-select [ngClass]="'ng-select'" [options]="listaTipoDocumentos"
+                            formControlName="tipoDocumento">
+                          </ng-select>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                          <label class="col-form-label">Documento</label>
+                          <input type="text" class="form-control" formControlName="documento"
+                            [validForm]="{form: formularioDependente.get('documento'), isSubmit: isSubmitDependente}">
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                          <label class="col-form-label">E-mail</label>
+                          <input type="email" class="form-control" formControlName="email"
+                            [validForm]="{form: formularioDependente.get('email'), isSubmit: isSubmitDependente}">
+                        </div>
+                        <div class="col-sm-3 col-md-1">
+                          <br><br>
+                          <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="ativoMorador"
+                              formControlName="ativo"
+                              [validForm]="{form: formularioDependente.get('ativo'), isSubmit: isSubmitDependente}">
+                            <label class="custom-control-label" for="ativoMorador">Ativo</label>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <label class="col-form-label">Observação</label>
+                          <input type="text" class="form-control" formControlName="observacao"
+                            [validForm]="{form: formularioDependente.get('observacao'), isSubmit: isSubmit}">
+                        </div>
+                        <div class="col-md-12">
+                          <div class="float-right">
+                            <button class="btn btn-primary btn-round btn-sm m-t-35 m-r-5" (click)="incluiDependente()">
+                              Adicionar
+                            </button>
+                            <button class="btn btn-warning btn-round btn-sm m-t-35"
+                              (click)="resetDependenteForm(); isCollapsed = !isCollapsed">
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <app-card>
+              <h5 class="card-title">Lista dos Moradores</h5>
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Código</th>
+                          <th>Nome</th>
+                          <th>Documento</th>
+                          <th>Opções</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let dependente of listaDependentes">
+                          <th scope="row">{{dependente.id == undefined ? '' : dependente.id}}</th>
+                          <td>{{dependente.nome}}</td>
+                          <td>{{dependente.documento}}</td>
+                          <td>
+                            <span class="badge badge-secondary pointer m-r-5"
+                              (click)="modalExibeFoto.show(); formFotoTemp = dependente"
+                              *ngIf="dependente.fotoUrl || dependente.foto64">Foto</span>
+                            <span class="badge badge-warning pointer m-r-5"
+                              (click)="carregaEditarDepentende(dependente); isCollapsed = (!isCollapsed || isCollapsed == undefined ? !isCollapsed : isCollapsed)">Editar</span>
+                            <span class="badge badge-danger pointer" (click)="removerMorador(dependente)">Deletar</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </app-card>
+          </form>
+        </app-card>
+      </form>
+    </app-card>
+  </div>
+</div>
+
+<app-ui-modal #modalCamera>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Capturar foto</h4>
+    <button type="button" class="close basic-close" (click)="modalCamera.hide(); image64Temp = undefined">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <ack-webcam #webcam [options]="options" [mime]="'image/jpeg'" (catch)="onCamError($event)" [hidden]="image64Temp">
+    </ack-webcam>
+    <image-cropper [imageBase64]="image64Temp" [aspectRatio]="3 / 4" format="jpeg"
+      (imageCropped)="croppedImage = $event" resizeToWidth="160" imageQuality="100" onlyScaleDown="true"
+      *ngIf="image64Temp"></image-cropper>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="generateBase64(webcam)"
+      *ngIf="!image64Temp">Capturar</button>
+    <button type="button" class="btn btn-default waves-effect" (click)="image64Temp = undefined" *ngIf="image64Temp">
+      Nova Foto
+    </button>
+    <button type="button" class="btn btn-primary waves-effect waves-light" (click)="confirmarModalFoto(modalCamera)"
+      *ngIf="image64Temp">Confirmar</button>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #modalImportaFoto>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Importar foto</h4>
+    <button type="button" class="close basic-close" (click)="modalImportaFoto.hide(); limparModalUploadFoto()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="form-group row">
+      <div class="col-sm-12">
+        <input type="file" class="form-control" (change)="fileChangeEvent($event)">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <image-cropper [imageChangedEvent]="imageChangedEvent" [aspectRatio]="3 / 4" format="jpeg"
+          (imageCropped)="croppedImage = $event" resizeToWidth="160" imageQuality="100" onlyScaleDown="true">
+        </image-cropper>
+      </div>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="confirmarModalFoto(modalImportaFoto); limparModalUploadFoto();">Confirmar</button>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #modalExibeFoto>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Exibir foto</h4>
+    <button type="button" class="close basic-close" (click)="modalExibeFoto.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <img class="img-fluid" [src]="formulario.get('foto64').value" *ngIf="formulario.get('foto64').value">
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="modalExibeFoto.hide()">Fechar</button>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #modalDocumentos [dialogClass]="'modal-xl'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Documentos do passageiro {{ passageiro.id }}</h4>
+    <button type="button" class="close basic-close" (click)="modalDocumentos.hide(); documentosForm.reset()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form [formGroup]="documentosForm">
+      <file-upload formControlName="files" fileslimit="1">
+        <ng-template #placeholder>
+          <span style="font-size: 3em">
+            <i class="fa fa-print"></i>
+          </span>
+          <br>
+          <span>Arraste e solte arquivos ou Clique aqui</span>
+        </ng-template>
+      </file-upload>
+    </form>
+    <div class="table-responsive" *ngIf="passageiro.documentos && passageiro.documentos.length !== 0">
+      <table class="table table-inverse">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Excluir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of passageiro.documentos">
+            <th scope="row"><a [href]="doc.url" target="_blank">{{ doc.nome }}</a></th>
+            <td>{{ doc.originalName }}</td>
+            <td><label class="badge badge-danger pointer" (click)="excluirDocumento(doc)">Excluir</label></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="modalDocumentos.hide(); documentosForm.reset()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect"
+      [disabled]="!documentosForm.value.files || documentosForm.value.files.length == 0" (click)="importarDocumentos()">
+      Importar documentos
+    </button>
+  </div>
+</app-ui-modal>
+
+<!-- <app-ui-modal #modalListaCrachas [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">Lista de impressão</h4>
+    <button type="button" class="close basic-close" (click)="modalListaCrachas.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="table-responsive" *ngIf="passageiro.passageiroes && passageiro.passageiroes.length !== 0">
+      <table class="table table-inverse">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Documento</th>
+            <th>Imprimir?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let passageiro of passageiro.passageiroes">
+            <td>{{ passageiro.nome }}</td>
+            <td>{{ passageiro.documento }}</td>
+            <td>
+              <label class="badge pointer"
+                [ngClass]="{'badge-danger': !passageiro.imprimir, 'badge-success': passageiro.imprimir}"
+                (click)="passageiro.imprimir = !passageiro.imprimir">
+                {{ !passageiro.imprimir ? 'Não' : 'Sim'  }}
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default waves-effect" (click)="modalListaCrachas.hide()">Fechar</button>
+    <button type="button" class="btn btn-default waves-effect"
+      (click)="imprimirCrachas(modalListaCrachas)">Imprimir</button>
+  </div>
+</app-ui-modal> -->

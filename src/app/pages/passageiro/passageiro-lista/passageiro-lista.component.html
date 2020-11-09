@@ -1,0 +1,115 @@
+<div class="page-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <app-card>
+        <div class="row">
+          <div class="col-sm-12 filter-bar">
+            <nav class="navbar navbar-light bg-faded m-b-30 p-10">
+              Lista de Passageiros
+              <div class="nav-item nav-grid">
+                <span class="m-r-15">Ações: </span>
+                <label class="badge badge-light m-t-10 pointer" [routerLink]="['/passageiro/cadastro']">Novo</label>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        <!-- filtros -->
+        <div class="row">
+          <div class="col-sm-12 p-l-30 p-r-30">
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label class="col-form-label">Nome</label>
+                <input type="text" class="form-control" [(ngModel)]="listaData.nome">
+              </div>
+              <div class="col-sm-3">
+                <label class="col-form-label">Documento</label>
+                <input type="text" class="form-control" [(ngModel)]="listaData.documento">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-4">
+                <p style="margin-bottom: 0.5rem;">Período Data Início</p>
+                <div class="row border-input">
+                  <div class="col-sm-6">
+                    <label class="col-form-label">De</label>
+                    <input type="date" class="form-control" [(ngModel)]="listaData.dataInicioDe">
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="col-form-label">Até</label>
+                    <input type="date" class="form-control" [(ngModel)]="listaData.dataInicioPara">
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <p style="margin-bottom: 0.5rem;">Período Data Fim</p>
+                <div class="row border-input">
+                  <div class="col-sm-6">
+                    <label class="col-form-label">De</label>
+                    <input type="date" class="form-control" [(ngModel)]="listaData.dataFimDe">
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="col-form-label">Até</label>
+                    <input type="date" class="form-control" [(ngModel)]="listaData.dataFimPara">
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4" style="align-self: flex-end; text-align: end;">
+                <button class="btn btn-blue btn-round m-r-5" (click)="getPassageiros()">
+                  Pesquisar
+                </button>
+                <button class="btn btn-warning btn-round" (click)="limparPesquisa()">
+                  Limpar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <ngx-datatable #table class='data-table' [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50"
+          [rowHeight]="'auto'" [externalPaging]="true" [rows]="listaPassageiros"
+          [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
+          [limit]="listaData ? listaData.size : 10" (page)='setPage($event)' (sort)="onSort($event)">
+          <ngx-datatable-column prop="nome" name="Nome" [flexGrow]="3" [sortable]="true"></ngx-datatable-column>
+          <ngx-datatable-column prop="documento" name="Documento" [flexGrow]="2"></ngx-datatable-column>
+          <ngx-datatable-column prop="dataInicio" name="Dt Início" [flexGrow]="1" [sortable]="true">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.dataInicio | date:'dd/MM/yyyy' }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="dataFim" name="Dt Fim" [flexGrow]="1" [sortable]="true">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.dataFim | date:'dd/MM/yyyy' }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="ativo" name="Ativo" [flexGrow]="1">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-success" *ngIf="row.ativo">Ativo</label>
+              <label class="badge badge-danger" *ngIf="!row.ativo">Inativo</label>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column prop="id" name="Opções" [flexGrow]="2" [sortable]="false">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <label class="badge badge-warning pointer m-r-5"
+                [routerLink]="['/passageiro/cadastro', row.id]">Ver/Editar</label>
+              <label class="badge badge-danger pointer m-r-5" (click)="excluir(row)">Excluir</label>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+              let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+              <div class="page-count">
+                {{rowCount.toLocaleString()}} {{totalMessage}} passageiros
+              </div>
+              <datatable-pager [pagerLeftArrowIcon]="'fa fa-angle-left'" [pagerRightArrowIcon]="'fa fa-angle-right'"
+                [pagerPreviousIcon]="'fa fa-angle-double-left'" [pagerNextIcon]="'fa fa-angle-double-right'"
+                [page]="curPage" [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                (change)="table.onFooterPage($event)">
+              </datatable-pager>
+            </ng-template>
+          </ngx-datatable-footer>
+        </ngx-datatable>
+      </app-card>
+    </div>
+  </div>
+</div>

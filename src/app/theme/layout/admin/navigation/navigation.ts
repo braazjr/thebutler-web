@@ -198,6 +198,28 @@ const NavigationItems = [
         icon: 'fa fa-bus',
         children: [
           {
+            id: 'passageiro',
+            title: 'Passageiros',
+            type: 'collapse',
+            breadcrumbs: false,
+            children: [
+              {
+                id: 'passageiro-lista',
+                title: 'Lista',
+                type: 'item',
+                url: '/passageiro/lista',
+                breadcrumbs: false
+              },
+              {
+                id: 'passageiro-cadastro',
+                title: 'Cadastro',
+                type: 'item',
+                url: '/passageiro/cadastro',
+                breadcrumbs: false
+              }
+            ]
+          },
+          {
             id: 'rota',
             title: 'Rotas',
             type: 'collapse',

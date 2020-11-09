@@ -48,6 +48,10 @@ const routes: Routes = [
         loadChildren: () => import('./pages/usuario/usuario.module').then(module => module.UsuarioModule)
       },
       {
+        path: 'passageiro',
+        loadChildren: () => import('./pages/passageiro/passageiro.module').then(module => module.PassageiroModule)
+      },
+      {
         path: 'rota',
         loadChildren: () => import('./pages/rota/rota.module').then(module => module.RotaModule)
       },

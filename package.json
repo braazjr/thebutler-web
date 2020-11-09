@@ -10,7 +10,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build",
+    "build": "npm run build:develop-electron",
     "build:electron": "ng build --base-href ./",
     "build:develop": "ng build --aot --configuration=develop",
     "build:develop-electron": "ng build --aot --configuration=develop --base-href ./",
@@ -125,7 +125,7 @@
     "appId": "br.com.onsmarttech.thebutler",
     "linux": {
       "target": [
-        "tar.gz"
+        "deb"
       ],
       "category": "Productivity"
     }
