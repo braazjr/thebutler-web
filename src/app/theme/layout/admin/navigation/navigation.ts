@@ -46,6 +46,7 @@ const NavigationItems = [
         title: 'Dados mestre',
         type: 'collapse',
         icon: 'fa fa-stream',
+        profiles: ['ASSOCIACAO'],
         children: [
           {
             id: 'empresa',
@@ -159,7 +160,8 @@ const NavigationItems = [
         type: 'item',
         icon: 'fa fa-address-card',
         url: '/ficha',
-        breadcrumbs: false
+        breadcrumbs: false,
+        profiles: ['ASSOCIACAO']
       },
       {
         id: 'controle-acesso',
@@ -196,6 +198,7 @@ const NavigationItems = [
         title: 'BUSControl',
         type: 'collapse',
         icon: 'fa fa-bus',
+        profiles: ['BUSCONTROL'],
         children: [
           {
             id: 'passageiro',

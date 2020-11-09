@@ -1,7 +1,8 @@
-import {Component, Input, NgZone, OnInit} from '@angular/core';
-import {NavigationItem} from '../../navigation';
-import {Location} from '@angular/common';
-import {GradientConfig} from '../../../../../../app-config';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { NavigationItem } from '../../navigation';
+import { Location } from '@angular/common';
+import { GradientConfig } from '../../../../../../app-config';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-nav-group',
@@ -14,7 +15,11 @@ export class NavGroupComponent implements OnInit {
   @Input() activeId: any;
   public gradientConfig: any;
 
-  constructor(private zone: NgZone, private location: Location) {
+  constructor(
+    private zone: NgZone,
+    private location: Location,
+    public sharedService: SharedService
+  ) {
     this.gradientConfig = GradientConfig.config;
   }
 
@@ -35,7 +40,7 @@ export class NavGroupComponent implements OnInit {
           parent.classList.add('pcoded-trigger');
         }
         parent.classList.add('active');
-      } else if(up_parent.classList.contains('pcoded-hasmenu')) {
+      } else if (up_parent.classList.contains('pcoded-hasmenu')) {
         if (this.gradientConfig['layout'] === 'vertical') {
           up_parent.classList.add('pcoded-trigger');
         }

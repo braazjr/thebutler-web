@@ -27,7 +27,7 @@ export class NavCollapseComponent implements OnInit {
   public themeLayout: string;
 
   constructor(
-    private sharedService: SharedService
+    public sharedService: SharedService
   ) {
     this.visible = false;
     this.gradientConfig = GradientConfig.config;
@@ -67,10 +67,5 @@ export class NavCollapseComponent implements OnInit {
       } while (preParent.classList.contains('pcoded-submenu'));
     }
     parent.classList.toggle('pcoded-trigger');
-  }
-
-  // verifica perfis para o menu
-  filterForRoles(children) {
-    return children.filter(child => !child.profiles || (child.profiles.length > 0 && this.sharedService.checkRole(child.profiles)));
   }
 }

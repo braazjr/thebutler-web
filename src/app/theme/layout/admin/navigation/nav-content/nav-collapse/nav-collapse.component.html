@@ -26,7 +26,7 @@
   </ng-template>
   <ng-template #subMenuContent>
     <ul class="pcoded-submenu" [routerLinkActive]="['active']">
-      <ng-container *ngFor="let item of filterForRoles(item.children)">
+      <ng-container *ngFor="let item of sharedService.filterForRoles(item.children)">
         <app-nav-group *ngIf="item.type=='group'" [item]="item"></app-nav-group>
         <app-nav-collapse *ngIf="item.type=='collapse'" [item]="item"></app-nav-collapse>
         <app-nav-item *ngIf="item.type=='item'" [item]="item"></app-nav-item>

@@ -33,4 +33,9 @@ export class SharedService {
 
     return false;
   }
+
+  // verifica perfis para o menu
+  filterForRoles(children) {
+    return children.filter(child => !child.profiles || (child.profiles.length > 0 && this.checkRole(child.profiles)));
+  }
 }
