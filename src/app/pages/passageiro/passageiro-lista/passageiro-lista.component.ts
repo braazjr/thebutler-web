@@ -31,7 +31,11 @@ export class PassageiroListaComponent implements OnInit {
     nome?: string,
     documento?: string,
     apartamentoNumero?: string,
-    ativo?: boolean
+    ativo?: boolean,
+    dataInicioDe: Date,
+    dataInicioPara: Date,
+    dataFimDe: Date,
+    dataFimPara: Date
   };
   listaPassageiros: any[] = [];
 
@@ -66,7 +70,11 @@ export class PassageiroListaComponent implements OnInit {
       page: 0,
       sort: 'nomePassageiro,asc',
       blocoId: '0',
-      condominioId: '0'
+      condominioId: '0',
+      dataInicioDe: undefined,
+      dataInicioPara: undefined,
+      dataFimDe: undefined,
+      dataFimPara: undefined
     };
   }
 
@@ -128,7 +136,11 @@ export class PassageiroListaComponent implements OnInit {
       page: 0,
       sort: 'nomePassageiro,asc',
       blocoId: '0',
-      condominioId: '0'
+      condominioId: '0',
+      dataInicioDe: undefined,
+      dataInicioPara: undefined,
+      dataFimDe: undefined,
+      dataFimPara: undefined
     };
 
     this.getPassageiros();
