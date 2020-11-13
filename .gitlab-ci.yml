@@ -9,12 +9,10 @@ cache:
 node-build:
   image: node:10
   stage: build
-  variables:
-    BUILD_ENV: $BUILD_ENV
   before_script:
     - npm install
     - npm install -g @angular/cli@8
-  script: "npm run build:$BUILD_ENV"
+  script: "npm run build:develop"
   artifacts:
     paths:
       - dist/
@@ -37,6 +35,20 @@ deploy-develop:
     - dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_API_KEY
   only:
     - develop
+    - master
+
+node-build:
+  image: node:10
+  stage: build
+  before_script:
+    - npm install
+    - npm install -g @angular/cli@8
+  script: "npm run build:prod"
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - master
 
 deploy-production:
   image: python:3.6.3
