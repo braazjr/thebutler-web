@@ -46,7 +46,7 @@ const NavigationItems = [
         title: 'Dados mestre',
         type: 'collapse',
         icon: 'fa fa-stream',
-        profiles: ['ASSOCIACAO'],
+        profiles: ['ADMIN', 'ASSOCIACAO'],
         children: [
           {
             id: 'empresa',
