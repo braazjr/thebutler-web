@@ -270,6 +270,7 @@
                           <th>Nome</th>
                           <th>Parentesco</th>
                           <th>Documento</th>
+                          <th>Status</th>
                           <th>Opções</th>
                         </tr>
                       </thead>
@@ -279,6 +280,10 @@
                           <td>{{mora.nome}}</td>
                           <td>{{mora.parentesco}}</td>
                           <td>{{mora.documento}}</td>
+                          <td>
+                            <label class="badge badge-success" *ngIf="mora.ativo">Ativo</label>
+                            <label class="badge badge-danger" *ngIf="!mora.ativo">Inativo</label>
+                          </td>
                           <td>
                             <span class="badge badge-secondary pointer m-r-5"
                               (click)="modalExibeFoto.show(); formFotoTemp = mora"
