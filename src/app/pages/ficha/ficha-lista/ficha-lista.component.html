@@ -106,6 +106,13 @@
                             {{ row.dataFim | date:'dd/MM/yyyy' }}
                         </ng-template>
                     </ngx-datatable-column>
+                    <ngx-datatable-column name="Status" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <label class="badge badge-primary pointer">
+                                {{ getStatus(row) }}
+                            </label>
+                        </ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column prop="id" name="Opções" [flexGrow]="1" [sortable]="false">
                         <ng-template let-row="row" ngx-datatable-cell-template>
                             <label class="badge badge-warning pointer m-r-5"

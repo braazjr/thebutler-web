@@ -149,4 +149,8 @@ export class FichaListaComponent implements OnInit {
     this.listaData.sort = event.column.prop + ',' + event.newValue;
     this.getFichas();
   }
+
+  getStatus(ficha) {
+    return (!ficha.dataFim || ficha.dataFim > new Date()) ? 'Ativo' : 'Inativo'
+  }
 }
