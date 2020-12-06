@@ -89,7 +89,6 @@ export class MoradorCadastroComponent implements OnInit, AfterViewChecked {
       ativo: [true, [Validators.required]],
       celular: ['', [Validators.required, Validators.pattern(this.celularRegex)]],
       telefone: ['', [Validators.pattern(this.telefoneRegex)]],
-      placaCarro: [''],
       tipoMorador: ['0', [Validators.required, Validators.min(1)]],
       tipoDocumento: ['0'],
       documento: ['', [Validators.required]],

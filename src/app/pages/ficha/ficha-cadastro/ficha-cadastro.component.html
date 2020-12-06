@@ -106,21 +106,6 @@
                     [validForm]="{form: getFieldResponsavelForm('tipoMorador'), isSubmit: isSubmit}">
                   </ng-select>
                 </div>
-                <div class="col-sm-12 col-md-6">
-                  <label class="col-form-label">Nome</label>
-                  <input type="text" class="form-control" formControlName="nome"
-                    [validForm]="{form: getFieldResponsavelForm('nome'), isSubmit: isSubmit}">
-                </div>
-                <div class="col-sm-6 col-md-3">
-                  <label class="col-form-label">Telefone</label>
-                  <input type="text" class="form-control" formControlName="telefone" [textMask]="{mask: telefoneMask}"
-                    [validForm]="{form: getFieldResponsavelForm('telefone'), isSubmit: isSubmit}">
-                </div>
-                <div class="col-sm-6 col-md-3">
-                  <label class="col-form-label">Celular</label>
-                  <input type="text" class="form-control" formControlName="celular" [textMask]="{mask: celularMask}"
-                    [validForm]="{form: getFieldResponsavelForm('celular'), isSubmit: isSubmit}">
-                </div>
                 <div class="col-sm-6 col-md-3">
                   <label class="col-form-label">Tipo Documento</label>
                   <ng-select [ngClass]="'ng-select'" [options]="listaTipoDocumentos" formControlName="tipoDocumento"
@@ -132,15 +117,10 @@
                   <input type="text" class="form-control" formControlName="documento"
                     [validForm]="{form: getFieldResponsavelForm('documento'), isSubmit: isSubmit}">
                 </div>
-                <div class="col-sm-12 col-md-6">
-                  <label class="col-form-label">E-mail</label>
-                  <input type="email" class="form-control" formControlName="email"
-                    [validForm]="{form: getFieldResponsavelForm('email'), isSubmit: isSubmit}">
-                </div>
-                <div class="col-sm-6 col-md-4">
-                  <label class="col-form-label">Placa Carro</label>
-                  <input type="text" class="form-control" formControlName="placaCarro"
-                    [validForm]="{form: getFieldResponsavelForm('placaCarro'), isSubmit: isSubmit}">
+                <div class="col-sm-12 col-md-9">
+                  <label class="col-form-label">Nome</label>
+                  <input type="text" class="form-control" formControlName="nome"
+                    [validForm]="{form: getFieldResponsavelForm('nome'), isSubmit: isSubmit}">
                 </div>
                 <div class="col-sm-2">
                   <br><br>
@@ -149,6 +129,21 @@
                       [validForm]="{form: getFieldResponsavelForm('ativo'), isSubmit: isSubmit}">
                     <label class="custom-control-label" for="ativo">Ativo</label>
                   </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Telefone</label>
+                  <input type="text" class="form-control" formControlName="telefone" [textMask]="{mask: telefoneMask}"
+                    [validForm]="{form: getFieldResponsavelForm('telefone'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <label class="col-form-label">Celular</label>
+                  <input type="text" class="form-control" formControlName="celular" [textMask]="{mask: celularMask}"
+                    [validForm]="{form: getFieldResponsavelForm('celular'), isSubmit: isSubmit}">
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <label class="col-form-label">E-mail</label>
+                  <input type="email" class="form-control" formControlName="email"
+                    [validForm]="{form: getFieldResponsavelForm('email'), isSubmit: isSubmit}">
                 </div>
                 <div class="col-sm-12">
                   <label class="col-form-label">Observação</label>

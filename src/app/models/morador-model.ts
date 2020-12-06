@@ -9,7 +9,6 @@ export class Morador extends DadosGenericoHistoricoModel {
     email: string;
     nome: string;
     telefone: string;
-    placaCarro: string;
     observacao: string;
     parentesco: string;
     tipoDocumento: string;

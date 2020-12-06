@@ -92,7 +92,6 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         ativo: [true, [Validators.required]],
         celular: ['', [Validators.required, Validators.pattern(this.celularRegex)]],
         telefone: ['', [Validators.pattern(this.telefoneRegex)]],
-        placaCarro: [''],
         tipoMorador: ['0', [Validators.required, Validators.min(1)]],
         tipoDocumento: ['0'],
         documento: ['', [Validators.required]],
@@ -186,10 +185,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getEmpresaFicha() {
-    this.defaultService.getById('empresas', this.sharedService.getUsuarioLogged().empresa.id)
-      .subscribe(empresa => {
-        this.empresaFicha = (empresa as Empresa)
-      });
+    if (!this.sharedService.isAdmin()) {
+      this.defaultService.getById('empresas', this.sharedService.getUsuarioLogged().empresa.id)
+        .subscribe(empresa => {
+          this.empresaFicha = (empresa as Empresa)
+        });
+    }
   }
 
   carregaEditarMorador(morador) {
