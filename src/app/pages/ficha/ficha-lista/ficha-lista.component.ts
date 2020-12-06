@@ -9,6 +9,7 @@ import { Bloco } from '../../../models/bloco-model';
 import { SharedService } from '../../../shared/shared.service';
 
 import Swal from 'sweetalert2';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-ficha-lista',
@@ -151,6 +152,6 @@ export class FichaListaComponent implements OnInit {
   }
 
   getStatus(ficha) {
-    return (!ficha.dataFim || ficha.dataFim > new Date()) ? 'Ativo' : 'Inativo'
+    return ficha.dataFim && moment(ficha.dataFim).isBefore(moment()) ? 'Inativo' : 'Ativo'
   }
 }

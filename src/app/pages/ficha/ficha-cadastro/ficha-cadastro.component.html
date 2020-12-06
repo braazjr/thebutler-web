@@ -57,8 +57,8 @@
             <div class="col-sm-2">
               <label class="col-form-label">Dt Fim</label>
               <div class="input-group">
-                <input type="date" class="form-control" autocomplete="off" placeholder="dd/MM/aaaa"
-                  formControlName="dataFim">
+                <input type="date" class="form-control" placeholder="dd/MM/aaaa" formControlName="dataFim"
+                  [validForm]="{form: formulario.get('dataFim'), isSubmit: isSubmit}">
               </div>
             </div>
             <div class="col-sm-8">

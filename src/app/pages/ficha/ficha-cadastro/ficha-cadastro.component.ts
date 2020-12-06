@@ -151,11 +151,20 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   getFicha(id) {
-    this.fichaService.getFullFicha(id)
-      .subscribe(ficha => {
-        this.ficha = ficha as Ficha;
-        this.carregaFicha();
-      })
+    new Promise(resolve => {
+      this.fichaService.getFullFicha(id)
+        .subscribe(ficha => {
+          this.ficha = ficha as Ficha;
+          this.carregaFicha();
+          if (!this.ficha.apartamento.numeroQuartos) {
+            this.defaultService.getById('apartamentos', this.ficha.apartamento.id)
+              .subscribe(apartamento => {
+                this.ficha.apartamento = apartamento as Apartamento
+                resolve()
+              })
+          }
+        })
+    })
   }
 
   carregaFicha() {
@@ -163,8 +172,14 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     if (this.ficha.dataInicio) this.formulario.get('dataInicio').setValue(moment(this.ficha.dataInicio).format('YYYY-MM-DD'));
     if (this.ficha.dataFim) this.formulario.get('dataFim').setValue(moment(this.ficha.dataFim).format('YYYY-MM-DD'));
     if (responsavel) {
+      responsavel.tipoDocumento = responsavel.tipoDocumento || 'OUTROS'
       this.formulario.get('responsavel').patchValue(responsavel);
-      this.listaMoradores = this.ficha.moradores.filter((morador) => morador.id != responsavel.id);
+      this.listaMoradores = this.ficha.moradores
+        .filter(morador => morador.id != responsavel.id)
+        .map(morador => {
+          morador.tipoDocumento = morador.tipoDocumento || 'OUTROS'
+          return morador
+        });
     }
   }
 
@@ -295,11 +310,11 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
       let dataInicio = undefined
       let dataFim = undefined
-      if (this.ficha.dataInicio) {
+      if (this.formulario.get('dataInicio').value) {
         dataInicio = moment(this.formulario.get('dataInicio').value, 'YYYY-MM-DD')
         fichaDto['dataInicio'] = this.formulario.get('dataInicio').value;
       }
-      if (this.ficha.dataFim) {
+      if (this.formulario.get('dataFim').value) {
         dataFim = moment(this.formulario.get('dataFim').value, 'YYYY-MM-DD')
         fichaDto['dataFim'] = this.formulario.get('dataFim').value;
       }
