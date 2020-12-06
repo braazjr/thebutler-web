@@ -79,7 +79,8 @@
               <label class="badge badge-warning pointer m-r-5"
                 [routerLink]="['/morador/cadastro', row.id]">Ver/Editar</label>
               <label class="badge badge-danger pointer m-r-5" (click)="excluir(row)">Excluir</label>
-              <label [routerLink]="['/ficha',row.fichaId]" class="badge badge-warning pointer">Ficha</label>
+              <label [routerLink]="['/ficha',row.fichaId]" class="badge badge-warning pointer"
+                *ngIf="row.fichaId">Ficha</label>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-footer>
