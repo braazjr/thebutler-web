@@ -466,4 +466,15 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       this.toastService.addToast('success', 'Impressão de crachás', 'Crachás impressos com sucesso!');
     })
   }
+
+  tornarResponsavel(moradorSelecionado) {
+    const responsavel = this.ficha.moradores.filter((morador) => morador.tipoMorador)[0];
+    responsavel.tipoMorador = undefined
+    this.listaMoradores.push(responsavel)
+
+    this.listaMoradores = this.listaMoradores.filter(morador => morador.id != moradorSelecionado.id)
+    moradorSelecionado.tipoMorador = 'PROPRIETARIO'
+    moradorSelecionado.tipoDocumento = 'OUTROS'
+    this.formulario.get('responsavel').patchValue(moradorSelecionado);
+  }
 }

@@ -288,6 +288,9 @@
                             <span class="badge badge-secondary pointer m-r-5"
                               (click)="modalExibeFoto.show(); formFotoTemp = mora"
                               *ngIf="mora.fotoUrl || mora.foto64">Foto</span>
+                            <span class="badge badge-primary pointer m-r-5" (click)="tornarResponsavel(mora)">
+                              Tornar responsável
+                            </span>
                             <span class="badge badge-warning pointer m-r-5"
                               (click)="carregaEditarMorador(mora); isCollapsed = (!isCollapsed || isCollapsed == undefined ? !isCollapsed : isCollapsed)">Editar</span>
                             <span class="badge badge-danger pointer" (click)="removerMorador(mora)">Deletar</span>
