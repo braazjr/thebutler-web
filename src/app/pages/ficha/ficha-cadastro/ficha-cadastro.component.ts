@@ -98,7 +98,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         email: ['', [Validators.required, Validators.email]],
         foto64: [],
         fotoUrl: [],
-        observacao: ['', [Validators.maxLength(255)]]
+        observacao: ['', [Validators.maxLength(255)]],
+        qrCodeId: ['']
       }),
       observacao: ['', [Validators.maxLength(255)]],
       dataInicio: [],
@@ -116,7 +117,8 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
       email: [''],
       foto64: [],
       fotoUrl: [],
-      observacao: ['', [Validators.maxLength(255)]]
+      observacao: ['', [Validators.maxLength(255)]],
+      qrCodeId: ['']
     });
 
     this.formularioMorador.get('tipoDocumento').valueChanges
