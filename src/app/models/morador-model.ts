@@ -18,5 +18,6 @@ export class Morador extends DadosGenericoHistoricoModel {
     apartamentoId?: any;
     documentos?: any[];
     apartamento?: any;
+    qrCodeId: number;
 
 }
