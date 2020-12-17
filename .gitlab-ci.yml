@@ -6,7 +6,7 @@ cache:
   paths:
     - node_modules/
 
-node-build:
+node-build-develop:
   image: node:10
   stage: build
   before_script:
@@ -39,7 +39,7 @@ deploy-develop:
     - develop
     - master
 
-node-build:
+node-build-prod:
   image: node:10
   stage: build
   before_script:
