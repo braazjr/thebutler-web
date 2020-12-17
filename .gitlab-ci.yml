@@ -20,7 +20,7 @@ node-build:
     - develop
     - master
 
-deploy-production:
+deploy-develop:
   image: python:3.6.3
   stage: deploy
   variables:
