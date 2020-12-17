@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ToastService } from 'src/app/services/toast.service';
 import { ElectronService } from 'src/app/services/electron.service';
+import { DefaultService } from './../../../services/default.service';
+import { SharedService } from './../../shared.service';
+import { EmpresaService } from './../../../services/empresa.service';
 
 @Component({
   selector: 'modal-bravasoft-configuration',
@@ -24,8 +26,10 @@ export class ModalBravasoftConfigurationComponent implements OnInit {
   isSubmit = false
 
   constructor(
-    private toastService: ToastService,
-    private electronService: ElectronService
+    private electronService: ElectronService,
+    private empresaService: EmpresaService,
+    private sharedService: SharedService,
+    private defaultService: DefaultService
   ) { }
 
   ngOnInit() {
@@ -33,11 +37,12 @@ export class ModalBravasoftConfigurationComponent implements OnInit {
       return;
     }
 
-    this.electronService.ipcRenderer.on('get-configurations-replay', (event, args) => {
-      this.configuration = args as any
-    })
+    const usuario = this.sharedService.getUsuarioLogged()
 
-    this.electronService.sendIpc('get-configurations', {})
+    this.defaultService.getById('empresas', usuario.empresa.id)
+      .subscribe(
+        empresa => this.configuration = (empresa as any).empresaConfig.bravaSoftConfiguration
+      )
   }
 
   public show(): void {
@@ -58,20 +63,17 @@ export class ModalBravasoftConfigurationComponent implements OnInit {
       return;
     }
 
-    this.electronService.ipcRenderer.on('configurations-save-replay', (event, error) => {
-      if (error) {
-        this.alert = { message: 'Houve um erro ao tentar atualizar as configurações', type: 'danger' }
-      } else {
-        this.alert = { message: 'Configurações atualizadas com sucesso!', type: 'success' }
-      }
+    this.empresaService.saveBravaSoftConfiguration(this.configuration)
+      .subscribe(
+        () => this.alert = { message: 'Configurações atualizadas com sucesso!', type: 'success' },
+        () => this.alert = { message: 'Houve um erro ao tentar atualizar as configurações', type: 'danger' },
+        () => {
+          setInterval(() => {
+            this.alert = undefined
+          }, 5000)
 
-      setInterval(() => {
-        this.alert = undefined
-      }, 5000)
-
-      modal.hide();
-    })
-
-    this.electronService.sendIpc('configurations-save', this.configuration)
+          modal.hide()
+        }
+      )
   }
 }

@@ -17,6 +17,7 @@ import { AuthInterceptorModule } from './seguranca/auth-interceptor/auth-interce
 import { HttpClientModule } from '@angular/common/http';
 import { ModalBravasoftConfigurationComponent } from './components/modal-bravasoft-configuration/modal-bravasoft-configuration.component';
 import { HttpUtil } from '../utils/http.util';
+import { EmpresaService } from './../services/empresa.service';
 
 @NgModule({
   declarations: [ValidFormDirectiveDirective, ModalAlterarSenhaComponent, ModalBravasoftConfigurationComponent],
@@ -39,7 +40,8 @@ import { HttpUtil } from '../utils/http.util';
     UsuarioService,
     SharedService,
     ToastService,
-    HttpUtil
+    HttpUtil,
+    EmpresaService
   ],
   exports: [
     ToastyModule,

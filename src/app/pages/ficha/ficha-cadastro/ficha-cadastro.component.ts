@@ -477,7 +477,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
     result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
 
-    this.electronService.sendIpc('imprimir-crachas', result)
+    this.electronService.sendIpc('imprimir-crachas', { crachas: result, bravaSoftConfiguration: this.empresaFicha.empresaConfig.bravaSoftConfiguration })
 
     this.electronService.ipcRenderer.on('imprimir-crachas-replay', (event, args) => {
       modal.hide();

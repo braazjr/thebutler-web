@@ -70,42 +70,42 @@ app.on('activate', function () {
 
 // ARQUIVO DE CONFIGURAÇÃO
 
-const settings_file_path = './electron/settings.json'
+// const settings_file_path = './electron/settings.json'
 
-if (!fs.existsSync(settings_file_path)) {
-    let settings = {
-        bsPrintPath: '',
-        projectPath: ''
-    }
+// if (!fs.existsSync(settings_file_path)) {
+//     let settings = {
+//         bsPrintPath: '',
+//         projectPath: ''
+//     }
 
-    fs.writeFileSync(settings_file_path, JSON.stringify(settings, null, 4))
-}
+//     fs.writeFileSync(settings_file_path, JSON.stringify(settings, null, 4))
+// }
 
-const rawData = fs.readFileSync(settings_file_path)
-const settings = JSON.parse(rawData || '{}')
+// const rawData = fs.readFileSync(settings_file_path)
+// const settings = JSON.parse(rawData || '{}')
 
-ipcMain.on('ready', () => { splashScreen })
+// ipcMain.on('ready', () => { splashScreen })
 
-ipcMain.on('configurations-save', (event, args) => {
-    fs.writeFile(settings_file_path, JSON.stringify(args, null, 4), {}, (error) => {
-        event.reply('configurations-save-replay', error || undefined)
-    })
-})
+// ipcMain.on('configurations-save', (event, args) => {
+//     fs.writeFile(settings_file_path, JSON.stringify(args, null, 4), {}, (error) => {
+//         event.reply('configurations-save-replay', error || undefined)
+//     })
+// })
 
-ipcMain.on('get-configurations', (event, args) => {
-    event.reply('get-configurations-replay', settings)
-})
+// ipcMain.on('get-configurations', (event, args) => {
+//     event.reply('get-configurations-replay', settings)
+// })
 
 // IMPRESSÃO DE CRACHÁS
 
 ipcMain.on('imprimir-crachas', (event, args) => {
     let stream = fs.createWriteStream('test.txt')
     stream.once('open', fd => {
-        args.forEach(line => stream.write(`${line}\n`))
+        args.crachas.forEach(line => stream.write(`${line}\n`))
         stream.end()
     })
 
-    exec(`${settings.bsPrintPath} imprimir /p:${settings.projectPath}`, (error, stdout, stderr) => {
+    exec(`${args.bravaSoftConfiguration.bsPrintPath} imprimir /p:${args.bravaSoftConfiguration.projectPath}`, (error, stdout, stderr) => {
         event.reply('imprimir-crachas-replay', error || undefined)
     })
 })

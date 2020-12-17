@@ -23,11 +23,13 @@
             </div>
         </form>
 
-        <app-alert [type]="alert.type" *ngIf="alert.message">Configurações atualizadas com sucesso!</app-alert>
+        <app-alert [type]="alert.type" *ngIf="alert.message">{{alert?.message}}</app-alert>
     </div>
 
     <div class="app-modal-footer">
         <button type="button" class="btn btn-default waves-effect" (click)="modalBravaSoft.hide()">Fechar</button>
-        <button type="button" class="btn btn-primary waves-effect" (click)="salvar(bravaSoftForm, modalBravaSoft)">Salvar</button>
+        <button type="button" class="btn btn-primary waves-effect" (click)="salvar(bravaSoftForm, modalBravaSoft)">
+            Salvar
+        </button>
     </div>
 </app-ui-modal>
