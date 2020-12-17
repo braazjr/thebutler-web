@@ -18,7 +18,6 @@ node-build-develop:
       - dist/
   only:
     - develop
-    - master
 
 deploy-develop:
   image: python:3.6.3
@@ -37,7 +36,6 @@ deploy-develop:
     - aws s3 sync dist/ s3://thebutler-web-dev --exclude ".DS_Store/*" --cache-control "max-age=120000" --delete --acl "public-read"
   only:
     - develop
-    - master
 
 node-build-prod:
   image: node:10
