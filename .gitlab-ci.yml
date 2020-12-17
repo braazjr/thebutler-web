@@ -20,19 +20,21 @@ node-build:
     - develop
     - master
 
-deploy-develop:
+deploy-production:
+  image: python:3.6.3
   stage: deploy
   variables:
-    HEROKU_API_KEY: $HEROKU_PRODUCTION_API_KEY
-    HEROKU_APP: $HEROKU_APP
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
   before_script:
-    - echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
-    - wget -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
-    - apt-get update
-    - apt-get install -y heroku-toolbelt
-    - gem install dpl
+    - python3 -m pip install awscli
+    - mkdir ~/.aws/
+    - touch ~/.aws/credentials
+    - printf "[eb-cli]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+    - touch ~/.aws/config
+    - printf "[profile eb-cli]\nregion=us-east-1\noutput=json" >> ~/.aws/config
   script:
-    - dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_API_KEY
+    - aws s3 sync dist/ s3://thebutler-web-dev --exclude ".DS_Store/*" --cache-control "max-age=120000" --delete --acl "public-read"
   only:
     - develop
     - master
