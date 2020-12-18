@@ -42,9 +42,9 @@
             </ng-select>
           </div>
           <div class="col-sm-4">
-            <label class="col-form-label">E-mail</label>
-            <input type="email" class="form-control" #email="ngModel" [(ngModel)]="usuario.email" name="email" required
-              [validForm]="{form: email, isSubmit: isSubmit}">
+            <label class="col-form-label">Username</label>
+            <input class="form-control" #username="ngModel" [(ngModel)]="usuario.username" name="username" required
+              [validForm]="{form: username, isSubmit: isSubmit}">
           </div>
           <div class="col-sm-4">
             <label class="col-form-label">Permissões</label>

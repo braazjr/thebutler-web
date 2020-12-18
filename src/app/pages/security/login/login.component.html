@@ -13,7 +13,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                 </div>
-                <input type="login" class="form-control" placeholder="E-mail" #login="ngModel" name="login"
+                <input class="form-control" placeholder="Username" #login="ngModel" name="login"
                   [(ngModel)]="form.login" required
                   [ngClass]="{'is-invalid': !login.valid && (login.dirty || login.touched || isSubmit)}">
               </div>
