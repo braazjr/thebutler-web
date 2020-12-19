@@ -1,9 +1,9 @@
 branch-defaults:
   integracao-aws:
-    environment: butler-web-dev
+    environment: thebutler-web
     group_suffix: null
 global:
-  application_name: butler-web
+  application_name: thebutler-web
   branch: null
   default_ec2_keyname: null
   default_platform: Docker 18.09.9-ce
