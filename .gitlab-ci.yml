@@ -64,6 +64,6 @@ deploy-production:
     - touch ~/.aws/config
     - printf "[profile eb-cli]\nregion=us-east-1\noutput=json" >> ~/.aws/config
   script:
-    - aws s3 sync dist/ s3://thebutler-web --exclude ".DS_Store/*" --cache-control "max-age=120000" --delete --acl "public-read" --exact-timestamps
+    - aws s3 cp --recursive dist/ s3://thebutler-web --exclude ".DS_Store/*" --cache-control "max-age=120000" --delete --acl "public-read" --exact-timestamps
   only:
     - master
