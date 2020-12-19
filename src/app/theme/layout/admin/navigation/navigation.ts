@@ -46,7 +46,7 @@ const NavigationItems = [
         title: 'Dados mestre',
         type: 'collapse',
         icon: 'fa fa-stream',
-        profiles: ['ADMIN', 'ASSOCIACAO'],
+        profiles: ['ADMIN', 'ASSOCIACAO', 'CONDOMINIO'],
         children: [
           {
             id: 'empresa',
@@ -75,6 +75,7 @@ const NavigationItems = [
             id: 'condominio',
             title: 'Condomínios',
             type: 'collapse',
+            profiles: ['ADMIN', 'ASSOCIACAO'],
             breadcrumbs: false,
             children: [
               {
@@ -97,6 +98,7 @@ const NavigationItems = [
             id: 'bloco',
             title: 'Blocos',
             type: 'collapse',
+            profiles: ['ADMIN', 'ASSOCIACAO','CONDOMINIO'],
             breadcrumbs: false,
             children: [
               {
