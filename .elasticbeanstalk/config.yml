@@ -2,6 +2,8 @@ branch-defaults:
   integracao-aws:
     environment: thebutler-web
     group_suffix: null
+  master:
+    environment: thebutler-web
 global:
   application_name: thebutler-web
   branch: null
