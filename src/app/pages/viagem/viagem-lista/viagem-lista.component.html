@@ -85,7 +85,7 @@
                   <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.morador.id }}</strong></ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column prop="horario" name="Horário" [flexGrow]="1">
-                  <ng-template let-row="row" ngx-datatable-cell-template>{{ row.horario | date:'HH:mm' }}</ng-template>
+                  <ng-template let-row="row" ngx-datatable-cell-template>{{ row.horario | date:'HH:mm':'-3000' }}</ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column prop="morador.nome" name="Morador" [flexGrow]="3">
                   <ng-template let-row="row" ngx-datatable-cell-template>{{ row.morador.nome }}</ng-template>
@@ -116,11 +116,11 @@
             <ng-template let-row="row" ngx-datatable-cell-template><strong>{{ row.id }}</strong></ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="dataHoraInicio" name="Data/Hora Início" [flexGrow]="2">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.dataHoraInicio | date:'dd/MM/yyyy HH:mm' }}
+            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.dataHoraInicio | date:'dd/MM/yyyy HH:mm':'-3000' }}
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="dataHoraFim" name="Data/Hora Fim" [flexGrow]="2">
-            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.dataHoraFim | date:'dd/MM/yyyy HH:mm' }}</ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>{{ row.dataHoraFim | date:'dd/MM/yyyy HH:mm':'-3000' }}</ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column prop="motorista.email" name="Motorista" [flexGrow]="2">
             <ng-template let-row="row" ngx-datatable-cell-template>{{ row.motorista.email }}</ng-template>
