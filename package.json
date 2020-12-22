@@ -15,11 +15,13 @@
     "build:develop": "ng build --aot --configuration=develop",
     "build:develop-electron": "ng build --aot --configuration=develop --base-href ./",
     "build:prod": "ng build --aot --configuration=production",
+    "build:electron:prod": "ng build --configuration=production --base-href ./",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "heroku-postbuild": "npm run build:develop",
-    "start:electron": "npm run build:develop-electron && electron ."
+    "start:electron": "npm run build:develop-electron && electron .",
+    "start:electron:prod": "npm run build:electron:prod && electron ."
   },
   "private": true,
   "dependencies": {
@@ -106,7 +108,6 @@
     "@types/jquery": "^3.3.30",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
-    "electron": "^8.2.5",
     "electron-builder": "^22.8.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
