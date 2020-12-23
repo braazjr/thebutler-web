@@ -442,7 +442,7 @@
           <tr>
             <th>Nome</th>
             <th>Documento</th>
-            <th>Imprimir?</th>
+            <th>Foto</th>
           </tr>
         </thead>
         <tbody>
@@ -452,14 +452,15 @@
             <td>{{ morador.documento }}</td>
             <td>
               <label class="badge pointer"
-                [ngClass]="{'badge-danger': !morador.imprimir, 'badge-success': morador.imprimir}"
-                (click)="morador.imprimir = !morador.imprimir">
-                {{ !morador.imprimir ? 'Não' : 'Sim'  }}
+                [ngClass]="{'badge-danger': !morador.foto64, 'badge-success': morador.foto64}">
+                {{ !morador.foto64 ? 'Sem foto' : 'Com foto' }}
               </label>
             </td>
           </tr>
         </tbody>
       </table>
+
+      <app-alert [type]="'warning'">Moradores sem foto não serão enviadas para impressão!</app-alert>
     </div>
   </div>
   <div class="app-modal-footer">

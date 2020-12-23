@@ -471,6 +471,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
 
   imprimirCrachas(modal) {
     let result = this.ficha.moradores
+      .filter(morador => morador.foto64)
       .map(morador =>
         `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64.substring(23) : ''};${morador.nome};${morador.telefone ? morador.telefone : ''};${this.ficha.apartamento.bloco.condominio.nome}`
       )
