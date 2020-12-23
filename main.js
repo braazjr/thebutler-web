@@ -16,8 +16,29 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        icon: path.join(__dirname, `dist/assets/images/logo-small.png`)
+        icon: path.join(__dirname, `dist/assets/images/logo-small.png`),
     })
+
+    mainWindow.loadURL(
+        url.format({
+            pathname: path.join(__dirname, `/dist/index.html`),
+            protocol: 'file:',
+            slashes: true
+        })
+    )
+
+    mainWindow.webContents.openDevTools()
+    mainWindow.maximize()
+
+    mainWindow.on('closed', function () {
+        mainWindow = null
+    })
+
+    mainWindow.once('ready-to-show', function () {
+        if (isDev) {
+            mainWindow.show();
+        }
+    });
 
     splashScreen = eSplashScreen.initSplashScreen({
         mainWindow,
@@ -33,27 +54,6 @@ function createWindow() {
         color: '#343a40',
         image: path.join(__dirname, `dist/assets/images/logo-small.png`)
     })
-
-    mainWindow.loadURL(
-        url.format({
-            pathname: path.join(__dirname, `/dist/index.html`),
-            protocol: 'file:',
-            slashes: true
-        })
-    )
-
-    // mainWindow.webContents.openDevTools()
-    mainWindow.maximize()
-
-    mainWindow.on('closed', function () {
-        mainWindow = null
-    })
-
-    mainWindow.once('ready-to-show', function () {
-        if (isDev) {
-            mainWindow.show();
-        }
-    });
 
     Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 }
@@ -99,13 +99,13 @@ app.on('activate', function () {
 // IMPRESSÃO DE CRACHÁS
 
 ipcMain.on('imprimir-crachas', (event, args) => {
-    let stream = fs.createWriteStream('test.txt')
+    let stream = fs.createWriteStream(`C:\\Users\\Braz\\Documents\\Cracha BEACH_PLACE\\LISTA_IMPRESSAO.txt`, { encoding: 'ascii' })
     stream.once('open', fd => {
         args.crachas.forEach(line => stream.write(`${line}\n`))
         stream.end()
     })
 
-    exec(`${args.bravaSoftConfiguration.bsPrintPath} imprimir /p:${args.bravaSoftConfiguration.projectPath}`, (error, stdout, stderr) => {
-        event.reply('imprimir-crachas-replay', error || undefined)
-    })
+    // exec(`${args.bravaSoftConfiguration.bsPrintPath} imprimir /p:${args.bravaSoftConfiguration.projectPath}`, (error, stdout, stderr) => {
+    //     event.reply('imprimir-crachas-replay', error || undefined)
+    // })
 })
