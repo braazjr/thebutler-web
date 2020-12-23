@@ -105,7 +105,7 @@ ipcMain.on('imprimir-crachas', (event, args) => {
         stream.end()
     })
 
-    // exec(`${args.bravaSoftConfiguration.bsPrintPath} imprimir /p:${args.bravaSoftConfiguration.projectPath}`, (error, stdout, stderr) => {
-    //     event.reply('imprimir-crachas-replay', error || undefined)
-    // })
+    exec(`"${args.bravaSoftConfiguration.bsPrintPath}" imprimir /p:"${args.bravaSoftConfiguration.projectPath}"`, (error, stdout, stderr) => {
+        event.reply('imprimir-crachas-replay', error || undefined)
+    })
 })
