@@ -108,7 +108,9 @@
     "@types/jquery": "^3.3.30",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
+    "electron": "^11.1.1",
     "electron-builder": "^22.8.0",
+    "electron-packager": "^15.2.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -129,6 +131,7 @@
         "deb"
       ],
       "category": "Productivity"
-    }
+    },
+    "icon": "./dist/assets/images/logo-small.png"
   }
 }
