@@ -16,7 +16,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
-        icon: path.join(__dirname, `dist/assets/images/logo-small.png`),
+        icon: path.join(__dirname, `dist/assets/images/logo.ico`),
     })
 
     mainWindow.loadURL(
@@ -27,7 +27,7 @@ function createWindow() {
         })
     )
 
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
     mainWindow.maximize()
 
     mainWindow.on('closed', function () {
@@ -99,7 +99,7 @@ app.on('activate', function () {
 // IMPRESSÃO DE CRACHÁS
 
 ipcMain.on('imprimir-crachas', (event, args) => {
-    let stream = fs.createWriteStream(`C:\\Users\\Braz\\Documents\\Cracha BEACH_PLACE\\LISTA_IMPRESSAO.txt`, { encoding: 'ascii' })
+    let stream = fs.createWriteStream(`C:\\OnSmart\\Cracha BEACH_PLACE\\LISTA_IMPRESSAO.txt`, { encoding: 'ascii' })
     stream.once('open', fd => {
         args.crachas.forEach(line => stream.write(`${line}\n`))
         stream.end()
