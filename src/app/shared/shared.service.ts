@@ -25,7 +25,7 @@ export class SharedService {
     }
   }
 
-  checkRole(roles, blackListProfiles) {
+  checkRole(roles, blackListProfiles = []) {
     if (localStorage.getItem('token') !== null) {
       const permissoes: any[] = this.getUsuarioLogged().permissoes;
       return !roles || (lodash.intersection(permissoes, roles).length > 0 && lodash.intersection(permissoes, blackListProfiles).length == 0);
