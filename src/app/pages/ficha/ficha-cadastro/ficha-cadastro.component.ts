@@ -182,6 +182,12 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
           morador.tipoDocumento = morador.tipoDocumento || 'OUTROS'
           return morador
         });
+    } else {
+      this.toastService.addToast(
+        'error',
+        'Carregando a ficha',
+        'Ficha sem responsável. Favor entrar em contato com o suporte!'
+      )
     }
   }
 
