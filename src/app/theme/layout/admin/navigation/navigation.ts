@@ -163,7 +163,7 @@ const NavigationItems = [
         icon: 'fa fa-address-card',
         url: '/ficha',
         breadcrumbs: false,
-        profiles: ['ASSOCIACAO']
+        profiles: ['ASSOCIACAO', 'CONDOMINIO']
       },
       {
         id: 'controle-acesso',
@@ -207,6 +207,8 @@ const NavigationItems = [
             title: 'Passageiros',
             type: 'collapse',
             breadcrumbs: false,
+            profiles: ['BUSCONTROL'],
+            blackListProfiles: ['CONDOMINIO'],
             children: [
               {
                 id: 'passageiro-lista',

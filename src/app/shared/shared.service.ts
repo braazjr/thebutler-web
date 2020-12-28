@@ -25,10 +25,10 @@ export class SharedService {
     }
   }
 
-  checkRole(roles) {
+  checkRole(roles, blackListProfiles) {
     if (localStorage.getItem('token') !== null) {
       const permissoes: any[] = this.getUsuarioLogged().permissoes;
-      return !roles || lodash.intersection(permissoes, roles).length > 0;
+      return !roles || (lodash.intersection(permissoes, roles).length > 0 && lodash.intersection(permissoes, blackListProfiles).length == 0);
     }
 
     return false;
@@ -36,6 +36,6 @@ export class SharedService {
 
   // verifica perfis para o menu
   filterForRoles(children) {
-    return children.filter(child => !child.profiles || (child.profiles.length > 0 && this.checkRole(child.profiles)));
+    return children.filter(child => !child.profiles || (child.profiles.length > 0 && this.checkRole(child.profiles, child.blackListProfiles)));
   }
 }
