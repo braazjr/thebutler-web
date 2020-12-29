@@ -19,6 +19,7 @@
 <div *ngIf="this.gradientConfig['layout'] === 'horizontal'" #navbarWrapper class="navbar-content sidenav-horizontal" id="layout-sidenav">
   <a href="javascript:" class="sidenav-horizontal-prev" [ngClass]="prevDisabled" (click)="scrollMinus()"></a>
   <div  class="sidenav-horizontal-wrapper"><!-- add 14-4 viral -->
+    <i class="feather icon-arrow-left f-20" (click)="location.back()"></i>
     <ul #navbarContent id="side-nav-horizontal" class="nav pcoded-inner-navbar sidenav-inner" (clickOutside)="fireLeave()" (mouseleave)="fireLeave()">
       <ng-container *ngFor="let item of navigation">
         <app-nav-group *ngIf="item.type=='group'" [item]="item"></app-nav-group>
