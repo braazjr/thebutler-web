@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { AuthComponent } from './theme/layout/auth/auth.component';
 import { SecurityGuard } from './pages/security/security.guard';
+import { LetsEncryptComponent } from './letsencripty';
 
 const routes: Routes = [
   {
@@ -75,8 +76,18 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'access-denied',
-        loadChildren: () => import('./pages/access-denied/access-denied.module').then(module => module.AccessDeniedModule)
+        path: '.well-known/acme-challenge/o7-I_m5qBZTw84tSSTb8wXs-KRDQt5uvdtRyBAVyVI0',
+        component: LetsEncryptComponent
+      }
+    ]
+  },
+  {
+    path: '',
+    component: AuthComponent,
+    children: [
+      {
+        path: 'auth/login',
+        loadChildren: () => import('./pages/security/login/login.module').then(module => module.LoginModule)
       }
     ]
   }
