@@ -76,7 +76,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: '.well-known/acme-challenge/o7-I_m5qBZTw84tSSTb8wXs-KRDQt5uvdtRyBAVyVI0',
+        path: '.well-known/acme-challenge/2BDBhUu5GvKfm2YiYvqWl7KNFSVq2s2Mdh8NqzPoqaI',
         component: LetsEncryptComponent
       }
     ]
