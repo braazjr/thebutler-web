@@ -19,7 +19,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "heroku-postbuild": "npm run build:develop",
+    "heroku-postbuild": "npm run build:prod",
     "start:electron": "npm run build:develop-electron && electron .",
     "start:electron:prod": "npm run build:electron:prod && electron ."
   },
