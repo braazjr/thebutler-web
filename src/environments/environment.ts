@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  urlAuthSpring: 'http://localhost:8080/oauth',
-  urlSpring: 'http://localhost:8080/api'
+  urlAuthSpring: 'https://thebutler-api.herokuapp.com/oauth',
+  urlSpring: 'https://thebutler-api.herokuapp.com/api'
 };
 
 /*
