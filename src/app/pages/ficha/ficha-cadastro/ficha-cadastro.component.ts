@@ -90,7 +90,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         id: [{ value: '', disabled: true }],
         nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
         ativo: [true, [Validators.required]],
-        celular: ['', [Validators.required, Validators.pattern(this.celularRegex)]],
+        celular: ['', [Validators.pattern(this.celularRegex)]],
         telefone: ['', [Validators.pattern(this.telefoneRegex)]],
         tipoMorador: ['0', [Validators.required, Validators.min(1)]],
         tipoDocumento: ['0'],
