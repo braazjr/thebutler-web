@@ -6,13 +6,17 @@ import { MoradorRoutingModule } from './usuario-routing.module';
 import { SharedTheButlerModule } from 'src/app/shared/shared-the-butler.module';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ModalAlterarSenhaComponent } from 'src/app/shared/components/modal-alterar-senha/modal-alterar-senha.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { WebCamModule } from 'ack-angular-webcam';
 
 @NgModule({
   imports: [
     CommonModule,
     MoradorRoutingModule,
     SharedModule,
-    SharedTheButlerModule
+    SharedTheButlerModule,
+    WebCamModule,
+    ImageCropperModule
   ],
   declarations: [UsuarioListaComponent, UsuarioCadastroComponent],
   entryComponents: [ModalAlterarSenhaComponent]

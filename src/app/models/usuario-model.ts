@@ -10,4 +10,5 @@ export class Usuario {
     ativo: Boolean= true;
     permissoes: String[] = []
     empresa: EmpresaSub
+    foto64: string;
 }

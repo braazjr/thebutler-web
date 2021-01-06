@@ -1,10 +1,13 @@
-import { Empresa } from './../../../models/empresa-model';
-import { Component, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-import { Usuario } from '../../../models/usuario-model';
-import { IOption } from 'ng-select';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { IOption } from 'ng-select';
+import { WebCamComponent } from 'ack-angular-webcam';
+import { Empresa } from './../../../models/empresa-model';
+import { Usuario } from '../../../models/usuario-model';
 import { DefaultService } from '../../../services/default.service';
-import { SharedService } from 'src/app/shared/shared.service';
+import { SharedService } from '../../../shared/shared.service';
+import { ToastService } from './../../../services/toast.service';
+import { ElectronService } from './../../../services/electron.service';
 
 @Component({
   selector: 'app-usuario-cadastro',
@@ -21,12 +24,21 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
 
   isSubmit: boolean = false;
 
+  empresaFicha: Empresa = new Empresa();
+  image64Temp: any;
+  formFotoTemp: any;
+  options = {};
+  croppedImage: any;
+  imageChangedEvent: any;
+
   constructor(
     private route: ActivatedRoute,
     private defaultService: DefaultService,
     private cdr: ChangeDetectorRef,
     public sharedService: SharedService,
-    private router: Router
+    private router: Router,
+    public electronService: ElectronService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -110,5 +122,50 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   getShortName() {
     const usuarioSplit = (this.usuario.nome || '').split(' ');
     return `${usuarioSplit[0]} ${usuarioSplit[usuarioSplit.length - 1]}`
+  }
+
+  imprimirCrachas() {
+    let result = [`${this.usuario.id};;;${this.usuario.foto64 ? this.usuario.foto64.substring(23) : ''};${this.usuario.nome};;`]
+
+    result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
+
+    this.electronService.sendIpc('imprimir-crachas', { crachas: result, bravaSoftConfiguration: this.empresaFicha.empresaConfig.bravaSoftConfiguration })
+
+    this.electronService.ipcRenderer.on('imprimir-crachas-replay', (event, args) => {
+      // modal.hide();
+      this.toastService.addToast('success', 'Impressão de crachás', 'Crachá impresso com sucesso!');
+    })
+  }
+
+  getEmpresaFicha() {
+    if (!this.sharedService.isAdmin()) {
+      this.defaultService.getById('empresas', this.sharedService.getUsuarioLogged().empresa.id)
+        .subscribe(empresa => {
+          this.empresaFicha = (empresa as Empresa)
+        });
+    }
+  }
+
+  onCamError(error) {
+    console.error(error);
+    this.toastService.addToast(
+      'error',
+      `Carregamento da webcam`,
+      'Ocorreu um erro ao carregar a webcam. Verifique a conexão!'
+    );
+  }
+
+  generateBase64(webcam: WebCamComponent) {
+    webcam.getBase64().then(base => {
+      this.image64Temp = base;
+      this.imageChangedEvent = this.image64Temp;
+    }).catch(error => console.error(error));
+  }
+
+  confirmarModalFoto(modalCamera) {
+    this.formFotoTemp.foto64 = this.croppedImage.base64
+    // this.formFotoTemp.get('foto64').setValue(this.croppedImage.base64);
+    this.image64Temp = undefined;
+    modalCamera.hide();
   }
 }
