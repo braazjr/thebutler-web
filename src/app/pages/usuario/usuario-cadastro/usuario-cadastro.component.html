@@ -37,12 +37,9 @@
                 <a href="javascript:" class="btn btn-sm btn-primary" data-popup="lightbox"
                   (click)="modalCamera.show(); formFotoTemp = usuario">
                   <i class="fa fa-camera"></i></a>
-                <a href="javascript:" class="btn btn-sm btn-primary m-l-5"
-                  (click)="removeFoto(formulario.get('responsavel'))" *ngIf="usuario.foto64">
+                <a href="javascript:" class="btn btn-sm btn-primary m-l-5" (click)="usuario.foto64 = undefined"
+                  *ngIf="usuario.foto64">
                   <i class="fa fa-trash"></i></a>
-                <a href="javascript:" class="btn btn-sm btn-primary m-l-5"
-                  (click)="modalImportaFoto.show(); formFotoTemp = usuario">
-                  <i class="fa fa-upload"></i></a>
               </div>
             </div>
           </div>
