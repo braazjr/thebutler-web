@@ -125,7 +125,7 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
   }
 
   imprimirCrachas() {
-    let result = [`${this.usuario.id};;;${this.usuario.foto64 ? this.usuario.foto64.substring(23) : ''};${this.usuario.nome};;`]
+    let result = [`${this.usuario.id};;;${this.usuario.foto64 ? this.usuario.foto64.substring(23) : ''};${this.usuario.nome};;FUNCIONÁRIO`]
 
     result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
 
