@@ -57,6 +57,8 @@ export class UsuarioCadastroComponent implements OnInit, AfterViewChecked {
         }
       }
     });
+
+    this.getEmpresaFicha();
   }
 
   ngAfterViewChecked() {
