@@ -19,10 +19,10 @@
           [rowHeight]="50" [rows]="listaUsuarios" [externalPaging]="true"
           [count]="listaData ? listaData.totalElements : 0" [offset]="listaData ? listaData.page : 0"
           [limit]="listaData ? listaData.size : 10" (page)='setPage($event)'>
-          <ngx-datatable-column name="Nome" [flexGrow]="3"></ngx-datatable-column>
-          <ngx-datatable-column prop="username" name="Username" [flexGrow]="3"></ngx-datatable-column>
+          <ngx-datatable-column name="Nome" [flexGrow]="2"></ngx-datatable-column>
+          <ngx-datatable-column prop="username" name="Username" [flexGrow]="1"></ngx-datatable-column>
           <ngx-datatable-column prop="empresa.nomeFantasia" name="Empresa" [flexGrow]="2" *ngIf="sharedService.isAdmin()"></ngx-datatable-column>
-          <ngx-datatable-column name="Permissões" [flexGrow]="1">
+          <ngx-datatable-column name="Permissões" [flexGrow]="3">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <label class="badge badge-info" *ngFor="let permissao of row.permissoes">{{permissao | uppercase}}</label>
             </ng-template>
