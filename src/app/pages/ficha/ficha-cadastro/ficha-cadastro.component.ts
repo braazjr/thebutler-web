@@ -479,7 +479,7 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
     let result = this.ficha.moradores
       .filter(morador => morador.foto64 && morador.ativo)
       .map(morador =>
-        `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64.substring(23) : ''};${morador.nome};${morador.telefone ? morador.telefone : ''};${(this.ficha.apartamento.bloco.condominio.empresa.id = "5fdb4191b6a35411c7658bd8" ? `${this.ficha.apartamento.bloco.nome} - ${this.ficha.apartamento.numero}` : this.ficha.apartamento.bloco.condominio.nome)}`
+        `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64.substring(23) : ''};${morador.nome};${morador.telefone ? morador.telefone : ''};${(this.ficha.apartamento.bloco.condominio.empresa.id = "5fdb4191b6a35411c7658bd8" ? `${morador.apartamento.bloco.nome} - ${morador.apartamento.numero}` : morador.apartamento.bloco.condominio.nome)}`
       )
 
     result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
