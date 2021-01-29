@@ -482,6 +482,11 @@ export class FichaCadastroComponent implements OnInit, AfterViewChecked {
         `${morador.id};${morador.documento ? morador.documento : ''};${morador.email};${morador.foto64 ? morador.foto64.substring(23) : ''};${morador.nome};${morador.telefone ? morador.telefone : ''};${(this.ficha.apartamento.bloco.condominio.empresa.id = "5fdb4191b6a35411c7658bd8" ? `${morador.apartamento.bloco.nome} - ${morador.apartamento.numero}` : morador.apartamento.bloco.condominio.nome)}`
       )
 
+    if (result.length == 0) {
+      this.toastService.addToast('warning', 'Impressão de crachás', 'Não existe morador ativo e com foto para impressão!');
+      return
+    }
+
     result.unshift('Id;Documento;Email;Foto64;Nome;Telefone;Condominio')
 
     this.electronService.sendIpc('imprimir-crachas', { crachas: result, bravaSoftConfiguration: this.empresaFicha.empresaConfig.bravaSoftConfiguration })

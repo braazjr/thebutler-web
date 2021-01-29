@@ -443,6 +443,7 @@
             <th>Nome</th>
             <th>Documento</th>
             <th>Foto</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -456,11 +457,17 @@
                 {{ !morador.foto64 ? 'Sem foto' : 'Com foto' }}
               </label>
             </td>
+            <td>
+              <label class="badge pointer"
+                [ngClass]="{'badge-danger': morador.ativo, 'badge-success': !morador.ativo}">
+                {{ morador.ativo ? 'Ativo' : 'Inativo' }}
+              </label>
+            </td>
           </tr>
         </tbody>
       </table>
 
-      <app-alert [type]="'warning'">Moradores sem foto não serão enviadas para impressão!</app-alert>
+      <app-alert [type]="'warning'">Moradores sem foto e/ou inativo não serão enviadas para impressão!</app-alert>
     </div>
   </div>
   <div class="app-modal-footer">
